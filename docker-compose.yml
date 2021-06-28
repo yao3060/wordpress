@@ -1,0 +1,41 @@
+version: "3.1"
+
+services:
+  wordpress:
+    build:
+      context: .
+      dockerfile: ./.docker/Dockerfile
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - cache
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: domain
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_REDIS_HOST', 'cache');
+        define( 'WP_REDIS_DATABASE', 0);
+    volumes:
+      - ./src:/var/www/html:rw
+
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_DATABASE=domain
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - db:/var/lib/mysql
+
+  cache:
+    image: redis:alpine
+    restart: always
+
+volumes:
+  db:
