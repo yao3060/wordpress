@@ -1,3 +1,4 @@
 src/wp-content/cache/*
 src/wp-content/uploads/*
 src/wp-content/plugins/fakerpress
+.env
