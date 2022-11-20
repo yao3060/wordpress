@@ -8,31 +8,31 @@ return apply_filters(
     [
 
         'enabled'     => [
-            'title'       => __('Enable/Disable', 'woocommerce-gateway-stripe'),
-            'label'       => __('Enable Stripe Alipay', 'woocommerce-gateway-stripe'),
+            'title'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
+            'label'       => __('Enable payermax Alipay', 'woocommerce-gateway-payermax'),
             'type'        => 'checkbox',
             'description' => '',
             'default'     => 'no',
         ],
         'title'       => [
-            'title'       => __('Title', 'woocommerce-gateway-stripe'),
+            'title'       => __('Title', 'woocommerce-gateway-payermax'),
             'type'        => 'text',
-            'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-gateway-stripe'),
-            'default'     => __('Alipay', 'woocommerce-gateway-stripe'),
+            'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-gateway-payermax'),
+            'default'     => __('Alipay', 'woocommerce-gateway-payermax'),
             'desc_tip'    => true,
         ],
         'description' => [
-            'title'       => __('Description', 'woocommerce-gateway-stripe'),
+            'title'       => __('Description', 'woocommerce-gateway-payermax'),
             'type'        => 'text',
-            'description' => __('This controls the description which the user sees during checkout.', 'woocommerce-gateway-stripe'),
-            'default'     => __('You will be redirected to Alipay.', 'woocommerce-gateway-stripe'),
+            'description' => __('This controls the description which the user sees during checkout.', 'woocommerce-gateway-payermax'),
+            'default'     => __('You will be redirected to Alipay.', 'woocommerce-gateway-payermax'),
             'desc_tip'    => true,
         ],
         'webhook'     => [
-            'title'       => __('Webhook Endpoints', 'woocommerce-gateway-stripe'),
+            'title'       => __('Webhook Endpoints', 'woocommerce-gateway-payermax'),
             'type'        => 'title',
             /* translators: webhook URL */
-            'description' => $this->display_admin_settings_webhook_description(),
+            'description' => '',
         ],
     ]
 );

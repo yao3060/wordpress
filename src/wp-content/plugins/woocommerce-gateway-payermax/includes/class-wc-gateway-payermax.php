@@ -42,6 +42,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 	 */
 	public function init_form_fields()
 	{
-		$this->form_fields = require WC_STRIPE_PLUGIN_PATH . '/includes/admin/payermax-settings.php';
+		$this->form_fields = require WC_PAYERMAX_PLUGIN_PATH . '/includes/admin/payermax-settings.php';
 	}
 }

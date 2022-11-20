@@ -66,20 +66,10 @@ function woocommerce_payermax_wc_not_supported()
 }
 
 
-/*
- * This action hook registers our PHP class as a WooCommerce payment gateway
- */
-add_filter('woocommerce_payment_gateways', function ($gateways) {
-    $gateways[] = 'WC_Gateway_PayerMax_Cashier';
-    return $gateways;
-});
-
-
-add_action('plugins_loaded', 'woocommerce_gateway_payermax_init');
+add_action('plugins_loaded', 'woocommerce_gateway_payermax_init', 11);
 
 function woocommerce_gateway_payermax_init()
 {
-
     load_plugin_textdomain('woocommerce-gateway-payermax', false, plugin_basename(dirname(WC_PAYERMAX_PLUGIN_FILE)) . '/languages');
 
     if (!class_exists('WooCommerce')) {
@@ -93,10 +83,20 @@ function woocommerce_gateway_payermax_init()
     }
 
     woocommerce_gateway_payermax();
+
+    /**
+     * This action hook registers our PHP class as a WooCommerce payment gateway
+     */
+    add_filter('woocommerce_payment_gateways', function ($methods) {
+        $methods[] = 'WC_Gateway_PayerMax';
+        // $methods[] = 'WC_Gateway_PayerMax_Card';
+        return $methods;
+    });
 }
 
 function woocommerce_gateway_payermax()
 {
+    if( !class_exists( 'WC_Payment_Gateway' ) ) return;
 
     require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
     require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-wc-gateway-payermax.php';
