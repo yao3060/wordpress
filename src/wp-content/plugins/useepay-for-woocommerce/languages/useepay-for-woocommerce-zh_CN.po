@@ -1,0 +1,117 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: UseePay For WooCommerce v1.0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"support@useepay.com"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2021-01-14 08:26:54+0000\n"
+"Last-Translator: jingyuan <jingyuan.tang@useepay.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: PEOPLE'S REPUBLIC OF CHINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: woocommerce-gateway-useepay.php:60
+msgid "Woocommerce not installed and activated. Before using UseePay, please install and active %1$s first."
+msgstr "Woocommerce 未安装和激活, 使用 UseePay 前，请先安装和激活 %1$s."
+
+#: woocommerce-gateway-useepay.php:84
+msgid "UseePay is a simple, secure and fast online payment gateway, customer can pay via debit card or credit card."
+msgstr "UseePay 是一个简单、安全、快速的在线支付网关，客户可以通过储蓄卡、借记卡、信用卡付款。"
+
+#: woocommerce-gateway-useepay.php:97
+msgid "Settings"
+msgstr "设置"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:27
+msgid "Enable/Disable"
+msgstr "启用/禁用"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:29
+msgid "Enable UseePay Payment"
+msgstr "启用UseePay"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:33
+msgid "Title"
+msgstr "标题"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:35
+msgid "This controls the title which the user sees during checkout."
+msgstr "支付网关名称，用户结账时显示"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:36
+msgid "Cread"
+msgstr "UseePay"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:42
+msgid "This controls the description which the user sees during checkout."
+msgstr "描述，用户结账时会看到"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:43
+msgid "Pay via UseePay, you can pay with your debit card or credit card"
+msgstr "通过 UseePay 使用借记卡/信用卡支付"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:47
+msgid "Merchant No"
+msgstr "商户号"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:49
+msgid "Please enter the Merchant No<br />If you dont have one, <a href=\"https://useepay.com/global-payment-acquiring-apply\" target=\"_blank\">click here</a> to get."
+msgstr "请输入商户号。<br/>如果没有商户号，请<a href=\"https://useepay.com/global-payment-acquiring-apply\" target=\"_blank\">点击这里</a>去获取"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:53
+msgid "Security Key"
+msgstr "交易安全校验码"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:57
+msgid "Please enter the security key<br />If you dont have one, <a href=\"https://useepay.com/global-payment-acquiring-apply\" target=\"_blank\">click here</a> to get."
+msgstr "请输入交易安全校验码<br />如果您还没有交易安全校验码，请<a href=\"https://useepay.com/global-payment-acquiring-apply\" target=\"_blank\">点击这里</a>去获取"
+
+
+#: includes/abstract-wc-useepay-payment-gateway.php:78
+msgid "Sandbox Mode"
+msgstr "沙盒模式"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:80
+#: includes/abstract-wc-useepay-payment-gateway.php:82
+msgid "Enable Sandbox Mode"
+msgstr "开启沙盒模式"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:85
+msgid "Debug Log"
+msgstr "调试信息"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:87
+msgid "Enable logging"
+msgstr "记录调试信息"
+
+#: includes/abstract-wc-useepay-payment-gateway.php:89
+msgid "Log UseePay events, such as trade status, inside %1$s"
+msgstr "记录UseePay事件，例如订单状态变化，日志文件位于 %1$s"
+
+#: includes/class-wc-useepay-api.php:30
+msgid "Network error, please try later"
+msgstr "网络错误, 请稍后再试"
+
+#: includes/class-wc-useepay-api.php:36
+msgid "Signature not match!"
+msgstr "验签失败"
+
+#:includes/class-wc-gateway-useepay.php:37
+msgid "Complete Order"
+msgstr "完成订单"
+
+#:includes/class-wc-gateway-useepay.php:290
+msgid "(Transaction Error) something is wrong."
+msgstr "交易出错"
+

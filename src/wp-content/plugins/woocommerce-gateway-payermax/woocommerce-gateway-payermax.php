@@ -31,6 +31,9 @@ define('WC_PAYERMAX_FUTURE_MIN_WC_VER', '6.9');
 define('WC_PAYERMAX_PLUGIN_FILE', __FILE__);
 define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', WC_PAYERMAX_PLUGIN_FILE)); // with tail slash
 define('WC_PAYERMAX_PLUGIN_PATH', untrailingslashit(plugin_dir_path(WC_PAYERMAX_PLUGIN_FILE))); // without tail slash
+define('PAYERMAX_API_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
+define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
+
 
 /**
  * WooCommerce fallback notice.
@@ -82,13 +85,17 @@ function woocommerce_gateway_payermax_init()
         return;
     }
 
+    // permalink is required
+    if (get_option('permalink_structure')) {
+    }
+
     woocommerce_gateway_payermax();
 
     /**
      * This action hook registers our PHP class as a WooCommerce payment gateway
      */
     add_filter('woocommerce_payment_gateways', function ($methods) {
-        $methods[] = 'WC_Gateway_PayerMax';
+        $methods[] = WC_Gateway_PayerMax::class;
         // $methods[] = 'WC_Gateway_PayerMax_Card';
         return $methods;
     });
@@ -96,8 +103,10 @@ function woocommerce_gateway_payermax_init()
 
 function woocommerce_gateway_payermax()
 {
-    if( !class_exists( 'WC_Payment_Gateway' ) ) return;
+    if (!class_exists('WC_Payment_Gateway')) return;
 
+    require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-payermax-logger.php';
+    require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-payermax-helper.php';
     require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
     require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-wc-gateway-payermax.php';
 }
@@ -106,7 +115,7 @@ function woocommerce_gateway_payermax()
 
 add_filter('plugin_action_links_' . plugin_basename(WC_PAYERMAX_PLUGIN_FILE), function ($links) {
     $plugin_links = [
-        '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-stripe') . '</a>',
+        '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-payermax') . '</a>',
     ];
     return array_merge($plugin_links, $links);
 });

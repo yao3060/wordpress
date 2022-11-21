@@ -29,20 +29,21 @@ return apply_filters(
             'desc_tip'    => true,
         ],
 
-        'merchant_id' => [
-            'title'       => __('Merchant Id', 'woocommerce-gateway-payermax'),
+        'merchant_number' => [
+            'title'       => __('Merchant No.', 'woocommerce-gateway-payermax'),
             'type'        => 'text',
-            'description' => __('Merchant Id', 'woocommerce-gateway-payermax'),
+            'description' => __('Merchant Number', 'woocommerce-gateway-payermax'),
             'default'     => __('', 'woocommerce-gateway-payermax'),
             'desc_tip'    => true,
         ],
 
         'merchant_private_key' => [
             'title'       => __('Merchant Private Key', 'woocommerce-gateway-payermax'),
-            'type'        => 'text',
+            'type'        => 'textarea',
             'description' => __('Merchant Private Key', 'woocommerce-gateway-payermax'),
             'default'     => __('', 'woocommerce-gateway-payermax'),
             'desc_tip'    => true,
+            'css'      => 'max-width: 600px;',
         ],
 
         'sandbox'     => [
@@ -68,5 +69,49 @@ return apply_filters(
             'description' => 'Webhook Endpoints',
             'desc_tip'    => true,
         ],
+
+        array(
+            'title' => __('Advanced Settings', 'woocommerce-gateway-payermax'),
+            'type'  => 'title',
+            'id'    => 'payermax_advanced_settings',
+            /* translators: %s: privacy page link. */
+            'desc'  => sprintf(esc_html__('Advanced Settings', 'woocommerce-gateway-payermax')),
+        ),
+
+        'enable_for_payment_methods' => array(
+            'title'             => __('Enable for payment methods', 'woocommerce-gateway-payermax'),
+            'type'              => 'multiselect',
+            'disabled'          => true, // only card for phase 1, so disabled this option.
+            'class'             => 'wc-enhanced-select',
+            'css'               => 'width: 400px;',
+            'default'           => 'cashier_card',
+            'description'       => __('PayerMax is only available for certain methods', 'woocommerce-gateway-payermax'),
+            'options'           => [
+                ''         => __('All Payment Methods', 'woocommerce-gateway-payermax'),
+                'cashier_card' => __('CARD', 'woocommerce-gateway-payermax'),
+            ],
+            'desc_tip'          => true,
+            'custom_attributes' => array(
+                'data-placeholder' => __('Select payment methods', 'woocommerce-gateway-payermax'),
+            ),
+        ),
+
+        'enable_for_currencies' => array(
+            'title'             => __('Enable for Currencies', 'woocommerce-gateway-payermax'),
+            'type'              => 'multiselect',
+            'class'             => 'wc-enhanced-select',
+            'css'               => 'width: 400px;',
+            'default'           => '',
+            'description'       => __('PayerMax is only available for certain currencies', 'woocommerce-gateway-payermax'),
+            'options'           => [
+                ''         => __('All Currencies', 'woocommerce-gateway-payermax'),
+                'usd' => __('USD', 'woocommerce-gateway-payermax'),
+                'rmb' => __('RMB', 'woocommerce-gateway-payermax'),
+            ],
+            'desc_tip'          => true,
+            'custom_attributes' => array(
+                'data-placeholder' => __('Select payment methods', 'woocommerce-gateway-payermax'),
+            ),
+        ),
     ]
 );

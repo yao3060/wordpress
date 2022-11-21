@@ -1,0 +1,12 @@
+2022-11-21T03:49:18+00:00 CRITICAL Uncaught Error: Call to undefined method PayerMax_Logger::getClientIp() in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax-logger.php:55
+Stack trace:
+#0 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax-logger.php(66): PayerMax_Logger->writeLog(' INFO asdad')
+#1 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/woocommerce-gateway-payermax.php(103): PayerMax_Logger::info('asdad')
+#2 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/woocommerce-gateway-payermax.php(85): woocommerce_gateway_payermax()
+#3 /var/www/html/wp-includes/class-wp-hook.php(303): woocommerce_gateway_payermax_init('')
+#4 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters(NULL, Array)
+#5 /var/www/html/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#6 /var/www/html/wp-settings.php(441): do_action('plugins_loaded')
+#7 /var/www/html/wp-config.php(135): require_once('/var/www/html/w...')
+#8 /var/www/html/wp-load.php(5 in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax-logger.php on line 55
+

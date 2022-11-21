@@ -1,0 +1,54 @@
+= 1.0.18 2022-11-09
+* Set Order transcationId
+
+= 1.0.17 2022-11-07
+* Pay with order number
+
+= 1.0.16 2022-10-26
+* Do not update order payment status when order status is successful
+
+= 1.0.14 2022-09-28
+* Modify the year interception algorithm
+
+= 1.0.13 2022-08-24
+* Modify CSS
+
+= 1.0.12 2022-08-15
+* Handling compatibility issues, unable to obtain product information
+
+= 1.0.11 2022-04-20
+* Fix payment method logo style
+
+= 1.0.10 2022-04-15
+* Update payment logo
+
+= 1.0.9 2021-12-16
+* Modify card verification method
+
+= 1.0.8 2021-09-27
+* Support dynamic 3d authorization, Order status on-hold
+* Modify order default expiration time
+
+= 1.0.7 2021-09-27
+* Refine 3D Frictionless URL splicing
+
+= 1.0.6 2021-09-24
+* Modify payment logo
+* Support dynamic 3d authorization
+
+= 1.0.5 2021-08-10 =
+* Remove cardholder first name and last name input fields
+* Update styles
+
+= 1.0.4 2021-06-15 =
+* Support double quotes in product name
+
+= 1.0.3 2021-02-04 =
+* UI refine
+* Pending improvement
+
+= 1.0.2 2021-01-14 =
+* Support 3D Secure 2.0
+
+= 1.0 2020-12-18 =
+* First Release

@@ -15,7 +15,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
     public function __construct()
     {
-
         // Setup general properties.
         $this->setup_general_properties();
 
@@ -27,7 +26,9 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         // Get settings.
         $this->title = $this->get_option('title', $this->method_title);
         $this->description = $this->get_option('description', $this->method_description);
-        $this->instructions = $this->get_option('instructions', $this->description, $this->method_description);
+        $this->instructions = $this->get_option('instructions', $this->description);
+        $this->sandbox = $this->get_option('sandbox', "no");
+        $this->debug = $this->get_option('debug', "no");
 
         add_action('woocommerce_update_options_payment_gateways_' . self::ID, array($this, 'process_admin_options'));
         add_action('woocommerce_thankyou_' .  self::ID, array($this, 'thankyou_page'));
@@ -35,6 +36,20 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         // Customer Emails.
         add_action('woocommerce_email_before_order_table', array($this, 'email_instructions'), 10, 3);
+
+        add_action('admin_notices', [$this, 'warning_no_debug_or_sandbox_on_production'], 0);
+    }
+
+    public function warning_no_debug_or_sandbox_on_production()
+    {
+        if ($this->sandbox === "no" && $this->debug === "no") {
+            return;
+        }
+        $message = __("Don't use payermax debug or sandbox mode in production.", 'woocommerce-gateway-payermax');
+        $settings = '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-payermax') . '</a>';
+        echo '<div class="notice notice-warning">
+        <p style="font-weight: bold;">' . esc_html($message) . ' ' . $settings . '</p>
+        </div>';
     }
 
     /**
@@ -44,8 +59,8 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     {
         $this->id   = self::ID;
         $this->icon = WC_PAYERMAX_ASSETS_URI . 'assets/images/logo.png';
-        $this->method_title = __('PayerMax Payment', 'woocommerce-gateway-stripe');
-        $this->method_description = __('PayerMax payment systems.', 'woocommerce-gateway-stripe');
+        $this->method_title = __('PayerMax Payment', 'woocommerce-gateway-payermax');
+        $this->method_description = __('PayerMax payment systems.', 'woocommerce-gateway-payermax');
         $this->has_fields         = false;
         $this->supports = [
             'products',
@@ -100,5 +115,35 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         if ($this->instructions && !$sent_to_admin && $this->id === $order->get_payment_method()) {
             echo wp_kses_post(wpautop(wptexturize($this->instructions)) . PHP_EOL);
         }
+    }
+
+    /**
+     * Process the payment and return the result.
+     *
+     * @param int $order_id Order ID.
+     * @return array
+     */
+    public function process_payment($order_id)
+    {
+        $order = wc_get_order($order_id);
+
+        if ($order->get_total() > 0) {
+            include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+
+            $request = new WC_Gateway_PayerMax_Request($this);
+
+            $request->get_request_url($order);
+        } else {
+            $order->payment_complete();
+        }
+
+        // Remove cart.
+        // WC()->cart->empty_cart();
+
+        // Return thankyou redirect.
+        return array(
+            'result'   => 'success',
+            'redirect' => $this->get_return_url($order),
+        );
     }
 }
