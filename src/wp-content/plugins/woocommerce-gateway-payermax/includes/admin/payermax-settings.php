@@ -81,7 +81,7 @@ return apply_filters(
         'enable_for_payment_methods' => array(
             'title'             => __('Enable for payment methods', 'woocommerce-gateway-payermax'),
             'type'              => 'multiselect',
-            'disabled'          => true, // only card for phase 1, so disabled this option.
+            // 'disabled'          => true, // only card for phase 1, so disabled this option.
             'class'             => 'wc-enhanced-select',
             'css'               => 'width: 400px;',
             'default'           => 'cashier_card',
@@ -103,11 +103,15 @@ return apply_filters(
             'css'               => 'width: 400px;',
             'default'           => '',
             'description'       => __('PayerMax is only available for certain currencies', 'woocommerce-gateway-payermax'),
-            'options'           => [
-                ''         => __('All Currencies', 'woocommerce-gateway-payermax'),
-                'usd' => __('USD', 'woocommerce-gateway-payermax'),
-                'rmb' => __('RMB', 'woocommerce-gateway-payermax'),
-            ],
+            'options'  => (function () {
+                $currency_code_options = get_woocommerce_currencies();
+
+                foreach ($currency_code_options as $code => $name) {
+                    $currency_code_options[$code] =  $name . ' (' . $code . ')';
+                }
+
+                return $currency_code_options;
+            })(),
             'desc_tip'          => true,
             'custom_attributes' => array(
                 'data-placeholder' => __('Select payment methods', 'woocommerce-gateway-payermax'),

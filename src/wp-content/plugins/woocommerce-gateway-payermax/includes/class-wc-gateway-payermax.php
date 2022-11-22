@@ -146,4 +146,20 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             'redirect' => $this->get_return_url($order),
         );
     }
+
+    /**
+     * Check If The Gateway Is Available For Use.
+     *
+     * @return bool
+     */
+    public function is_available()
+    {
+        // if set it up the available currencies
+        $enable_for_currencies = $this->get_option('enable_for_currencies');
+        if (is_array($enable_for_currencies) && !in_array(get_option('woocommerce_currency'), $enable_for_currencies)) {
+            return false;
+        }
+
+        return parent::is_available();
+    }
 }

@@ -1,0 +1,972 @@
+# Translation of Plugins - Health Check &amp; Troubleshooting - Stable (latest release) in Chinese (China)
+# This file is distributed under the same license as the Plugins - Health Check &amp; Troubleshooting - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-01-01 05:51:03+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.0-alpha.3\n"
+"Language: zh_CN\n"
+"Project-Id-Version: Plugins - Health Check &amp; Troubleshooting - Stable (latest release)\n"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:40
+msgid "Highest supported PHP"
+msgstr "PHP 最高支持版本"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:39
+msgid "Minimum PHP"
+msgstr "PHP 最低版本需求"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:37
+msgid "Plugin"
+msgstr "插件"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:101
+msgid "Could not be determined"
+msgstr "无法确定"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:65
+msgid "Check plugins"
+msgstr "检查插件兼容性"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:10
+msgid "The compatibility check will need to send requests to the <a href=\"https://wptide.org\">WPTide</a> project to fetch the test results for each of your plugins."
+msgstr "兼容性检查需要将请求发送到<a href=\"https://wptide.org\"> WPTide </a>项目，以获取每个插件的测试结果。"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:9
+msgid "Attempt to identify the compatibility of your plugins before upgrading PHP, note that a compatibility check may not always be accurate, and you may want to contact the plugin author to confirm that things will continue working."
+msgstr "在升级PHP之前请检查插件的兼容性，请注意兼容性检查并不一定完全准确，并且您可能需要与插件作者联系以确认插件人可正常使用。"
+
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:6
+msgid "Plugin compatibility"
+msgstr "插件兼容性"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:165
+msgid "Inactive Themes"
+msgstr "未启用的主题"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:160
+msgid "Parent Theme"
+msgstr "父主题"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:85
+msgid "Timezone"
+msgstr "时区"
+
+#. translators: %s: URL to Site Health Status page.
+#: pages/debug-data.php:38
+msgid "This page can show you every detail about the configuration of your WordPress website. For any improvements that could be made, see the <a href=\"%s\">Site Health Status</a> page."
+msgstr "此页面能向您显示您的WordPress网站的每一个配置详情。想知道可被改善之处，请查阅<a href=\"%s\">站点健康状态</a>页面。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:288
+msgid "When bulk-disabling plugins, a site failure occurred. Because of this the change was automatically reverted."
+msgstr "批量禁用插件时站点出现故障。因此更改以被自动还原。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:263
+msgid "When bulk-enabling plugins, a site failure occurred. Because of this the change was automatically reverted."
+msgstr "批量启用插件时站点出现故障。因此更改以被自动还原。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:238
+msgid "When enabling troubleshooting on the selected plugins, a site failure occurred. Because of this the selected plugins were kept disabled while troubleshooting mode started."
+msgstr "在对所选插件启用故障排除时，发生站点故障。因此，在启用故障排除模式时，所选插件将会继续处于禁用状态。"
+
+#: pages/phpinfo.php:17
+msgid "Extended PHP Information"
+msgstr "查看全部PHP信息"
+
+#: pages/debug-data.php:19 pages/site-health-header.php:56
+msgid "The Site Health check requires JavaScript."
+msgstr "站点健康检查需要JavaScript。"
+
+#: pages/site-health-header.php:21
+msgid "Secondary menu"
+msgstr "次要菜单"
+
+#: pages/site-health-header.php:17
+msgid "Site Health"
+msgstr "站点健康"
+
+#: HealthCheck/Tools/class-health-check-phpinfo.php:78
+msgid "View extended PHP information"
+msgstr "查看全部PHP信息"
+
+#: pages/debug-data.php:50
+msgid "Copied!"
+msgstr "已复制！"
+
+#: pages/debug-data.php:48
+msgid "Copy site info to clipboard"
+msgstr "复制站点信息到剪贴板"
+
+#: pages/debug-data.php:42
+msgid "If you want to export a handy list of all the information on this page, you can use the button below to copy it to the clipboard. You can then paste it in a text file and save it to your device, or paste it in an email exchange with a support engineer or theme/plugin developer for example."
+msgstr "如果您希望导出此页所有信息的列表，您可以使用下方的按钮将其复制到剪贴板。这样您就可以将其粘贴到文本文件并保存到本地，或粘贴到电子邮件正文并发送给您的支持工程师或是插件/主题开发者。"
+
+#: pages/debug-data.php:32
+msgid "Site Health Info"
+msgstr "站点健康信息"
+
+#: pages/troubleshoot.php:17
+msgid "Troubleshooting mode"
+msgstr "故障排除模式"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:978
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1024
+msgid "Theme directory location"
+msgstr "主题目录位置"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:974
+msgid "Theme features"
+msgstr "主题功能"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:940
+msgid "None"
+msgstr "无"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:697
+msgid "Is SUHOSIN installed?"
+msgstr "是否安装了SUHOSIN？"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:628
+msgid "PHP version"
+msgstr "PHP版本"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:623
+msgid "Web server"
+msgstr "Web服务器"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:479
+msgid "ImageMagick version string"
+msgstr "ImageMagick版本字串"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:474
+msgid "ImageMagick version number"
+msgstr "ImageMagick版本号"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:350
+msgid "Shows whether WordPress is able to write to the directories it needs access to."
+msgstr "显示WordPress是否能够写入必需的目录。"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:251
+msgid "These settings alter where and how parts of WordPress are loaded."
+msgstr "这些设置修改WordPress的每个部分将在何处如何加载。"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:138
+msgid "Directories and Sizes"
+msgstr "目录和大小"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:125
+msgctxt "comment status"
+msgid "Closed"
+msgstr "关闭"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:125
+msgctxt "comment status"
+msgid "Open"
+msgstr "打开"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:100
+msgid "No permalink structure set"
+msgstr "未设置固定链接结构"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:81
+msgid "User Language"
+msgstr "用户语言"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:77
+msgid "Site Language"
+msgstr "站点语言"
+
+#: compat.php:159
+msgctxt "localized PHP upgrade information page"
+msgid "https://wordpress.org/support/update-php/"
+msgstr "https://cn.wordpress.org/support/update-php/"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:152
+msgid "Error"
+msgstr "错误"
+
+#: HealthCheck/BackCompat/class-wp-site-health.php:30
+msgid "Once weekly"
+msgstr "每周一次"
+
+#: HealthCheck/class-health-check.php:337
+msgid "Info"
+msgstr "信息"
+
+#. translators: %s: Critical issue counter, if any.
+#: HealthCheck/BackCompat/class-wp-site-health.php:104
+msgctxt "Menu Title"
+msgid "Site Health %s"
+msgstr "站点健康%s"
+
+#: HealthCheck/BackCompat/class-wp-site-health.php:97
+msgctxt "Issue counter label for the admin menu"
+msgid "Critical issues"
+msgstr "关键问题"
+
+#. translators: %d: The HTTP response code returned.
+#: HealthCheck/class-health-check-loopback.php:95
+msgid "The loopback request returned an unexpected http status code, %d, it was not possible to determine if this will prevent features from working as expected."
+msgstr "到您站点的环回请求返回了预外的HTTP状态码%d，无法判断依赖此种请求的功能是否能正常工作。"
+
+#: HealthCheck/class-health-check-loopback.php:79
+msgid "The loopback request to your site failed, this means features relying on them are not currently working as expected."
+msgstr "到您站点的环回请求失败，这意味着依赖此种请求的功能将不能正常工作。"
+
+#. translators: %d: The amount of notices that are visible.
+#: mu-plugin/health-check-troubleshooting-mode.php:1268
+msgid "Notices (%d)"
+msgstr "通知%d）"
+
+#. translators: %d: The amount of available themes.
+#: mu-plugin/health-check-troubleshooting-mode.php:1185
+msgid "Available themes (%d)"
+msgstr "可用主题（%d）"
+
+#. translators: %d: The amount of available plugins.
+#: mu-plugin/health-check-troubleshooting-mode.php:1084
+msgid "Available plugins (%d)"
+msgstr "可用插件%d"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1041
+msgid "enabled"
+msgstr "启用"
+
+#. translators: %s: The running status of Troubleshooting Mode.
+#: mu-plugin/health-check-troubleshooting-mode.php:1038
+msgid "Troubleshooting Mode - %s"
+msgstr "故障排除模式- %s"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:952
+msgctxt "Prefix for inactive themes in troubleshooting mode"
+msgid "Switch to"
+msgstr "切换至"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:952
+msgctxt "Prefix for the active theme in troubleshooting mode"
+msgid "Active:"
+msgstr "启用："
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:197
+#: HealthCheck/Tools/class-health-check-files-integrity.php:206
+msgid "You do not have access to this file."
+msgstr "您无权访问此文件。"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:600
+msgid "(Does not support 64bit values)"
+msgstr "（不支持64位数值）"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:624
+msgid "Unable to determine what web server software is used"
+msgstr "未能确认web服务器软件"
+
+#. translators: %s: The custom message that may be included with the email.
+#: HealthCheck/Tools/class-health-check-mail-check.php:70
+msgid "Additional message from admin: %s"
+msgstr "来自管理员的附加信息：%s"
+
+#. translators: %1$s: website name. %2$s: website url. %3$s: The date the
+#. message was sent. %4$s: The time the message was sent.
+#: HealthCheck/Tools/class-health-check-mail-check.php:59
+msgid "Hi! This test message was sent by the Health Check plugin from %1$s (%2$s) on %3$s at %4$s. Since you’re reading this, it obviously works."
+msgstr "您好！此测试消息是由健康检查插件在%1$s（%2$s）在%3$s %4$s发送的。您能阅读到此消息，几表示此功能正常。"
+
+#. Plugin Name of the plugin
+msgid "Health Check & Troubleshooting"
+msgstr "健康检查和故障排除"
+
+#: HealthCheck/class-health-check-troubleshoot.php:172
+msgid "You have successfully enabled Troubleshooting Mode, all plugins will appear inactive until you disable Troubleshooting Mode, or log out and back in again."
+msgstr "您已成功启用故障排除模式，所有插件的状态都将显示为禁用，直到您禁用故障排除模式或退出后重新登录为止。"
+
+#. translators: %s: The active theme name.
+#: HealthCheck/class-health-check-loopback.php:196
+msgid "Active theme: %s"
+msgstr "激活的主题：%s"
+
+#: HealthCheck/class-health-check-loopback.php:188
+#: HealthCheck/class-health-check-loopback.php:199
+msgid "Waiting..."
+msgstr "请稍后..."
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1220
+msgid "Switch to this theme"
+msgstr "切换至此主题"
+
+#. translators: %s: Theme name.
+#: mu-plugin/health-check-troubleshooting-mode.php:1216
+msgid "Switch the active theme to %s"
+msgstr "切换至%s主题"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1146
+msgid "Enable"
+msgstr "启用"
+
+#. translators: %s: Plugin name.
+#: mu-plugin/health-check-troubleshooting-mode.php:1142
+msgid "Enable the plugin, %s, while troubleshooting."
+msgstr "在故障排除时启用%s插件。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1127
+msgid "Disable"
+msgstr "禁用"
+
+#. translators: %s: Plugin name.
+#: mu-plugin/health-check-troubleshooting-mode.php:1123
+msgid "Disable the plugin, %s, while troubleshooting."
+msgstr "在故障排除时禁用%s插件。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1323
+msgid "Dismiss notices"
+msgstr "忽略通知"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1288
+msgid "Plugin actions, such as activating and deactivating, are not available while in Troubleshooting Mode."
+msgstr "在故障排除模式下，启用和禁用等插件操作不可用。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1280
+msgid "There are no notices to show."
+msgstr "没有可供显示的注意事项。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1067
+msgid "Here you can enable individual plugins or themes, helping you to find out what might be causing strange behaviors on your site. Do note that <strong>any changes you make to settings will be kept</strong> when you disable Troubleshooting Mode."
+msgstr "在这里，您可以启用个别插件或主题，帮助您找出可能导致您的站点出现故障的原因。 请注意，当您禁用故障排除模式时，<strong>您对设置所做的任何更改都将被保存</strong>。"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:1063
+msgid "Your site is currently in Troubleshooting Mode. This has <strong>no effect on your site visitors</strong>, they will continue to view your site as usual, but for you it will look as if you had just installed WordPress for the first time."
+msgstr "您的站点当前处于故障排除模式。 这对您的站点访问者<strong>没有任何影响</strong>，他们将照常访问您的站点，但是对于您，看上去就像第一次安装WordPress一样。"
+
+#: HealthCheck/class-health-check-troubleshoot.php:98
+msgid "We could not remove the old must-use plugin."
+msgstr "我们无法删除旧的必须使用插件。"
+
+#: HealthCheck/Tools/class-health-check-mail-check.php:124
+msgid "Send test mail"
+msgstr "发送测试邮件"
+
+#: HealthCheck/Tools/class-health-check-mail-check.php:118
+msgid "Additional message"
+msgstr "附加消息"
+
+#. translators: %s: website url.
+#: HealthCheck/Tools/class-health-check-mail-check.php:55
+msgid "Health Check – Test Message from %s"
+msgstr "健康检查–来自%s的测试消息"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:136
+msgid "One possible reason for this may be that your installation contains translated versions. An easy way to clear this is to reinstall WordPress. Don't worry. This will only affect WordPress' own files, not your themes, plugins or uploaded media."
+msgstr "可能的原因是您的安装包含了翻译版本。 最简单的方法就是重新安装WordPress。 别担心。 这只会影响到WordPress自身的文件，而不会影响到您的主题、插件或上传的媒体。"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:738
+msgid ".htaccess rules"
+msgstr ".htaccess规则"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:448
+#: HealthCheck/BackCompat/class-wp-debug-data.php:470
+msgid "Not available"
+msgstr "不可用"
+
+#. translators: %s: Latest WordPress version number.
+#. translators: %s: Latest plugin version number.
+#. translators: %s: Latest theme version number.
+#: HealthCheck/BackCompat/class-wp-debug-data.php:58
+#: HealthCheck/BackCompat/class-wp-debug-data.php:889
+#: HealthCheck/BackCompat/class-wp-debug-data.php:921
+#: HealthCheck/BackCompat/class-wp-debug-data.php:993
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1073
+msgid "(Latest version: %s)"
+msgstr "（最新版本：%s）"
+
+#. translators: Prefix for the active theme in a listing.
+#: mu-plugin/health-check-troubleshooting-mode.php:1226
+msgid "Active:"
+msgstr "已启用："
+
+#: mu-plugin/health-check-troubleshooting-mode.php:936
+msgid "Themes"
+msgstr "主题"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:219
+msgid "Modified"
+msgstr "修改"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:217
+msgid "Original"
+msgstr "原始"
+
+#: HealthCheck/Tools/class-health-check-mail-check.php:112
+msgid "Email"
+msgstr "电子邮箱地址"
+
+#: HealthCheck/Tools/class-health-check-mail-check.php:21
+msgid "The Mail Check will invoke the <code>wp_mail()</code> function and check if it succeeds. We will use the E-mail address you have set up, but you can change it below if you like."
+msgstr "邮件检查将调用<code>wp_mail()</code>函数并检查它是否成功。 我们将使用您设置的电子邮件地址，但如果您愿意，可以在下面进行更改。"
+
+#: HealthCheck/Tools/class-health-check-mail-check.php:20
+msgid "Mail Check"
+msgstr "邮件检查"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:240
+msgid "Check the Files Integrity"
+msgstr "检查文件完整性"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:21
+msgid "The File Integrity checks all the core files with the <code>checksums</code> provided by the WordPress API to see if they are intact. If there are changes you will be able to make a Diff between the files hosted on WordPress.org and your installation to see what has been changed."
+msgstr "文件完整性通过WordPress API提供的<code>checksums</code>检查所有核心文件，看它们是否完整。 如果有变化，您可以在WordPress.org上托管的文件和安装之间进行区分，以查看已更改的内容。"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:20
+msgid "File integrity"
+msgstr "文件完整性"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:682
+#: HealthCheck/BackCompat/class-wp-debug-data.php:687
+msgid "cURL version"
+msgstr "cURL版本"
+
+#: HealthCheck/Tools/class-health-check-mail-check.php:83
+msgid "It seems there was a problem sending the e-mail."
+msgstr "看起来发送电子邮件有问题。"
+
+#: HealthCheck/Tools/class-health-check-mail-check.php:79
+msgid "We have just sent an e-mail using <code>wp_mail()</code> and it seems to work. Please check your inbox and spam folder to see if you received it."
+msgstr "我们刚刚使用<code>wp_mail()</code>发送了一封电子邮件，它似乎可以工作。 请检查您的收件箱和垃圾邮件文件夹，看看是否收到它。"
+
+#: HealthCheck/class-health-check-loopback.php:171
+msgid "Result from testing without any plugins active and a default theme"
+msgstr "没有任何插件活动和默认主题的测试结果"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:142
+#: HealthCheck/Tools/class-health-check-files-integrity.php:148
+msgid "Reason"
+msgstr "原因"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:140
+#: HealthCheck/Tools/class-health-check-files-integrity.php:146
+msgid "File"
+msgstr "文件"
+
+#: HealthCheck/class-health-check.php:336
+#: HealthCheck/Tools/class-health-check-files-integrity.php:138
+#: HealthCheck/Tools/class-health-check-files-integrity.php:144
+msgid "Status"
+msgstr "状态"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:135
+msgid "It appears as if some files may have been modified."
+msgstr "看起来有些文件可能已被修改。"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:131
+msgid "All files passed the check. Everything seems to be ok!"
+msgstr "所有文件都通过了检查。 一切似乎都没问题！"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:107
+msgid "File not found"
+msgstr "找不到文件"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:104
+msgid "(View Diff)"
+msgstr "（查看差异）"
+
+#: HealthCheck/Tools/class-health-check-files-integrity.php:104
+msgid "Content changed"
+msgstr "内容已更改"
+
+#: HealthCheck/class-health-check.php:339
+#: HealthCheck/class-health-check.php:348 pages/tools.php:17
+msgid "Tools"
+msgstr "工具"
+
+#: HealthCheck/class-health-check-troubleshoot.php:244
+#: mu-plugin/health-check-troubleshooting-mode.php:973
+#: mu-plugin/health-check-troubleshooting-mode.php:1057
+msgid "Disable Troubleshooting Mode"
+msgstr "禁用故障排除模式"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:169
+msgid "Install a default theme"
+msgstr "安装默认主题"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:160
+msgid "You don't have any of the default themes installed. A default theme helps you determine if your current theme is causing conflicts."
+msgstr "您没有安装任何默认主题。 默认主题可帮助您确定当前主题是否导致冲突。"
+
+#: HealthCheck/class-health-check.php:328
+msgctxt "Menu, Section and Page Title"
+msgid "Health Check"
+msgstr "健康检查"
+
+#. Translators: %s: Plugin slug.
+#: mu-plugin/health-check-troubleshooting-mode.php:906
+msgid "Enable %s"
+msgstr "启用%s"
+
+#. Translators: %s: Plugin slug.
+#: mu-plugin/health-check-troubleshooting-mode.php:891
+msgid "Disable %s"
+msgstr "禁用%s"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:852
+msgid "Manage active plugins"
+msgstr "管理启用的插件"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:305
+#: mu-plugin/health-check-troubleshooting-mode.php:377
+msgid "Enable while troubleshooting"
+msgstr "故障排除已启用"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:306
+#: mu-plugin/health-check-troubleshooting-mode.php:364
+msgid "Disable while troubleshooting"
+msgstr "故障排除已禁用"
+
+#: pages/troubleshoot.php:30
+msgid "A Troubleshooting Mode menu is added to your admin bar, which will allow you to enable plugins individually, switch back to your current theme, and disable Troubleshooting Mode."
+msgstr "故障排除模式菜单被添加到您的管理工具栏，这将允许您单独启用插件，切换回当前主题并禁用故障排除模式。"
+
+#: pages/troubleshoot.php:26
+msgid "By enabling the Troubleshooting Mode, all plugins will appear inactive and your site will switch to the default theme only for you. All other users will see your site as usual."
+msgstr "通过启用故障排除模式，所有插件都将显示为非活动状态，您的站点将只为您自动切换到默认主题。 所有其他用户将照常看到您的站点。"
+
+#: pages/troubleshoot.php:21
+msgid "When troubleshooting issues on your site, you are likely to be told to disable all plugins and switch to the default theme."
+msgstr "在排除站点上的故障时，可能会要求您停用所有插件并切换到默认主题。"
+
+#. translators: %1$d: The HTTP response code. %2$s: The error message returned.
+#: HealthCheck/class-health-check-loopback.php:82
+msgid "Error encountered: (%1$d) %2$s"
+msgstr "出现错误: %2$s (%1$d)"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:797
+msgid "Database name"
+msgstr "数据库名"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:665
+msgid "Max input time"
+msgstr "最大输入时间"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:580
+msgid "Ghostscript version"
+msgstr "Ghostscript版本"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:575
+msgid "Unable to determine if Ghostscript is installed"
+msgstr "未能确认Ghostscript是否安装"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:559
+msgid "GD version"
+msgstr "GD版本"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:545
+msgid "Imagick Resource Limits"
+msgstr "Imagick资源限制"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:460
+msgid "Active editor"
+msgstr "已启用的编辑器"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:189
+msgid "Media Handling"
+msgstr "媒体处理"
+
+#: HealthCheck/class-health-check.php:310
+#: mu-plugin/health-check-troubleshooting-mode.php:299
+msgid "Troubleshoot"
+msgstr "故障排除"
+
+#: HealthCheck/class-health-check-troubleshoot.php:176
+msgid "Return to the Dashboard"
+msgstr "返回仪表盘"
+
+#: HealthCheck/class-health-check-troubleshoot.php:149
+msgid "We were unable to replace the plugin file required to enable the Troubleshooting Mode."
+msgstr "我们无法替换启用故障排除模式所需的插件文件。"
+
+#: HealthCheck/class-health-check-troubleshoot.php:255
+msgid "Enable Troubleshooting Mode"
+msgstr "启用故障排除模式"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:861
+msgid "Plugins"
+msgstr "插件"
+
+#: mu-plugin/health-check-troubleshooting-mode.php:842
+msgid "Troubleshooting Mode"
+msgstr "故障排除模式"
+
+#: pages/troubleshoot.php:34
+msgid "Please note, that due to how Must Use plugins work, any such plugin will not be disabled for the troubleshooting session."
+msgstr "请注意，由于必须使用插件的操作原理，任何此类插件都不会在排除故障会话中被禁用。"
+
+#: pages/troubleshoot.php:22
+msgid "Understandably, you do not wish to do so as it may affect your site visitors, leaving them with lost functionality."
+msgstr "可以理解的是，您不希望这样做，因为它可能会影响您的站点访问者，使他们失去功能。"
+
+#: HealthCheck/class-health-check-troubleshoot.php:105
+msgid "We were unable to copy the plugin file required to enable the Troubleshooting Mode."
+msgstr "我们无法复制启用故障排除模式所需的插件文件。"
+
+#: HealthCheck/class-health-check-troubleshoot.php:90
+msgid "We were unable to create the mu-plugins directory."
+msgstr "我们无法创建mu-plugins目录。"
+
+#: HealthCheck/class-health-check.php:338
+#: HealthCheck/class-health-check.php:347
+msgid "Troubleshooting"
+msgstr "故障排除"
+
+#: HealthCheck/class-health-check-loopback.php:103
+msgid "The loopback request to your site completed successfully."
+msgstr "到您站点的环回请求成功完成。"
+
+#. translators: %s: Plugin version number.
+#. translators: %s: Theme version number.
+#: HealthCheck/BackCompat/class-wp-debug-data.php:843
+#: HealthCheck/BackCompat/class-wp-debug-data.php:882
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1066
+msgid "Version %s"
+msgstr "%s版本"
+
+#. translators: %s: Plugin author name.
+#. translators: %s: Theme author name.
+#: HealthCheck/BackCompat/class-wp-debug-data.php:837
+#: HealthCheck/BackCompat/class-wp-debug-data.php:876
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1060
+msgid "By %s"
+msgstr "作者%s"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:827
+#: HealthCheck/BackCompat/class-wp-debug-data.php:866
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1050
+msgid "No version or author information is available."
+msgstr "没有可用的版本或作者信息。"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:600
+msgid "(Supports 64bit values)"
+msgstr "（支持64位数值）"
+
+#. Author of the plugin
+msgid "The WordPress.org community"
+msgstr "WordPress.org社区"
+
+#. Description of the plugin
+msgid "Checks the health of your WordPress install."
+msgstr "检查您的WordPress安装的健康状况。"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://wordpress.org/plugins/health-check/"
+msgstr "https://cn.wordpress.org/plugins/health-check/"
+
+#: HealthCheck/Tools/class-health-check-phpinfo.php:22 pages/phpinfo.php:26
+msgid "The phpinfo() function has been disabled by your host. Please contact the host if you need more information about your setup."
+msgstr "phpinfo() 函数已被您的主机禁用。 如果您需要有关设置的更多信息，请联系主机商。"
+
+#. translators: 1: Theme name. 2: Theme slug.
+#: HealthCheck/BackCompat/class-wp-debug-data.php:930
+#: HealthCheck/BackCompat/class-wp-debug-data.php:949
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1004
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1080
+msgid "%1$s (%2$s)"
+msgstr "%1$s（%2$s）"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:969
+msgid "Parent theme"
+msgstr "父主题"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:964
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1019
+msgid "Author website"
+msgstr "作者网站"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:960
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1015
+msgid "Author"
+msgstr "作者"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:946
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1001
+msgid "Name"
+msgstr "名字"
+
+#. translators: 1: Plugin version number. 2: Plugin author name.
+#. translators: 1: Theme version number. 2: Theme author name.
+#: HealthCheck/BackCompat/class-wp-debug-data.php:832
+#: HealthCheck/BackCompat/class-wp-debug-data.php:871
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1055
+msgid "Version %1$s by %2$s"
+msgstr "%1$s版，作者%2$s"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:791
+msgid "Database host"
+msgstr "数据库主机"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:780
+msgid "Client version"
+msgstr "客户端版本"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:775
+msgid "Server version"
+msgstr "服务器版本"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:770
+msgid "Extension"
+msgstr "扩展"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:706
+msgid "Is the Imagick library available?"
+msgstr "Imagick库是否可用？"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:673
+msgid "PHP post max size"
+msgstr "PHP最大post大小"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:669
+msgid "Upload max filesize"
+msgstr "上传最大文件大小"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:660
+msgid "PHP memory limit"
+msgstr "PHP内存限制"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:655
+msgid "PHP time limit"
+msgstr "PHP 时间限制"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:651
+msgid "PHP max input variables"
+msgstr "PHP最大输入变量"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:641
+msgid "Server settings"
+msgstr "服务器设置"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:634
+msgid "Unable to determine PHP SAPI"
+msgstr "未能确认PHP SAPI"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:633
+msgid "PHP SAPI"
+msgstr "PHP SAPI"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:607
+msgid "Unable to determine PHP version"
+msgstr "未能确认PHP版本"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:619
+msgid "Unable to determine server architecture"
+msgstr "未能确认服务器架构"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:618
+msgid "Server architecture"
+msgstr "服务器架构"
+
+#. translators: 1: The IP address WordPress.org resolves to. 2: The error
+#. returned by the lookup.
+#: HealthCheck/BackCompat/class-wp-debug-data.php:433
+msgid "Unable to reach WordPress.org at %1$s: %2$s"
+msgstr "未能访问WordPress.org（%1$s）：%2$s"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:425
+msgid "WordPress.org is reachable"
+msgstr "WordPress.org可达"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:424
+#: HealthCheck/BackCompat/class-wp-debug-data.php:430
+msgid "Communication with WordPress.org"
+msgstr "与WordPress.org通讯"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:407
+msgid "Network count"
+msgstr "网络数量"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:402
+msgid "Site count"
+msgstr "站点数量"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:397
+#: HealthCheck/BackCompat/class-wp-debug-data.php:414
+msgid "User count"
+msgstr "用户数量"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1094
+msgid "The must use plugins directory"
+msgstr "必须使用的插件目录"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:373
+msgid "The themes directory"
+msgstr "themes目录"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:368
+msgid "The plugins directory"
+msgstr "plugins目录"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:363
+msgid "The uploads directory"
+msgstr "uploads目录"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:358
+msgid "The wp-content directory"
+msgstr "wp-content目录"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:354
+#: HealthCheck/BackCompat/class-wp-debug-data.php:359
+#: HealthCheck/BackCompat/class-wp-debug-data.php:364
+#: HealthCheck/BackCompat/class-wp-debug-data.php:369
+#: HealthCheck/BackCompat/class-wp-debug-data.php:374
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1095
+msgid "Not writable"
+msgstr "不可写"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:354
+#: HealthCheck/BackCompat/class-wp-debug-data.php:359
+#: HealthCheck/BackCompat/class-wp-debug-data.php:364
+#: HealthCheck/BackCompat/class-wp-debug-data.php:369
+#: HealthCheck/BackCompat/class-wp-debug-data.php:374
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1095
+msgid "Writable"
+msgstr "可写"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:353
+msgid "The main WordPress directory"
+msgstr "主WordPress目录"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:349
+msgid "Filesystem Permissions"
+msgstr "文件系统权限"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:205
+#: HealthCheck/BackCompat/class-wp-debug-data.php:215
+#: HealthCheck/BackCompat/class-wp-debug-data.php:224
+#: HealthCheck/BackCompat/class-wp-debug-data.php:233
+#: HealthCheck/BackCompat/class-wp-debug-data.php:242
+#: HealthCheck/BackCompat/class-wp-debug-data.php:286
+#: HealthCheck/BackCompat/class-wp-debug-data.php:291
+#: HealthCheck/BackCompat/class-wp-debug-data.php:301
+#: HealthCheck/BackCompat/class-wp-debug-data.php:306
+#: HealthCheck/BackCompat/class-wp-debug-data.php:503
+msgid "Disabled"
+msgstr "未启用"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:210
+#: HealthCheck/BackCompat/class-wp-debug-data.php:215
+#: HealthCheck/BackCompat/class-wp-debug-data.php:224
+#: HealthCheck/BackCompat/class-wp-debug-data.php:233
+#: HealthCheck/BackCompat/class-wp-debug-data.php:242
+#: HealthCheck/BackCompat/class-wp-debug-data.php:286
+#: HealthCheck/BackCompat/class-wp-debug-data.php:291
+#: HealthCheck/BackCompat/class-wp-debug-data.php:301
+#: HealthCheck/BackCompat/class-wp-debug-data.php:306
+#: HealthCheck/BackCompat/class-wp-debug-data.php:503
+msgid "Enabled"
+msgstr "启用"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:218
+#: HealthCheck/BackCompat/class-wp-debug-data.php:227
+#: HealthCheck/BackCompat/class-wp-debug-data.php:236
+#: HealthCheck/BackCompat/class-wp-debug-data.php:245
+#: HealthCheck/BackCompat/class-wp-debug-data.php:260
+#: HealthCheck/BackCompat/class-wp-debug-data.php:265
+#: HealthCheck/BackCompat/class-wp-debug-data.php:331
+#: HealthCheck/BackCompat/class-wp-debug-data.php:336
+#: HealthCheck/BackCompat/class-wp-debug-data.php:965
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1020
+msgid "Undefined"
+msgstr "未定义"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:250
+msgid "WordPress Constants"
+msgstr "WordPress常量"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:200
+msgid "Database"
+msgstr "数据库"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:195
+msgid "The options shown below relate to your server setup. If changes are required, you may need your web host&#8217;s assistance."
+msgstr "这些选项与您的服务器设置相关。如果您需要修改，您可能需要您的主机服务提供商的帮助。"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:194
+msgid "Server"
+msgstr "服务器"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:183
+msgid "Inactive Plugins"
+msgstr "未启用的插件"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:177
+msgid "Active Plugins"
+msgstr "已启用的插件"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:171
+msgid "Must Use Plugins"
+msgstr "必须使用的插件"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:155
+msgid "Active Theme"
+msgstr "已启用的主题"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:144
+msgid "Drop-ins"
+msgstr "强化扩展"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:109
+msgid "Is this a multisite?"
+msgstr "这是多站点吗？"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:124
+msgid "Default comment status"
+msgstr "默认评论状态"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:114
+msgid "Can anyone register on this site?"
+msgstr "此站点是否任何人都能注册？"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:105
+#: HealthCheck/BackCompat/class-wp-debug-data.php:110
+#: HealthCheck/BackCompat/class-wp-debug-data.php:115
+#: HealthCheck/BackCompat/class-wp-debug-data.php:120
+#: HealthCheck/BackCompat/class-wp-debug-data.php:698
+#: HealthCheck/BackCompat/class-wp-debug-data.php:707
+#: HealthCheck/BackCompat/class-wp-debug-data.php:716
+msgid "No"
+msgstr "否"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:105
+#: HealthCheck/BackCompat/class-wp-debug-data.php:110
+#: HealthCheck/BackCompat/class-wp-debug-data.php:115
+#: HealthCheck/BackCompat/class-wp-debug-data.php:120
+#: HealthCheck/BackCompat/class-wp-debug-data.php:698
+#: HealthCheck/BackCompat/class-wp-debug-data.php:707
+#: HealthCheck/BackCompat/class-wp-debug-data.php:716
+msgid "Yes"
+msgstr "是"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:104
+msgid "Is this site using HTTPS?"
+msgstr "此站点是否使用HTTPS？"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:99
+msgid "Permalink structure"
+msgstr "固定链接结构"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:94
+msgid "Site URL"
+msgstr "站点网址"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:89
+msgid "Home URL"
+msgstr "首页网址"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:72
+#: HealthCheck/BackCompat/class-wp-debug-data.php:955
+#: HealthCheck/BackCompat/class-wp-debug-data.php:1010
+#: HealthCheck/Tools/class-health-check-plugin-compatibility.php:38
+msgid "Version"
+msgstr "版本"
+
+#: HealthCheck/BackCompat/class-wp-debug-data.php:69
+msgid "WordPress"
+msgstr "WordPress"
