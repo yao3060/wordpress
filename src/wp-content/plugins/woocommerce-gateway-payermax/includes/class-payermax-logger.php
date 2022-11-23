@@ -36,8 +36,10 @@ class PayerMax_Logger
 
     public static function debug(string $message): void
     {
-        $payermax_logger = static::getInstance();
-        $payermax_logger->logger->debug($message, $payermax_logger->context);
+        if (WP_DEBUG) {
+            $payermax_logger = static::getInstance();
+            $payermax_logger->logger->debug($message, $payermax_logger->context);
+        }
     }
 
     /**
@@ -45,10 +47,8 @@ class PayerMax_Logger
      */
     public static function info(string $message): void
     {
-        if (WP_DEBUG) {
-            $payermax_logger = static::getInstance();
-            $payermax_logger->logger->info($message, $payermax_logger->context);
-        }
+        $payermax_logger = static::getInstance();
+        $payermax_logger->logger->info($message, $payermax_logger->context);
     }
 
     public static function notice(string $message): void

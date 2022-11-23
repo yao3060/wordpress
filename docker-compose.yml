@@ -51,5 +51,16 @@ services:
     ports:
       - 8080:8080
 
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin
+    container_name: ${COMPOSE_PROJECT_NAME}_phpredisadmin
+    environment:
+      - REDIS_1_HOST=cache
+      - REDIS_1_PORT=6379
+    depends_on:
+      - cache
+    ports:
+      - 8081:80
+
 volumes:
   db:

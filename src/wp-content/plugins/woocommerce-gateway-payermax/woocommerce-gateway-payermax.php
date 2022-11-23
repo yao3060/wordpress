@@ -11,7 +11,7 @@
  * Tested up to: 6.0
  * WC requires at least: 6.8
  * WC tested up to: 7.0
- * Text Domain: woocommerce-gateway-stripe
+ * Text Domain: woocommerce-gateway-payermax
  * Domain Path: /languages
  */
 
@@ -25,6 +25,7 @@ use Automattic\Jetpack\Constants;
  * Required minimums and constants
  */
 define('WC_PAYERMAX_PLUGIN_VERSION', '1.0.0');
+define('WC_PAYERMAX_PLUGIN_NAME', 'woocommerce-gateway-payermax');
 define('WC_PAYERMAX_API_VERSION', '1.0');
 define('WC_PAYERMAX_API_KEY_VERSION', '1');
 define('WC_PAYERMAX_MIN_PHP_VER', '7.3.0');
@@ -36,6 +37,7 @@ define('WC_PAYERMAX_PLUGIN_PATH', untrailingslashit(plugin_dir_path(WC_PAYERMAX_
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 
+require_once __DIR__ . '/includes/class-payermax.php';
 
 /**
  * WooCommerce fallback notice.
@@ -112,6 +114,9 @@ function woocommerce_gateway_payermax()
     require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-payermax-helper.php';
     require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
     require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-wc-gateway-payermax.php';
+
+    PayerMax_Logger::debug("Supported Currencies:" . json_encode(PayerMax::get_currencies()));
+    PayerMax_Logger::debug("Supported Languages:" . json_encode(PayerMax::get_languages()));
 }
 
 

@@ -93,7 +93,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
      */
     public function thankyou_page()
     {
-        print_r($_REQUEST);
+        // TODO: check payment status here.
         if ($this->instructions) {
             echo wp_kses_post(wpautop(wptexturize($this->instructions)));
         }
