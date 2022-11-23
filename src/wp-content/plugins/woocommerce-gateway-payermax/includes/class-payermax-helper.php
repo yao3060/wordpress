@@ -16,7 +16,7 @@ class PayerMax_Helper
         openssl_sign(json_encode($request_data), $sign, $res, OPENSSL_ALGO_SHA256);
         $sign = base64_encode($sign);
 
-        PayerMax_Logger::info('Base64 Sign: ' . $sign);
+        PayerMax_Logger::debug('Base64 Sign: ' . $sign);
 
         return $sign;
     }

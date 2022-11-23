@@ -15,7 +15,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public $app_id;
     public $merchant_number;
     public $merchant_private_key;
-    public $debug = "no";
     public $sandbox = "no";
 
     public function __construct()
@@ -73,7 +72,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $this->icon = WC_PAYERMAX_ASSETS_URI . 'assets/images/logo.png';
         $this->method_title = __('PayerMax Payment', 'woocommerce-gateway-payermax');
         $this->method_description = __('PayerMax payment settings. for more information, please visit our <a target="_blank" href="https://www.payermax.com/">official website</a>.', 'woocommerce-gateway-payermax');
-        $this->has_fields         = false;
+        $this->has_fields = false;
         $this->supports = [
             'products',
             'refunds',
@@ -171,9 +170,12 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
      */
     public function is_available()
     {
-        // if set it up the available currencies
-        $enable_for_currencies = $this->get_option('enable_for_currencies');
-        if (is_array($enable_for_currencies) && !in_array(get_option('woocommerce_currency'), $enable_for_currencies)) {
+        // check is woocommerce_currency available.
+        if (
+            !get_option('woocommerce_currency') ||
+            !in_array(get_option('woocommerce_currency'), PayerMax::get_currencies())
+        ) {
+            PayerMax_Logger::debug('currency not available.');
             return false;
         }
 

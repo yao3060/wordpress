@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 final class PayerMax
 {
-    static function get_currencies()
+    static function get_currencies(): array
     {
         $currencies = array_merge(
             ...array_column(
@@ -16,7 +16,7 @@ final class PayerMax
         return array_unique($currencies);
     }
 
-    static function get_languages()
+    static function get_languages(): array
     {
         $languages = array_merge(
             ...array_column(
