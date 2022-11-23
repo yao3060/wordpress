@@ -62,14 +62,7 @@ return apply_filters(
             'default'     => 'no',
         ],
 
-        'debug'     => [
-            'title'       => __('Debug', 'woocommerce-gateway-payermax'),
-            'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'type'        => 'checkbox',
-            'disabled' => true,
-            'description' => __('Depend on <code>WP_DEBUG</code>, if enabled, plugin will store <code>INFO</code> level logs.', 'woocommerce-gateway-payermax'),
-            'default'     => WP_DEBUG ? 'yes' : 'no',
-        ],
+
 
         'webhook'     => [
             'title'       => __('Webhook Endpoints', 'woocommerce-gateway-payermax'),
@@ -79,26 +72,34 @@ return apply_filters(
             'desc_tip'    => true,
         ],
 
-        'enable_for_currencies' => array(
-            'title'             => __('Enable for Currencies', 'woocommerce-gateway-payermax'),
-            'type'              => 'multiselect',
-            'class'             => 'wc-enhanced-select',
-            'css'               => 'width: 400px;',
-            'default'           => '',
-            'description'       => __('PayerMax is only available for certain currencies', 'woocommerce-gateway-payermax'),
-            'options'  => (function () {
-                $currency_code_options = get_woocommerce_currencies();
-
-                foreach ($currency_code_options as $code => $name) {
-                    $currency_code_options[$code] =  $name . ' (' . $code . ')';
-                }
-
-                return $currency_code_options;
-            })(),
-            'desc_tip'          => true,
-            'custom_attributes' => array(
-                'data-placeholder' => __('Select payment methods', 'woocommerce-gateway-payermax'),
+        'debug'     => [
+            'title'       => __('Debug', 'woocommerce-gateway-payermax'),
+            'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
+            'type'        => 'title',
+            'description' => sprintf(
+                __('<code>WP_DEBUG</code> is %s, if enabled, plugin will store <code title="%s">%s</code> level logs.', 'woocommerce-gateway-payermax'),
+                WP_DEBUG ? 'true' : 'false',
+                'PayerMax_Logger::debug()',
+                'debug'
             ),
+            'default'     => WP_DEBUG ? 'yes' : 'no',
+        ],
+
+        'available_for_payment_method' => array(
+            'title'             => __('Available for Payment Method', 'woocommerce-gateway-payermax'),
+            'type'              => 'title',
+            'description'       => __('PayerMax is only available for <code>CARD</code> method is this version.', 'woocommerce-gateway-payermax'),
+        ),
+
+        'available_for_currencies' => array(
+            'title'             => __('Available for Currencies', 'woocommerce-gateway-payermax'),
+            'type'              => 'title',
+            'css'      => 'max-width: 600px;',
+            'description'       => sprintf(
+                __('PayerMax is only available for those currencies: <code>%s</code>, <br>Current currency is: <code>%s</code>', 'woocommerce-gateway-payermax'),
+                join(', ', PayerMax::get_currencies()),
+                get_option('woocommerce_currency')
+            )
         ),
     ]
 );
