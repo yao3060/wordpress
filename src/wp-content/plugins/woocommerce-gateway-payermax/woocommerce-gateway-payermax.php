@@ -24,7 +24,9 @@ use Automattic\Jetpack\Constants;
 /**
  * Required minimums and constants
  */
-define('WC_PAYERMAX_VERSION', '1.0.0'); // WRCS: DEFINED_VERSION.
+define('WC_PAYERMAX_PLUGIN_VERSION', '1.0.0');
+define('WC_PAYERMAX_API_VERSION', '1.0');
+define('WC_PAYERMAX_API_KEY_VERSION', '1');
 define('WC_PAYERMAX_MIN_PHP_VER', '7.3.0');
 define('WC_PAYERMAX_MIN_WC_VER', '6.8');
 define('WC_PAYERMAX_FUTURE_MIN_WC_VER', '6.9');
@@ -73,6 +75,7 @@ add_action('plugins_loaded', 'woocommerce_gateway_payermax_init', 11);
 
 function woocommerce_gateway_payermax_init()
 {
+
     load_plugin_textdomain('woocommerce-gateway-payermax', false, plugin_basename(dirname(WC_PAYERMAX_PLUGIN_FILE)) . '/languages');
 
     if (!class_exists('WooCommerce')) {

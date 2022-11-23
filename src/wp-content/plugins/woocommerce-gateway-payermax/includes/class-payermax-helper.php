@@ -5,12 +5,28 @@ if (!defined('ABSPATH')) {
 
 class PayerMax_Helper
 {
+    public static function get_sign(array $request_data, $private_key)
+    {
+        $res = "-----BEGIN RSA PRIVATE KEY-----\n" .
+            wordwrap($private_key, 64, "\n", true) .
+            "\n-----END RSA PRIVATE KEY-----";
+
+        ($res) or die('私钥格式错误');
+
+        openssl_sign(json_encode($request_data), $sign, $res, OPENSSL_ALGO_SHA256);
+        $sign = base64_encode($sign);
+
+        PayerMax_Logger::info('Base64 Sign: ' . $sign);
+
+        return $sign;
+    }
+
     public static function get_order_country(WC_Order $order)
     {
         return empty(trim($order->get_shipping_country())) ? trim($order->get_billing_country()) : trim($order->get_shipping_country());
     }
 
-    public static function getTradeNo(WC_Order $order)
+    public static function get_trade_no(WC_Order $order)
     {
         $transaction_id = $order->get_transaction_id();
         if (!$transaction_id) {

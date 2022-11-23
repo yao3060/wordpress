@@ -9,7 +9,7 @@ return apply_filters(
 
         'enabled'     => [
             'title'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'label'       => __('Enable PayerMax', 'woocommerce-gateway-payermax'),
+            'label'       => __('PayerMax', 'woocommerce-gateway-payermax'),
             'type'        => 'checkbox',
             'description' => '',
             'default'     => 'no',
@@ -29,6 +29,14 @@ return apply_filters(
             'desc_tip'    => true,
         ],
 
+        'app_id' => [
+            'title'       => __('App ID', 'woocommerce-gateway-payermax'),
+            'type'        => 'text',
+            'description' => __('App ID', 'woocommerce-gateway-payermax'),
+            'default'     => __('', 'woocommerce-gateway-payermax'),
+            'desc_tip'    => true,
+        ],
+
         'merchant_number' => [
             'title'       => __('Merchant No.', 'woocommerce-gateway-payermax'),
             'type'        => 'text',
@@ -43,23 +51,24 @@ return apply_filters(
             'description' => __('Merchant Private Key', 'woocommerce-gateway-payermax'),
             'default'     => __('', 'woocommerce-gateway-payermax'),
             'desc_tip'    => true,
-            'css'      => 'max-width: 600px;',
+            'css'      => 'max-width: 600px; min-height:250px;',
         ],
 
         'sandbox'     => [
-            'title'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'label'       => __('Enable Sandbox', 'woocommerce-gateway-payermax'),
+            'title'       => __('Sandbox Mode', 'woocommerce-gateway-payermax'),
+            'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
             'type'        => 'checkbox',
-            'description' => '',
+            'description' => __('Sandbox is for test only, Do not enable it on production.', 'woocommerce-gateway-payermax'),
             'default'     => 'no',
         ],
 
         'debug'     => [
-            'title'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'label'       => __('Enable Debug', 'woocommerce-gateway-payermax'),
+            'title'       => __('Debug', 'woocommerce-gateway-payermax'),
+            'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
             'type'        => 'checkbox',
-            'description' => '',
-            'default'     => 'no',
+            'disabled' => true,
+            'description' => __('Depend on <code>WP_DEBUG</code>, if enabled, plugin will store <code>INFO</code> level logs.', 'woocommerce-gateway-payermax'),
+            'default'     => WP_DEBUG ? 'yes' : 'no',
         ],
 
         'webhook'     => [
@@ -69,32 +78,6 @@ return apply_filters(
             'description' => 'Webhook Endpoints',
             'desc_tip'    => true,
         ],
-
-        array(
-            'title' => __('Advanced Settings', 'woocommerce-gateway-payermax'),
-            'type'  => 'title',
-            'id'    => 'payermax_advanced_settings',
-            /* translators: %s: privacy page link. */
-            'desc'  => sprintf(esc_html__('Advanced Settings', 'woocommerce-gateway-payermax')),
-        ),
-
-        'enable_for_payment_methods' => array(
-            'title'             => __('Enable for payment methods', 'woocommerce-gateway-payermax'),
-            'type'              => 'multiselect',
-            // 'disabled'          => true, // only card for phase 1, so disabled this option.
-            'class'             => 'wc-enhanced-select',
-            'css'               => 'width: 400px;',
-            'default'           => 'cashier_card',
-            'description'       => __('PayerMax is only available for certain methods', 'woocommerce-gateway-payermax'),
-            'options'           => [
-                ''         => __('All Payment Methods', 'woocommerce-gateway-payermax'),
-                'cashier_card' => __('CARD', 'woocommerce-gateway-payermax'),
-            ],
-            'desc_tip'          => true,
-            'custom_attributes' => array(
-                'data-placeholder' => __('Select payment methods', 'woocommerce-gateway-payermax'),
-            ),
-        ),
 
         'enable_for_currencies' => array(
             'title'             => __('Enable for Currencies', 'woocommerce-gateway-payermax'),

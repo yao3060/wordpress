@@ -12,6 +12,11 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 {
 
     const ID = 'payermax';
+    public $app_id;
+    public $merchant_number;
+    public $merchant_private_key;
+    public $debug = "no";
+    public $sandbox = "no";
 
     public function __construct()
     {
@@ -24,11 +29,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $this->init_settings();
 
         // Get settings.
-        $this->title = $this->get_option('title', $this->method_title);
-        $this->description = $this->get_option('description', $this->method_description);
-        $this->instructions = $this->get_option('instructions', $this->description);
-        $this->sandbox = $this->get_option('sandbox', "no");
-        $this->debug = $this->get_option('debug', "no");
+        $this->get_settings();
 
         add_action('woocommerce_update_options_payment_gateways_' . self::ID, array($this, 'process_admin_options'));
         add_action('woocommerce_thankyou_' .  self::ID, array($this, 'thankyou_page'));
@@ -40,12 +41,23 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         add_action('admin_notices', [$this, 'warning_no_debug_or_sandbox_on_production'], 0);
     }
 
+    public function get_settings()
+    {
+        $this->title = $this->get_option('title', $this->method_title);
+        $this->description = $this->get_option('description', $this->method_description);
+        $this->instructions = $this->get_option('instructions', $this->description);
+        $this->sandbox = $this->get_option('sandbox', 'no');
+        $this->app_id = $this->get_option('app_id');
+        $this->merchant_number = $this->get_option('merchant_number');
+        $this->merchant_private_key = $this->get_option('merchant_private_key');
+    }
+
     public function warning_no_debug_or_sandbox_on_production()
     {
-        if ($this->sandbox === "no" && $this->debug === "no") {
+        if ($this->sandbox === "no") {
             return;
         }
-        $message = __("Don't use payermax debug or sandbox mode in production.", 'woocommerce-gateway-payermax');
+        $message = __("Don't use payermax sandbox mode in production.", 'woocommerce-gateway-payermax');
         $settings = '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-payermax') . '</a>';
         echo '<div class="notice notice-warning">
         <p style="font-weight: bold;">' . esc_html($message) . ' ' . $settings . '</p>
@@ -60,7 +72,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $this->id   = self::ID;
         $this->icon = WC_PAYERMAX_ASSETS_URI . 'assets/images/logo.png';
         $this->method_title = __('PayerMax Payment', 'woocommerce-gateway-payermax');
-        $this->method_description = __('PayerMax payment systems.', 'woocommerce-gateway-payermax');
+        $this->method_description = __('PayerMax payment settings. for more information, please visit our <a target="_blank" href="https://www.payermax.com/">official website</a>.', 'woocommerce-gateway-payermax');
         $this->has_fields         = false;
         $this->supports = [
             'products',
@@ -81,6 +93,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
      */
     public function thankyou_page()
     {
+        print_r($_REQUEST);
         if ($this->instructions) {
             echo wp_kses_post(wpautop(wptexturize($this->instructions)));
         }
@@ -132,13 +145,17 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
             $request = new WC_Gateway_PayerMax_Request($this);
 
-            $request->get_request_url($order);
+            $url = $request->get_request_url($order);
+            return array(
+                'result'   => empty($url) ? 'failed' : 'success',
+                'redirect' => $url,
+            );
         } else {
             $order->payment_complete();
         }
 
         // Remove cart.
-        // WC()->cart->empty_cart();
+        WC()->cart->empty_cart();
 
         // Return thankyou redirect.
         return array(
