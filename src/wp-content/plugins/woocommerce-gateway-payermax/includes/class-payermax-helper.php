@@ -74,6 +74,14 @@ class PayerMax_Helper
 
     public static function get_payermax_language($language)
     {
-        return $language;
+        if (in_array($language, ['zh_CN', 'zh-CN', 'zh-Hans'])) {
+            return 'zh';
+        }
+
+        if (in_array($language, ['zh_HK', 'zh-HK', 'zh_TW', 'zh-TW', 'zh-Hant'])) {
+            return 'zh-TW';
+        }
+
+        return substr($language, 0, 2);
     }
 }
