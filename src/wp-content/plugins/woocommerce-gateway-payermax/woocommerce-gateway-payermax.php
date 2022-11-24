@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: WooCommerce PayerMax Gateway
- * Plugin URI: https://wordpress.org/plugins/woocommerce-gateway-payermax/
+ * Plugin URI: https://www.payermax.com/
  * Description: Take credit card payments on your store using PayerMax.
  * Author: PayerMax
  * Author URI: https://www.payermax.com/
@@ -11,18 +11,22 @@
  * Tested up to: 6.0
  * WC requires at least: 6.8
  * WC tested up to: 7.0
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: woocommerce-gateway-payermax
  * Domain Path: /languages
  */
 
-if (!defined('ABSPATH')) {
-    exit;
+// If this file is called directly, abort.
+if (!defined('WPINC')) {
+    die;
 }
 
 use Automattic\Jetpack\Constants;
 
 /**
  * Required minimums and constants
+ * Start at version 1.0.0 and use SemVer - https://semver.org
  */
 define('WC_PAYERMAX_PLUGIN_VERSION', '1.0.0');
 define('WC_PAYERMAX_PLUGIN_NAME', 'woocommerce-gateway-payermax');
@@ -36,8 +40,6 @@ define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', WC_PAYERMAX_PLUGIN_FILE)); /
 define('WC_PAYERMAX_PLUGIN_PATH', untrailingslashit(plugin_dir_path(WC_PAYERMAX_PLUGIN_FILE))); // without tail slash
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
-
-require_once __DIR__ . '/includes/class-payermax.php';
 
 /**
  * WooCommerce fallback notice.
@@ -101,7 +103,6 @@ function woocommerce_gateway_payermax_init()
      */
     add_filter('woocommerce_payment_gateways', function ($methods) {
         $methods[] = WC_Gateway_PayerMax::class;
-        // $methods[] = 'WC_Gateway_PayerMax_Card';
         return $methods;
     });
 }
@@ -109,11 +110,11 @@ function woocommerce_gateway_payermax_init()
 function woocommerce_gateway_payermax()
 {
     if (!class_exists('WC_Payment_Gateway')) return;
-
-    require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-payermax-logger.php';
-    require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-payermax-helper.php';
-    require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
-    require_once WC_PAYERMAX_PLUGIN_PATH . '/includes/class-wc-gateway-payermax.php';
+    require_once __DIR__ . '/includes/class-payermax.php';
+    require_once __DIR__ . '/includes/class-payermax-logger.php';
+    require_once __DIR__ . '/includes/class-payermax-helper.php';
+    require_once __DIR__ . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
+    require_once __DIR__ . '/includes/class-wc-gateway-payermax.php';
 
     PayerMax_Logger::debug("Supported Currencies:" . json_encode(PayerMax::get_currencies()));
     PayerMax_Logger::debug("Supported Languages:" . json_encode(PayerMax::get_languages()));
