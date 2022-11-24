@@ -18,6 +18,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public $sandbox = "no";
 
     const ORDER_NOTIFY_CALLBACK = 'payermax-order-notify-v1';
+    const REFUND_ORDER_NOTIFY_CALLBACK = 'payermax-refund-order-notify-v1';
 
     public function __construct()
     {

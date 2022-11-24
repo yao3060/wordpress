@@ -45,13 +45,22 @@ return apply_filters(
             'desc_tip'    => true,
         ],
 
+        'merchant_public_key' => [
+            'title'       => __('Merchant Public Key', 'woocommerce-gateway-payermax'),
+            'type'        => 'textarea',
+            'description' => __('Merchant Public Key', 'woocommerce-gateway-payermax'),
+            'default'     => '',
+            'desc_tip'    => true,
+            'css'      => 'max-width: 650px; min-height:60px;',
+        ],
+
         'merchant_private_key' => [
             'title'       => __('Merchant Private Key', 'woocommerce-gateway-payermax'),
             'type'        => 'textarea',
             'description' => __('Merchant Private Key', 'woocommerce-gateway-payermax'),
-            'default'     => __('', 'woocommerce-gateway-payermax'),
+            'default'     => '',
             'desc_tip'    => true,
-            'css'      => 'max-width: 600px; min-height:250px;',
+            'css'      => 'max-width: 650px; min-height:250px;',
         ],
 
         'sandbox'     => [
@@ -62,14 +71,14 @@ return apply_filters(
             'default'     => 'no',
         ],
 
-
-
-        'webhook'     => [
-            'title'       => __('Webhook Endpoints', 'woocommerce-gateway-payermax'),
-            'type'        => 'text',
-            /* translators: webhook URL */
-            'description' => 'Webhook Endpoints',
-            'desc_tip'    => true,
+        'Callbacks'     => [
+            'title'       => __('Callbacks', 'woocommerce-gateway-payermax'),
+            'type'        => 'title',
+            'description' => sprintf(
+                __('<strong>Payment:</strong><code>%s</code><br><strong>Refund:</strong><code>%s</code>', 'woocommerce-gateway-payermax'),
+                home_url('wc-api/' . self::ORDER_NOTIFY_CALLBACK),
+                home_url('wc-api/' . self::REFUND_ORDER_NOTIFY_CALLBACK)
+            ),
         ],
 
         'debug'     => [
