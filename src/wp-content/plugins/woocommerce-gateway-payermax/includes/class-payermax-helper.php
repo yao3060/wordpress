@@ -11,8 +11,6 @@ class PayerMax_Helper
             wordwrap($private_key, 64, "\n", true) .
             "\n-----END RSA PRIVATE KEY-----";
 
-        ($res) or die('私钥格式错误');
-
         openssl_sign(json_encode($request_data), $sign, $res, OPENSSL_ALGO_SHA256);
         $sign = base64_encode($sign);
 
@@ -20,6 +18,18 @@ class PayerMax_Helper
 
         return $sign;
     }
+
+    public static function verify_sign($content, $sign, $public_key)
+    {
+        if (!$sign || !$content || !$public_key) return false;
+
+        $formatted = "-----BEGIN PUBLIC KEY-----\n" .
+            wordwrap($public_key, 64, "\n", true) .
+            "\n-----END PUBLIC KEY-----";
+
+        return openssl_verify($content, base64_decode($sign), $formatted, OPENSSL_ALGO_SHA256) === 1;
+    }
+
 
     public static function get_order_country(WC_Order $order)
     {
@@ -50,8 +60,7 @@ class PayerMax_Helper
 
             $wc_order->add_order_note(
                 sprintf(
-                    /* translators: %s is the PayerMax transaction ID */
-                    __('PayerMax transaction ID: %s', 'woocommerce-gateway-payermax'),
+                    __('Set transaction ID: %s', 'woocommerce-gateway-payermax'),
                     $transaction_id
                 )
             );
@@ -61,5 +70,10 @@ class PayerMax_Helper
             PayerMax_Logger::error('Failed to set transaction ID ' . $transaction_id . $exception->getMessage());
             return false;
         }
+    }
+
+    public static function get_payermax_language($language)
+    {
+        return $language;
     }
 }

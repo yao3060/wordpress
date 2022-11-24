@@ -17,6 +17,8 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public $merchant_private_key;
     public $sandbox = "no";
 
+    const ORDER_NOTIFY_CALLBACK = 'payermax-order-notify-v1';
+
     public function __construct()
     {
         // Setup general properties.
@@ -30,14 +32,18 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         // Get settings.
         $this->get_settings();
 
+        // add a save hook for your settings
         add_action('woocommerce_update_options_payment_gateways_' . self::ID, array($this, 'process_admin_options'));
         add_action('woocommerce_thankyou_' .  self::ID, array($this, 'thankyou_page'));
-        add_filter('woocommerce_payment_complete_order_status', array($this, 'change_payment_complete_order_status'), 10, 3);
 
         // Customer Emails.
         add_action('woocommerce_email_before_order_table', array($this, 'email_instructions'), 10, 3);
 
         add_action('admin_notices', [$this, 'warning_no_debug_or_sandbox_on_production'], 0);
+
+        // @see https://woocommerce.com/document/wc_api-the-woocommerce-api-callback/#section-2
+        // payermax order notify `https://domain.com/wc-api/payermax-order-notify-v1`
+        add_action('woocommerce_api_' . self::ORDER_NOTIFY_CALLBACK, [$this, 'order_notify']);
     }
 
     public function get_settings()
@@ -88,79 +94,108 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     }
 
     /**
-     * Output for the order received page.
-     */
-    public function thankyou_page()
-    {
-        // TODO: check payment status here.
-        if ($this->instructions) {
-            echo wp_kses_post(wpautop(wptexturize($this->instructions)));
-        }
-    }
-
-    /**
-     * Change payment complete order status to completed for payleo orders.
-     *
-     * @since  3.1.0
-     * @param  string         $status Current order status.
-     * @param  int            $order_id Order ID.
-     * @param  WC_Order|false $order Order object.
-     * @return string
-     */
-    public function change_payment_complete_order_status($status, $order_id = 0, $order = false)
-    {
-        if ($order && self::ID === $order->get_payment_method()) {
-            $status = 'completed';
-        }
-        return $status;
-    }
-
-    /**
-     * Add content to the WC emails.
-     *
-     * @param WC_Order $order Order object.
-     * @param bool     $sent_to_admin  Sent to admin.
-     * @param bool     $plain_text Email format: plain text or HTML.
-     */
-    public function email_instructions($order, $sent_to_admin, $plain_text = false)
-    {
-        if ($this->instructions && !$sent_to_admin && $this->id === $order->get_payment_method()) {
-            echo wp_kses_post(wpautop(wptexturize($this->instructions)) . PHP_EOL);
-        }
-    }
-
-    /**
      * Process the payment and return the result.
      *
+     * @see https://woocommerce.com/document/payment-gateway-api/
      * @param int $order_id Order ID.
      * @return array
      */
     public function process_payment($order_id)
     {
+
         $order = wc_get_order($order_id);
 
         if ($order->get_total() > 0) {
+
+            // Mark as on-hold (we're awaiting the payermax payment)
+            $order->update_status('on-hold', __('Awaiting payermax payment', 'woocommerce-gateway-payermax'));
+
             include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
 
             $request = new WC_Gateway_PayerMax_Request($this);
 
             $url = $request->get_request_url($order);
+
+            // make retry if transaction is CLOSED.
+            if ($url === 'CLOSED') {
+                $url = $request->get_request_url($order);
+            }
+
+            if (empty($url)) {
+                wc_add_notice(__("Payment error:  Can't get payment link.", 'woocommerce-gateway-payermax'), 'error');
+                return;
+            }
+
+            // Remove cart.
+            WC()->cart->empty_cart();
+
             return array(
-                'result'   => empty($url) ? 'failed' : 'success',
+                'result'   => 'success',
                 'redirect' => $url,
             );
         } else {
             $order->payment_complete();
+
+            // Remove cart.
+            WC()->cart->empty_cart();
+
+            // Return thankyou redirect.
+            return array(
+                'result'   => 'success',
+                'redirect' => $this->get_return_url($order),
+            );
+        }
+    }
+
+    public function process_refund($order_id, $amount = null, $reason = '')
+    {
+        return parent::process_refund($order_id, $amount = null, $reason = '');
+    }
+
+
+    public function order_notify()
+    {
+        if (!isset($_SERVER['REQUEST_METHOD']) || ('POST' !== $_SERVER['REQUEST_METHOD'])) {
+            echo 'not supported REQUEST_METHOD';
+            exit;
         }
 
-        // Remove cart.
-        WC()->cart->empty_cart();
+        require_once __DIR__ . '/class-wc-gateway-payermax-notify.php';
 
-        // Return thankyou redirect.
-        return array(
-            'result'   => 'success',
-            'redirect' => $this->get_return_url($order),
-        );
+        // @see request data from: https://docs.shareitpay.in/#/30?page_id=653&lang=zh-cn
+        $request_body = file_get_contents('php://input');
+        PayerMax_Logger::info("Payment notice, " . $request_body);
+
+        // verify sign from payermax request header.
+        if (!PayerMax_Helper::verify_sign(
+            $request_body,
+            $_SERVER['HTTP_SIGN'] ?? '',
+            '123'
+        )) {
+            PayerMax_Logger::warning("verify_sign failed, sign:" . $_SERVER['HTTP_SIGN']);
+            echo "verify_sign failed";
+            exit;
+        }
+
+        $result = WC_Gateway_PayerMax_Notify::payment_complete(json_decode($request_body, true));
+
+        header('Content-Type: application/json');
+        if (!$result) {
+            status_header(422);
+            echo json_encode([
+                "code" => "failed",
+                "msg" => "Failed"
+            ]);
+        } else {
+            status_header(200);
+            echo json_encode([
+                "code" => "SUCCESS",
+                "msg" => "Success"
+            ]);
+        }
+
+        // Exit WordPress.
+        exit;
     }
 
     /**
@@ -185,5 +220,36 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         }
 
         return parent::is_available();
+    }
+
+    /**
+     * Output for the order received page.
+     */
+    public function thankyou_page($order_id)
+    {
+        if ($order = wc_get_order($order_id)) {
+            include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+
+            $request = new WC_Gateway_PayerMax_Request($this);
+
+            $request->get_transaction_status($order);
+        }
+
+        // display some information about PayerMax
+        echo '<h2>Thank you.</h2>';
+    }
+
+    /**
+     * Add content to the WC emails.
+     *
+     * @param WC_Order $order Order object.
+     * @param bool     $sent_to_admin  Sent to admin.
+     * @param bool     $plain_text Email format: plain text or HTML.
+     */
+    public function email_instructions($order, $sent_to_admin, $plain_text = false)
+    {
+        if ($this->instructions && !$sent_to_admin && $this->id === $order->get_payment_method()) {
+            echo wp_kses_post(wpautop(wptexturize($this->instructions)) . PHP_EOL);
+        }
     }
 }

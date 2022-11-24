@@ -101,25 +101,28 @@ function woocommerce_gateway_payermax_init()
     /**
      * This action hook registers our PHP class as a WooCommerce payment gateway
      */
-    add_filter('woocommerce_payment_gateways', function ($methods) {
-        $methods[] = WC_Gateway_PayerMax::class;
-        return $methods;
-    });
+    add_filter('woocommerce_payment_gateways', 'woocommerce_gateway_payermax_add_gateways');
 }
 
 function woocommerce_gateway_payermax()
 {
     if (!class_exists('WC_Payment_Gateway')) return;
+
     require_once __DIR__ . '/includes/class-payermax.php';
     require_once __DIR__ . '/includes/class-payermax-logger.php';
     require_once __DIR__ . '/includes/class-payermax-helper.php';
     require_once __DIR__ . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
     require_once __DIR__ . '/includes/class-wc-gateway-payermax.php';
 
-    PayerMax_Logger::debug("Supported Currencies:" . json_encode(PayerMax::get_currencies()));
-    PayerMax_Logger::debug("Supported Languages:" . json_encode(PayerMax::get_languages()));
+    // PayerMax_Logger::debug("Supported Currencies:" . json_encode(PayerMax::get_currencies()));
+    // PayerMax_Logger::debug("Supported Languages:" . json_encode(PayerMax::get_languages()));
 }
 
+function woocommerce_gateway_payermax_add_gateways($methods)
+{
+    $methods[] = WC_Gateway_PayerMax::class;
+    return $methods;
+}
 
 
 add_filter('plugin_action_links_' . plugin_basename(WC_PAYERMAX_PLUGIN_FILE), function ($links) {

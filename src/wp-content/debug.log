@@ -58,3 +58,48 @@
 [23-Nov-2022 09:34:02 UTC] PHP Warning:  print_r() expects at most 2 parameters, 51 given in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax.php on line 10
 [23-Nov-2022 09:34:02 UTC] PHP Warning:  print_r() expects at most 2 parameters, 51 given in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax.php on line 10
 [24-Nov-2022 02:40:54 UTC] PHP Notice:  Trying to get property 'Value' of non-object in /var/www/html/wp-content/plugins/wp-serverinfo/wp-serverinfo.php on line 493
+[24-Nov-2022 08:06:12 UTC] PHP Warning:  call_user_func_array() expects parameter 1 to be a valid callback, class 'WC_Gateway_PayerMax' does not have a method 'order_notify' in /var/www/html/wp-includes/class-wp-hook.php on line 303
+[24-Nov-2022 09:05:34 UTC] PHP Fatal error:  Uncaught Error: Object of class WP_REST_Response could not be converted to string in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php:169
+Stack trace:
+#0 /var/www/html/wp-includes/class-wp-hook.php(303): WC_Gateway_PayerMax->order_notify('')
+#1 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#2 /var/www/html/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#3 /var/www/html/wp-content/plugins/woocommerce/includes/class-wc-api.php(161): do_action('woocommerce_api...')
+#4 /var/www/html/wp-includes/class-wp-hook.php(303): WC_API->handle_api_requests(Object(WP))
+#5 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters(NULL, Array)
+#6 /var/www/html/wp-includes/plugin.php(518): WP_Hook->do_action(Array)
+#7 /var/www/html/wp-includes/class-wp.php(388): do_action_ref_array('parse_request', Array)
+#8 /var/www/html/wp-includes/class-wp.php(750): WP->parse_request('')
+#9 /var/www/html/wp-includes/functions.php( in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php on line 169
+[24-Nov-2022 09:12:25 UTC] PHP Notice:  Undefined index: reference in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-notify.php on line 39
+[24-Nov-2022 09:12:25 UTC] PHP Notice:  Undefined variable: item in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-notify.php on line 41
+[24-Nov-2022 10:00:05 UTC] PHP Notice:  Undefined index: wc-api in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php on line 158
+[24-Nov-2022 10:00:33 UTC] PHP Warning:  openssl_verify(): supplied key param cannot be coerced into a public key in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax-helper.php on line 30
+[24-Nov-2022 10:01:04 UTC] PHP Warning:  openssl_verify(): supplied key param cannot be coerced into a public key in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax-helper.php on line 30
+[24-Nov-2022 10:45:13 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type WP_Error as array in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php:120
+Stack trace:
+#0 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php(235): WC_Gateway_PayerMax_Request->query_transaction(Object(Automattic\WooCommerce\Admin\Overrides\Order))
+#1 /var/www/html/wp-includes/class-wp-hook.php(303): WC_Gateway_PayerMax->thankyou_page(31)
+#2 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#3 /var/www/html/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#4 /var/www/html/wp-content/plugins/woocommerce/templates/checkout/thankyou.php(79): do_action('woocommerce_tha...', 31)
+#5 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(345): include('/var/www/html/w...')
+#6 /var/www/html/wp-content/plugins/woocommerce/includes/shortcodes/class-wc-shortcode-checkout.php(276): wc_get_template('checkout/thank in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 120
+[24-Nov-2022 10:46:09 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type WP_Error as array in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php:120
+Stack trace:
+#0 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php(235): WC_Gateway_PayerMax_Request->query_transaction(Object(Automattic\WooCommerce\Admin\Overrides\Order))
+#1 /var/www/html/wp-includes/class-wp-hook.php(303): WC_Gateway_PayerMax->thankyou_page(31)
+#2 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#3 /var/www/html/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#4 /var/www/html/wp-content/plugins/woocommerce/templates/checkout/thankyou.php(79): do_action('woocommerce_tha...', 31)
+#5 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(345): include('/var/www/html/w...')
+#6 /var/www/html/wp-content/plugins/woocommerce/includes/shortcodes/class-wc-shortcode-checkout.php(276): wc_get_template('checkout/thank in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 120
+[24-Nov-2022 10:46:14 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type WP_Error as array in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php:120
+Stack trace:
+#0 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php(235): WC_Gateway_PayerMax_Request->query_transaction(Object(Automattic\WooCommerce\Admin\Overrides\Order))
+#1 /var/www/html/wp-includes/class-wp-hook.php(303): WC_Gateway_PayerMax->thankyou_page(31)
+#2 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#3 /var/www/html/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#4 /var/www/html/wp-content/plugins/woocommerce/templates/checkout/thankyou.php(79): do_action('woocommerce_tha...', 31)
+#5 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(345): include('/var/www/html/w...')
+#6 /var/www/html/wp-content/plugins/woocommerce/includes/shortcodes/class-wc-shortcode-checkout.php(276): wc_get_template('checkout/thank in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 120
