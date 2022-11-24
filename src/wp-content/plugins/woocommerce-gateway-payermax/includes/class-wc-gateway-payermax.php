@@ -170,6 +170,11 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
      */
     public function is_available()
     {
+        if (!$this->merchant_private_key || !$this->merchant_number || !$this->app_id) {
+            PayerMax_Logger::debug('Please fill up the "Merchant private key" "merchant number" "app id" in your settings.');
+            return false;
+        }
+
         // check is woocommerce_currency available.
         if (
             !get_option('woocommerce_currency') ||
