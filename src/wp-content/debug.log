@@ -57,3 +57,4 @@
 [23-Nov-2022 09:33:53 UTC] PHP Warning:  print_r() expects at most 2 parameters, 51 given in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax.php on line 10
 [23-Nov-2022 09:34:02 UTC] PHP Warning:  print_r() expects at most 2 parameters, 51 given in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax.php on line 10
 [23-Nov-2022 09:34:02 UTC] PHP Warning:  print_r() expects at most 2 parameters, 51 given in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-payermax.php on line 10
+[24-Nov-2022 02:40:54 UTC] PHP Notice:  Trying to get property 'Value' of non-object in /var/www/html/wp-content/plugins/wp-serverinfo/wp-serverinfo.php on line 493
