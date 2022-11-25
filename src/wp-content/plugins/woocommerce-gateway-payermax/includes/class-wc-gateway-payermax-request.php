@@ -100,10 +100,8 @@ class WC_Gateway_PayerMax_Request
     /**
      * 交易查询
      */
-    public function get_transaction_status(WC_Order $order, $sandbox = false) {
+    public function get_transaction_status(WC_Order $order)
     {
-        $this->endpoint = $sandbox ? PAYERMAX_API_GATEWAY : PAYERMAX_API_GATEWAY;
-
         $request_data = $this->wrap_request_data(["outTradeNo" => $order->get_transaction_id()]);
 
         $this->endpoint = PayerMax::gateway($this->gateway->sandbox === 'no');
