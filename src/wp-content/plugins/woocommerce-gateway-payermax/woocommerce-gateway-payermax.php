@@ -95,40 +95,41 @@ final class PayerMax
         wp_cache_set($cache_key, $supports, $group, DAY_IN_SECONDS);
         return $supports;
     }
-}
 
+    static function missing_wc_notice()
+    {
+        echo '<div class="error"><p><strong>' .
+            sprintf(
+                esc_html__('PayerMax requires WooCommerce to be installed and active. You can download %s here.', 'woocommerce-gateway-payermax'),
+                '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>'
+            ) .
+            '</strong></p></div>';
+    }
 
-/**
- * WooCommerce fallback notice.
- *
- * @since 4.1.2
- */
-function woocommerce_payermax_missing_wc_notice()
-{
-    /* translators: 1. URL link. */
-    echo '<div class="error"><p><strong>' .
-        sprintf(
-            esc_html__('PayerMax requires WooCommerce to be installed and active. You can download %s here.', 'woocommerce-gateway-payermax'),
-            '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>'
-        ) .
-        '</strong></p></div>';
-}
+    static function wc_not_supported()
+    {
+        echo '<div class="error"><p><strong>' .
+            sprintf(
+                esc_html__('PayerMax requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-stripe'),
+                WC_PAYERMAX_MIN_WC_VER,
+                Constants::get_constant('WC_VERSION')
+            ) .
+            '</strong></p></div>';
+    }
 
-/**
- * WooCommerce not supported fallback notice.
- *
- * @since 4.4.0
- */
-function woocommerce_payermax_wc_not_supported()
-{
-    /* translators: $1. Minimum WooCommerce version. $2. Current WooCommerce version. */
-    echo '<div class="error"><p><strong>' .
-        sprintf(
-            esc_html__('PayerMax requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-stripe'),
-            WC_PAYERMAX_MIN_WC_VER,
-            Constants::get_constant('WC_VERSION')
-        ) .
-        '</strong></p></div>';
+    static function add_gateways($methods)
+    {
+        $methods[] = WC_Gateway_PayerMax::class;
+        return $methods;
+    }
+
+    static function plugin_action_links($links)
+    {
+        $plugin_links = [
+            '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-payermax') . '</a>',
+        ];
+        return array_merge($plugin_links, $links);
+    }
 }
 
 
@@ -137,15 +138,20 @@ add_action('plugins_loaded', 'woocommerce_gateway_payermax_init', 11);
 function woocommerce_gateway_payermax_init()
 {
 
-    load_plugin_textdomain('woocommerce-gateway-payermax', false, plugin_basename(dirname(WC_PAYERMAX_PLUGIN_FILE)) . '/languages');
+    load_plugin_textdomain(
+        'woocommerce-gateway-payermax',
+        false,
+        plugin_basename(dirname(WC_PAYERMAX_PLUGIN_FILE)) . '/languages'
+    );
+
 
     if (!class_exists('WooCommerce')) {
-        add_action('admin_notices', 'woocommerce_payermax_missing_wc_notice');
+        add_action('admin_notices', [PayerMax::class, 'missing_wc_notice']);
         return;
     }
 
     if (version_compare(Constants::get_constant('WC_VERSION'), WC_PAYERMAX_MIN_WC_VER, '<')) {
-        add_action('admin_notices', 'woocommerce_payermax_wc_not_supported');
+        add_action('admin_notices', [PayerMax::class, 'wc_not_supported']);
         return;
     }
 
@@ -154,13 +160,6 @@ function woocommerce_gateway_payermax_init()
     }
 
     woocommerce_gateway_payermax();
-
-    /**
-     * This action hook registers our PHP class as a WooCommerce payment gateway
-     */
-    add_filter('woocommerce_payment_gateways', 'woocommerce_gateway_payermax_add_gateways');
-
-    add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'woocommerce_gateway_payermax_plugin_action_links');
 }
 
 function woocommerce_gateway_payermax()
@@ -174,18 +173,17 @@ function woocommerce_gateway_payermax()
 
     // PayerMax_Logger::debug("Supported Currencies:" . json_encode(PayerMax::get_currencies()));
     // PayerMax_Logger::debug("Supported Languages:" . json_encode(PayerMax::get_languages()));
-}
 
-function woocommerce_gateway_payermax_add_gateways($methods)
-{
-    $methods[] = WC_Gateway_PayerMax::class;
-    return $methods;
-}
+    /**
+     * This action hook registers our PHP class as a WooCommerce payment gateway
+     */
+    add_filter(
+        'woocommerce_payment_gateways',
+        [PayerMax::class, 'add_gateways']
+    );
 
-function woocommerce_gateway_payermax_plugin_action_links($links)
-{
-    $plugin_links = [
-        '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-payermax') . '</a>',
-    ];
-    return array_merge($plugin_links, $links);
+    add_filter(
+        'plugin_action_links_' . plugin_basename(__FILE__),
+        [PayerMax::class, 'plugin_action_links']
+    );
 }
