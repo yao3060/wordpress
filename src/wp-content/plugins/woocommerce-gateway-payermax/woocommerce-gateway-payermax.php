@@ -110,7 +110,7 @@ final class PayerMax
     {
         echo '<div class="error"><p><strong>' .
             sprintf(
-                esc_html__('PayerMax requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-stripe'),
+                esc_html__('PayerMax requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-payermax'),
                 WC_PAYERMAX_MIN_WC_VER,
                 Constants::get_constant('WC_VERSION')
             ) .

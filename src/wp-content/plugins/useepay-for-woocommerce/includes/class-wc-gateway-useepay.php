@@ -124,21 +124,73 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
         $cardNumber = isset($_REQUEST['cardNumber']) ? esc_attr($_REQUEST['cardNumber']) : '';
         $cardExpirationMonth = isset($_REQUEST['cardExpirationMonth']) ? esc_attr($_REQUEST['cardExpirationMonth']) : '';
         $cardExpirationYear = isset($_REQUEST['cardExpirationYear']) ? esc_attr($_REQUEST['cardExpirationYear']) : '';
-        ?>
+?>
         <style>
-            .payment_box.payment_method_useepay { font-size: 0.75rem; padding:0 !important; border-radius: 10px; background-color: transparent !important;}
-            .payment_box.payment_method_useepay:before {display:none !important;}
-             label[for=payment_method_useepay] img {width: 60%; margin: 0 auto !important;}
-            .payment_box.payment_method_useepay input {padding: 12px;border-color: #ddd !important; border-radius: 10px!important;}
-            .payment_box.payment_method_useepay select {padding: 0 12px; width: 49%;height: 2.5rem;border-radius: 10px;border-color: #ddd !important;border-radius: 10px!important;}
-            .payment_box.payment_method_useepay .select-container { display: flex !important; width: 90% !important; margin: auto !important; justify-content: space-between !important;}
-            .payment_box.payment_method_useepay label {display:block;width:100%;font-size: 0.75rem !important;font-weight: 500;margin-bottom: 8px;}
-            .payment_box.payment_method_useepay .form-row {width:100%; padding: 0.5rem 1rem !important;}
-            .payment_methods .useepay-security-code-hint-section img {margin: 0 auto;width: 10rem;max-height:3rem !important;padding-right:1rem !important;padding-left: 1.5rem;}
-            @media screen and (max-width: 400px) {
-                label[for=payment_method_useepay] img {width: 60%; margin: 0 auto !important;}
+            .payment_box.payment_method_useepay {
+                font-size: 0.75rem;
+                padding: 0 !important;
+                border-radius: 10px;
+                background-color: transparent !important;
             }
 
+            .payment_box.payment_method_useepay:before {
+                display: none !important;
+            }
+
+            label[for=payment_method_useepay] img {
+                width: 60%;
+                margin: 0 auto !important;
+            }
+
+            .payment_box.payment_method_useepay input {
+                padding: 12px;
+                border-color: #ddd !important;
+                border-radius: 10px !important;
+            }
+
+            .payment_box.payment_method_useepay select {
+                padding: 0 12px;
+                width: 49%;
+                height: 2.5rem;
+                border-radius: 10px;
+                border-color: #ddd !important;
+                border-radius: 10px !important;
+            }
+
+            .payment_box.payment_method_useepay .select-container {
+                display: flex !important;
+                width: 90% !important;
+                margin: auto !important;
+                justify-content: space-between !important;
+            }
+
+            .payment_box.payment_method_useepay label {
+                display: block;
+                width: 100%;
+                font-size: 0.75rem !important;
+                font-weight: 500;
+                margin-bottom: 8px;
+            }
+
+            .payment_box.payment_method_useepay .form-row {
+                width: 100%;
+                padding: 0.5rem 1rem !important;
+            }
+
+            .payment_methods .useepay-security-code-hint-section img {
+                margin: 0 auto;
+                width: 10rem;
+                max-height: 3rem !important;
+                padding-right: 1rem !important;
+                padding-left: 1.5rem;
+            }
+
+            @media screen and (max-width: 400px) {
+                label[for=payment_method_useepay] img {
+                    width: 60%;
+                    margin: 0 auto !important;
+                }
+            }
         </style>
 
         <?php
@@ -146,27 +198,26 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
         echo '<script type="text/javascript" src="' . $useepay_js . '"></script>';
         ?>
 
-        <input id="browserInfo" name="browserInfo" type="hidden" value=""/>
+        <input id="browserInfo" name="browserInfo" type="hidden" value="" />
         <div id="threedsContainer" hidden="hidden"></div>
-        <input id="isGather" type="hidden" value="0"/>
+        <input id="isGather" type="hidden" value="0" />
 
         <p class="form-row validate-required">
             <label>Card number <span class="required">*</span></label>
-            <input id="cardNo" class="input-text" type="text" size="19" maxlength="19" name="cardNumber"
-                   value="<?php echo $cardNumber; ?>"/>
+            <input id="cardNo" class="input-text" type="text" size="19" maxlength="19" name="cardNumber" value="<?php echo $cardNumber; ?>" />
         </p>
         <div class="clear"></div>
         <p class="form-row form-row-first">
             <label>Expiration date <span class="required">*</span></label>
-            <div class="select-container">
-                <input id="cardExpirationMonth" class="input-text" placeholder="MM" type="text" maxlength="19" name="cardExpirationMonth" value="<?php echo $cardExpirationMonth; ?>" style="width: 50%;"/>
-                <input id="cardExpirationYear" class="input-text" placeholder="YY" type="text" maxlength="19" name="cardExpirationYear" value="<?php echo $cardExpirationYear; ?>" style="width: 50%;"/>
-            </div>
+        <div class="select-container">
+            <input id="cardExpirationMonth" class="input-text" placeholder="MM" type="text" maxlength="19" name="cardExpirationMonth" value="<?php echo $cardExpirationMonth; ?>" style="width: 50%;" />
+            <input id="cardExpirationYear" class="input-text" placeholder="YY" type="text" maxlength="19" name="cardExpirationYear" value="<?php echo $cardExpirationYear; ?>" style="width: 50%;" />
+        </div>
         </p>
         <div class="clear"></div>
         <p class="form-row form-row-first validate-required">
             <label>CVV <span class="required">*</span></label>
-            <input id="cvv" class="input-text" type="text" size="4" maxlength="4" name="securityCode" value=""/>
+            <input id="cvv" class="input-text" type="text" size="4" maxlength="4" name="securityCode" value="" />
         </p>
         <?php
         $cvv_hint_img = plugins_url() . "/useepay-for-woocommerce/assets/images/card-security-code-hint.png";
@@ -183,7 +234,7 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
                 document.getElementById("browserInfo").value = JSON.stringify(browserInfo);
             }
         </script>
-        <?php
+<?php
     }
 
 
@@ -230,9 +281,9 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
                 );
             } else if ($result_code == 'pending_review') {
 
-               $this->do_order_on_hold_tasks($order, $transaction_id);
+                $this->do_order_on_hold_tasks($order, $transaction_id);
 
-               return array(
+                return array(
                     'result'   => 'success',
                     'redirect' => empty($response['redirectUrl']) ? $this->get_return_url($order) : $response['redirectUrl']
                 );
@@ -308,8 +359,6 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
             wc_add_wp_error_notices(new  WP_Error('error', $e->get_localization_message()));
             return false;
         }
-
-
     }
 
     /**
@@ -448,8 +497,8 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
                 'fingerPrintId' => trim($fingerPrintId), // 设备指纹
             ];
         }
-       
-        
+
+
         $transaction_id = $order->get_transaction_id();
         if (!$transaction_id) {
             $transaction_id = $this->get_useepay_order_transaction_id($order);
@@ -480,33 +529,34 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
     }
 
     /**
-	 * Sets transaction ID to the WC order.
-	 *
-	 * @param string               $transaction_id The transaction ID to set.
-	 * @param WC_Order             $wc_order The order to set transaction ID to.
-	 * @param LoggerInterface|null $logger The logger to log errors.
-	 *
-	 * @return bool
-	 */
-	protected function update_transaction_id(string $transaction_id,WC_Order $wc_order): bool {
-		try {
-			$wc_order->set_transaction_id( $transaction_id );
-			$wc_order->save();
+     * Sets transaction ID to the WC order.
+     *
+     * @param string               $transaction_id The transaction ID to set.
+     * @param WC_Order             $wc_order The order to set transaction ID to.
+     * @param LoggerInterface|null $logger The logger to log errors.
+     *
+     * @return bool
+     */
+    protected function update_transaction_id(string $transaction_id, WC_Order $wc_order): bool
+    {
+        try {
+            $wc_order->set_transaction_id($transaction_id);
+            $wc_order->save();
 
-			$wc_order->add_order_note(
-				sprintf(
-					/* translators: %s is the Useepay transaction ID */
-					__( 'Useepay transaction ID: %s', 'woocommerce-useepay-payments' ),
-					$transaction_id
-				)
-			);
+            $wc_order->add_order_note(
+                sprintf(
+                    /* translators: %s is the Useepay transaction ID */
+                    __('Useepay transaction ID: %s', 'woocommerce-useepay-payments'),
+                    $transaction_id
+                )
+            );
 
-			return true;
-		} catch ( Exception $exception ) {
-			WC_UseePay_Logger::log('Failed to set transaction ID '.$transaction_id . $exception->getMessage());
-			return false;
-		}
-	}
+            return true;
+        } catch (Exception $exception) {
+            WC_UseePay_Logger::log('Failed to set transaction ID ' . $transaction_id . $exception->getMessage());
+            return false;
+        }
+    }
 
     /**
      * Build parameters for refund
@@ -571,8 +621,8 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
         if ($order->get_status() == 'completed')
             return;
 
-         if ($order->get_status() == 'pending') {
-             $order->add_order_note(
+        if ($order->get_status() == 'pending') {
+            $order->add_order_note(
                 sprintf("Credit card authorize with transaction id of '%s'", $transaction_id)
             );
         }
@@ -697,7 +747,7 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
         $resp_json = json_decode($resp_json_str, true);
         $resp_json = json_decode($resp_json, true);
         WC_UseePay_Logger::log('threeds_handle begin to form post with json: ' . var_export($resp_json, true));
-        $threeDSMethodCompletionUrl = add_query_arg(array('order_id'=>$resp_json['transactionId'], 'threeDSServerTransId'=>$resp_json['threeDSServerTransId']), $this->threeds_processing_url);
+        $threeDSMethodCompletionUrl = add_query_arg(array('order_id' => $resp_json['transactionId'], 'threeDSServerTransId' => $resp_json['threeDSServerTransId']), $this->threeds_processing_url);
         WC_UseePay_Logger::log('threeds_handle begin to form post with threeDSMethodCompletionUrl: ' . $threeDSMethodCompletionUrl);
         $useepay_js   = plugins_url() . "/useepay-for-woocommerce/assets/js/useepay-1.0.1.js";
         $useepay_utils_js   = plugins_url() . "/useepay-for-woocommerce/assets/js/useepay-threeds2-utils.js";
@@ -716,7 +766,7 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
                   window.UseePay.showPageLoading('$loading_img', '$loading_text');
                     let resp = JSON.parse($resp_json_str);
                     let redirectParam = JSON.parse(resp.redirectParam);
-                    let threeDSMethodURL = resp.redirectUrl;                                                       
+                    let threeDSMethodURL = resp.redirectUrl;
                     window.UseePay.createAndSubmitFormFor3ds('$threeDSMethodCompletionUrl', threeDSMethodURL, redirectParam , 'POST');
                 })
             </script>
@@ -738,7 +788,7 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
         $order            = wc_get_order($order_id);
         $review_order_url = $this->get_return_url($order);
         $poll_url         = add_query_arg('order_id', $order_id, $this->query_order_status_url);
-        $url              = add_query_arg(array('threeds_trans_id'=>$threeds_trans_id, 'threeDSMethodData'=>$threeDSMethodData), $this->threeds_query_next_step_url);
+        $url              = add_query_arg(array('threeds_trans_id' => $threeds_trans_id, 'threeDSMethodData' => $threeDSMethodData), $this->threeds_query_next_step_url);
 
         $useepay_css  = plugins_url() . "/useepay-for-woocommerce/assets/css/useepay-styles.css";
         $loading_img  = plugins_url() . "/useepay-for-woocommerce/assets/images/loading.gif";
@@ -797,7 +847,7 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
          * 订单处于completed /processing 则不修改订单状态
          * Order status. Options: pending, processing, on-hold, completed, cancelled, refunded, failed and trash. Default is pending.
          */
-        if ('completed' === $order->status || 'processing' === $order->status){
+        if ('completed' === $order->status || 'processing' === $order->status) {
             return;
         }
 
@@ -816,7 +866,6 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
             $this->do_order_on_hold_tasks($order, $orderId);
             echo 'ok';
         }
-
     }
 
     /**
@@ -845,7 +894,11 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
         if ($resultCode == "succeed" && $errorCode == "0000") {
             $refund_amount = Wc_UseePay_Util::convert_useepay_price_to_woo_price($order->get_currency(), $_POST['amount'], 2);
             $order->add_order_note(
-                sprintf('Credit card refund succeed;Refund ID: %s ; Refund Amount: %s', $_POST['reference'], $refund_amount)
+                sprintf(
+                    'Credit card refund succeed;Refund ID: %s ; Refund Amount: %s',
+                    $_POST['reference'],
+                    $refund_amount
+                )
             );
         } else {
             $errorMessage = $errorCode . "," . $errorMsg;
@@ -873,7 +926,6 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
                     $_product                       = $order->get_product_from_item($item);
                     $result["product_names"]        .= $_product->get_data()["name"];
                     $result["product_descriptions"] .= $_product->get_data()["description"];
-
                 }
             }
         }
@@ -916,9 +968,10 @@ class WC_Gateway_UseePay extends WC_UseePay_Payment_Gateway
         }
     }
 
-    protected function get_useepay_order_transaction_id( WC_Order $order ): ?string {
-		return  substr($order->get_order_number() . '.' . md5(uniqid(microtime(true), true)), 0, 24);
-	}
+    protected function get_useepay_order_transaction_id(WC_Order $order): ?string
+    {
+        return  substr($order->get_order_number() . '.' . md5(uniqid(microtime(true), true)), 0, 24);
+    }
 }
 
 ?>

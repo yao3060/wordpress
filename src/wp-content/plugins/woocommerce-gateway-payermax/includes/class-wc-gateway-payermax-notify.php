@@ -107,14 +107,14 @@ class WC_Gateway_PayerMax_Notify
             // if refund successfully
             if ($order->get_transaction_id() === $transaction_id && $request_data['data']['status'] === 'REFUND_SUCCESS') {
                 $order->add_order_note(sprintf(
-                    'PayerMax Refund succeed; Refund ID: %s ; Refund Amount: %s',
+                    'Refunded - Refund ID: %s - Refund Amount: %s',
                     $request_data['data']['refundTradeNo'],
                     $request_data['data']['refundAmount']
-                ));
+                ), 1);
                 return true;
             } else {
                 $order->add_order_note(sprintf(
-                    'PayerMax refund failed; Refund ID: %s; errorMessage: %s',
+                    'Refund failed - Refund ID: %s - errorMessage: %s',
                     $request_data['data']['refundTradeNo'],
                     $request_data['msg']
                 ));
