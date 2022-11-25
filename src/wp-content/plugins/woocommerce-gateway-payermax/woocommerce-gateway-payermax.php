@@ -41,6 +41,63 @@ define('WC_PAYERMAX_PLUGIN_PATH', untrailingslashit(plugin_dir_path(WC_PAYERMAX_
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 
+final class PayerMax
+{
+
+    static function gateway($sandbox): string
+    {
+        return $sandbox ? PAYERMAX_API_UAT_GATEWAY : PAYERMAX_API_GATEWAY;
+    }
+
+    static function get_currencies(): array
+    {
+        $currencies = array_merge(
+            ...array_column(
+                self::get_supports(),
+                'currencies'
+            )
+        );
+        return array_unique($currencies);
+    }
+
+    static function get_languages(): array
+    {
+        $languages = array_merge(
+            ...array_column(
+                self::get_supports(),
+                'languages'
+            )
+        );
+        return array_unique($languages);
+    }
+
+    static function get_supports()
+    {
+        $cache_key = 'supports';
+        $group = WC_PAYERMAX_PLUGIN_NAME . '-' . WC_PAYERMAX_PLUGIN_VERSION;
+        $supports = wp_cache_get($cache_key, $group);
+        if ($supports) {
+            return $supports;
+        }
+
+        $supports = [];
+        if (($open = fopen(WC_PAYERMAX_PLUGIN_PATH . '/payermax-payment-supports.csv', "r")) !== FALSE) {
+            $headers = fgetcsv($open, 10000, ",");
+            while (($data = fgetcsv($open, 1000, ",")) !== FALSE) {
+                $combine = array_combine($headers, $data);
+                $supports[] = array_merge($combine, [
+                    'currencies' => explode(',', $combine['currencies']),
+                    'languages' => explode(',', $combine['languages'])
+                ]);
+            }
+            fclose($open);
+        }
+        wp_cache_set($cache_key, $supports, $group, DAY_IN_SECONDS);
+        return $supports;
+    }
+}
+
+
 /**
  * WooCommerce fallback notice.
  *
@@ -102,13 +159,14 @@ function woocommerce_gateway_payermax_init()
      * This action hook registers our PHP class as a WooCommerce payment gateway
      */
     add_filter('woocommerce_payment_gateways', 'woocommerce_gateway_payermax_add_gateways');
+
+    add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'woocommerce_gateway_payermax_plugin_action_links');
 }
 
 function woocommerce_gateway_payermax()
 {
     if (!class_exists('WC_Payment_Gateway')) return;
 
-    require_once __DIR__ . '/includes/class-payermax.php';
     require_once __DIR__ . '/includes/class-payermax-logger.php';
     require_once __DIR__ . '/includes/class-payermax-helper.php';
     require_once __DIR__ . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
@@ -124,10 +182,10 @@ function woocommerce_gateway_payermax_add_gateways($methods)
     return $methods;
 }
 
-
-add_filter('plugin_action_links_' . plugin_basename(WC_PAYERMAX_PLUGIN_FILE), function ($links) {
+function woocommerce_gateway_payermax_plugin_action_links($links)
+{
     $plugin_links = [
         '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-payermax') . '</a>',
     ];
     return array_merge($plugin_links, $links);
-});
+}

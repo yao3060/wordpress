@@ -12,9 +12,12 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 {
 
     const ID = 'payermax';
-    public $app_id;
-    public $merchant_number;
-    public $merchant_private_key;
+    public $app_id = '';
+    public $merchant_number = '';
+    public $merchant_public_key = '';
+    public $merchant_private_key = '';
+    public $sp_merchant_number = '';
+    public $sp_merchant_auth_token = '';
     public $sandbox = "no";
 
     const ORDER_NOTIFY_CALLBACK = 'payermax-order-notify-v1';
@@ -37,8 +40,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         add_action('woocommerce_update_options_payment_gateways_' . self::ID, array($this, 'process_admin_options'));
         add_action('woocommerce_thankyou_' .  self::ID, array($this, 'thankyou_page'));
 
-        // Customer Emails.
-        add_action('woocommerce_email_before_order_table', array($this, 'email_instructions'), 10, 3);
 
         add_action('admin_notices', [$this, 'warning_no_debug_or_sandbox_on_production'], 0);
 
@@ -51,7 +52,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     {
         $this->title = $this->get_option('title', $this->method_title);
         $this->description = $this->get_option('description', $this->method_description);
-        $this->instructions = $this->get_option('instructions', $this->description);
         $this->sandbox = $this->get_option('sandbox', 'no');
         $this->app_id = $this->get_option('app_id');
         $this->merchant_number = $this->get_option('merchant_number');
@@ -238,19 +238,5 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         // display some information about PayerMax
         echo '<h2>Thank you.</h2>';
-    }
-
-    /**
-     * Add content to the WC emails.
-     *
-     * @param WC_Order $order Order object.
-     * @param bool     $sent_to_admin  Sent to admin.
-     * @param bool     $plain_text Email format: plain text or HTML.
-     */
-    public function email_instructions($order, $sent_to_admin, $plain_text = false)
-    {
-        if ($this->instructions && !$sent_to_admin && $this->id === $order->get_payment_method()) {
-            echo wp_kses_post(wpautop(wptexturize($this->instructions)) . PHP_EOL);
-        }
     }
 }
