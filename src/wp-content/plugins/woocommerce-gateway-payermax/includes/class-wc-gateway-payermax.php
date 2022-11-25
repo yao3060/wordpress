@@ -46,6 +46,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         // @see https://woocommerce.com/document/wc_api-the-woocommerce-api-callback/#section-2
         // payermax order notify `https://domain.com/wc-api/payermax-order-notify-v1`
         add_action('woocommerce_api_' . self::ORDER_NOTIFY_CALLBACK, [$this, 'order_notify']);
+        add_action('woocommerce_api_' . self::REFUND_ORDER_NOTIFY_CALLBACK, [$this, 'order_refund_notify']);
     }
 
     public function get_settings()
@@ -148,9 +149,50 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         }
     }
 
+    /**
+     * Process refund.
+     *
+     * If the gateway declares 'refunds' support, this will allow it to refund.
+     * a passed in amount.
+     *
+     * @param  int        $order_id Order ID.
+     * @param  float|null $amount Refund amount.
+     * @param  string     $reason Refund reason.
+     * @return boolean True or false based on success, or a WP_Error object.
+     */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        return parent::process_refund($order_id, $amount = null, $reason = '');
+        $order = wc_get_order($order_id);
+        if (!$order) {
+            return false;
+        }
+
+        // 1. determine days the transaction has made till now, only can refund the transaction made in 180 days.
+        $interval = (new DateTime())->diff($order->get_date_paid());
+        PayerMax_Logger::info('Check Trade Days Diff:' . wc_print_r($interval, true));
+        if ($interval->invert && $interval->days >= 180) {
+            PayerMax_Logger::warning('Refund window is over. order ID: ' . $order_id);
+            return new WP_Error('window_is_over', 'Refund window is over');
+        }
+
+        // 2. dispatch refund request.
+        include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+        $result = (new WC_Gateway_PayerMax_Request($this))
+            ->refund_transaction($order, $amount, $reason);
+
+        if (!is_wp_error($result) && $result['code'] === 'APPLY_SUCCESS') {
+            $order->add_order_note(sprintf(
+                __('Refund Status: %1$s - Refund ID: %2$s', 'woocommerce-gateway-payermax'),
+                $result['data']['status'],
+                $result['data']['refundTradeNo']
+            ));
+            return true;
+        }
+
+        new WP_Error(
+            'error',
+            __('Refund Failed.', 'woocommerce-gateway-payermax')
+        );
     }
 
 
@@ -171,7 +213,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         if (!PayerMax_Helper::verify_sign(
             $request_body,
             $_SERVER['HTTP_SIGN'] ?? '',
-            '123'
+            $this->merchant_public_key
         )) {
             PayerMax_Logger::warning("verify_sign failed, sign:" . $_SERVER['HTTP_SIGN']);
             echo "verify_sign failed";
@@ -199,6 +241,48 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         exit;
     }
 
+    public function order_refund_notify()
+    {
+        if (!isset($_SERVER['REQUEST_METHOD']) || ('POST' !== $_SERVER['REQUEST_METHOD'])) {
+            echo 'not supported REQUEST_METHOD';
+            exit;
+        }
+
+        require_once __DIR__ . '/class-wc-gateway-payermax-notify.php';
+        // @see request data from: https://docs.payermax.com/#/30?page_id=657&si=1&lang=zh-cn
+        $request_body = file_get_contents('php://input');
+        PayerMax_Logger::info("refund notice: " . $request_body);
+
+        // verify sign from payermax request header.
+        if (!PayerMax_Helper::verify_sign(
+            $request_body,
+            $_SERVER['HTTP_SIGN'] ?? '',
+            $this->merchant_public_key
+        )) {
+            PayerMax_Logger::warning("refund sign verify failed, sign:" . $_SERVER['HTTP_SIGN']);
+            echo "refund sign verify failed";
+            exit;
+        }
+
+        $result = WC_Gateway_PayerMax_Notify::refund_complete(json_decode($request_body, true));
+
+        header('Content-Type: application/json');
+        status_header(200);
+        if ($result) {
+            echo json_encode([
+                "code" => "SUCCESS",
+                "msg" => "Success"
+            ]);
+        } else {
+            echo json_encode([
+                "code" => "FAILED",
+                "msg" => "Failed"
+            ]);
+        }
+
+        exit;
+    }
+
     /**
      * Check If The Gateway Is Available For Use.
      *
@@ -221,6 +305,17 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         }
 
         return parent::is_available();
+    }
+
+    /**
+     * Can the order be refunded via PayerMax?
+     *
+     * @param WC_Order $order Order object.
+     * @return bool
+     */
+    function can_refund_order($order)
+    {
+        return parent::can_refund_order($order);
     }
 
     /**

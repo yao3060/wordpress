@@ -61,14 +61,17 @@ class WC_Gateway_PayerMax_Request
 
         $request_data = $this->wrap_request_data($this->get_request_data($order));
         PayerMax_Logger::info(json_encode($request_data));
-        $response = wp_remote_post($this->endpoint . 'orderAndPay', [
-            'method' => 'POST',
-            'body' => json_encode($request_data),
-            'headers' => [
-                'sign' => PayerMax_Helper::get_sign($request_data, $this->gateway->merchant_private_key),
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+        $response = wp_remote_post(
+            $this->endpoint . 'orderAndPay',
+            [
+                'method' => 'POST',
+                'body' => json_encode($request_data),
+                'headers' => [
+                    'sign' => PayerMax_Helper::get_sign($request_data, $this->gateway->merchant_private_key),
+                    'Content-Type' => 'application/json',
+                ],
+            ]
+        );
 
         if (!is_wp_error($response)) {
             PayerMax_Logger::info($response['body']);
@@ -96,9 +99,43 @@ class WC_Gateway_PayerMax_Request
         return '';
     }
 
+    public function refund_transaction(WC_Order $order, $amount, $reason)
+    {
+        $out_refund_no = 'R' . str_replace('-', '', wp_generate_uuid4());
+        $request_data = $this->wrap_request_data([
+            "outRefundNo" => $out_refund_no,
+            "outTradeNo" => $order->get_transaction_id(),
+            "refundAmount" => $amount,
+            "refundCurrency" => $order->get_currency(),
+            "comments" => $reason ?? '',
+            "refundNotifyUrl" => home_url('wc-api/' . $this->gateway::REFUND_ORDER_NOTIFY_CALLBACK)
+        ]);
+        PayerMax_Logger::info('Refund Request: ' . wc_print_r($request_data, true));
+
+        $response = wp_safe_remote_post(
+            PayerMax::gateway($this->gateway->sandbox === 'no') . 'refund',
+            [
+                'method' => 'POST',
+                'body' => json_encode($request_data),
+                'headers' => [
+                    'sign' => PayerMax_Helper::get_sign($request_data, $this->gateway->merchant_private_key),
+                    'Content-Type' => 'application/json',
+                ]
+            ]
+        );
+
+        if (is_wp_error($response)) {
+            PayerMax_Logger::error('refund transaction failed: ' . $response->get_error_message());
+            return $response;
+        }
+
+        PayerMax_Logger::info('Refund Response: ' . wc_print_r($response['body'], true));
+        return json_decode($response['body'], true);
+    }
+
 
     /**
-     * 交易查询
+     * verify transaction status
      */
     public function get_transaction_status(WC_Order $order)
     {
