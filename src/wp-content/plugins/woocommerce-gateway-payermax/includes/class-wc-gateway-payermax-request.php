@@ -53,12 +53,11 @@ class WC_Gateway_PayerMax_Request
      * Get the PayerMax request URL for an order.
      *
      * @param  WC_Order $order Order object.
-     * @param  bool     $sandbox Whether to use sandbox mode or not.
      * @return string
      */
-    public function get_request_url($order, $sandbox = false)
+    public function get_request_url($order)
     {
-        $this->endpoint = $sandbox ? PAYERMAX_API_GATEWAY : PAYERMAX_API_GATEWAY;
+        $this->endpoint = PayerMax::gateway($this->gateway->sandbox === 'no');
 
         $request_data = $this->wrap_request_data($this->get_request_data($order));
         PayerMax_Logger::info(json_encode($request_data));
@@ -107,6 +106,8 @@ class WC_Gateway_PayerMax_Request
 
         $request_data = $this->wrap_request_data(["outTradeNo" => $order->get_transaction_id()]);
 
+        $this->endpoint = PayerMax::gateway($this->gateway->sandbox === 'no');
+
         $response = wp_remote_post($this->endpoint . 'orderQuery', [
             'method' => 'POST',
             'body' => json_encode($request_data),
@@ -115,11 +116,13 @@ class WC_Gateway_PayerMax_Request
                 'Content-Type' => 'application/json',
             ],
         ]);
+
         if (is_wp_error($response)) {
             PayerMax_Logger::error('query transaction failed: ' . json_encode($request_data));
+            PayerMax_Logger::error('get_transaction_status response:' . json_encode($response));
             return false;
         } else {
-            PayerMax_Logger::info($response['body']);
+            PayerMax_Logger::info('get_transaction_status response:' . $response['body']);
             $response_data = json_decode($response['body'], true);
 
             if ($response_data['data'] && $response_data['data']['status'] === 'SUCCESS') {

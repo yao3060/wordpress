@@ -103,3 +103,23 @@ Stack trace:
 #4 /var/www/html/wp-content/plugins/woocommerce/templates/checkout/thankyou.php(79): do_action('woocommerce_tha...', 31)
 #5 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(345): include('/var/www/html/w...')
 #6 /var/www/html/wp-content/plugins/woocommerce/includes/shortcodes/class-wc-shortcode-checkout.php(276): wc_get_template('checkout/thank in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 120
+[24-Nov-2022 12:30:37 UTC] PHP Notice:  Undefined index: redirectUrl in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 78
+[24-Nov-2022 12:35:27 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type WP_Error as array in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php:119
+Stack trace:
+#0 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php(236): WC_Gateway_PayerMax_Request->get_transaction_status(Object(Automattic\WooCommerce\Admin\Overrides\Order))
+#1 /var/www/html/wp-includes/class-wp-hook.php(303): WC_Gateway_PayerMax->thankyou_page(31)
+#2 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#3 /var/www/html/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#4 /var/www/html/wp-content/plugins/woocommerce/templates/checkout/thankyou.php(79): do_action('woocommerce_tha...', 31)
+#5 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(345): include('/var/www/html/w...')
+#6 /var/www/html/wp-content/plugins/woocommerce/includes/shortcodes/class-wc-shortcode-checkout.php(276): wc_get_template('checkout/ in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 119
+[24-Nov-2022 12:35:46 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type WP_Error as array in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php:119
+Stack trace:
+#0 /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax.php(236): WC_Gateway_PayerMax_Request->get_transaction_status(Object(Automattic\WooCommerce\Admin\Overrides\Order))
+#1 /var/www/html/wp-includes/class-wp-hook.php(303): WC_Gateway_PayerMax->thankyou_page(31)
+#2 /var/www/html/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#3 /var/www/html/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#4 /var/www/html/wp-content/plugins/woocommerce/templates/checkout/thankyou.php(79): do_action('woocommerce_tha...', 31)
+#5 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(345): include('/var/www/html/w...')
+#6 /var/www/html/wp-content/plugins/woocommerce/includes/shortcodes/class-wc-shortcode-checkout.php(276): wc_get_template('checkout/ in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 119
+[25-Nov-2022 02:05:39 UTC] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /var/www/html/wp-content/plugins/woocommerce-gateway-payermax/includes/class-wc-gateway-payermax-request.php on line 136

@@ -5,6 +5,12 @@ if (!defined('ABSPATH')) {
 
 final class PayerMax
 {
+
+    static function gateway($sandbox): string
+    {
+        return $sandbox ? PAYERMAX_API_UAT_GATEWAY : PAYERMAX_API_GATEWAY;
+    }
+
     static function get_currencies(): array
     {
         $currencies = array_merge(
