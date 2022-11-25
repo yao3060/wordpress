@@ -105,6 +105,7 @@ class WC_Gateway_PayerMax_Request
         $request_data = $this->wrap_request_data([
             "outRefundNo" => $out_refund_no,
             "outTradeNo" => $order->get_transaction_id(),
+            // TODO: cast into payermax format amount
             "refundAmount" => $amount,
             "refundCurrency" => $order->get_currency(),
             "comments" => $reason ?? '',
@@ -185,6 +186,7 @@ class WC_Gateway_PayerMax_Request
         $data = [
             'outTradeNo' => PayerMax_Helper::get_trade_no($order),
             'subject' => $order->get_title(),
+            // TODO: cast into payermax format amount
             'totalAmount' => (string)$order->get_total(),
             'currency' => $order->get_currency(),
             'country' => PayerMax_Helper::get_order_country($order),
@@ -198,7 +200,7 @@ class WC_Gateway_PayerMax_Request
 
         // Only CARD pay for Phase 1
         $data['paymentDetail'] = [
-            'paymentMethod' => 'CARD' // 当指定paymentMethod为CARD时，目标机构targetOrg不需要上送，如需指定卡组织，则需要指定cardOrg。
+            'paymentMethod' => 'CARD'
         ];
 
         return apply_filters('wc_payermax_order_data', $data, $order);
