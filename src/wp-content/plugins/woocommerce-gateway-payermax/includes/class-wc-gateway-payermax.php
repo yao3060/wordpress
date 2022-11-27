@@ -16,8 +16,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public $merchant_number = '';
     public $merchant_public_key = '';
     public $merchant_private_key = '';
-    public $sp_merchant_number = '';
-    public $sp_merchant_auth_token = '';
     public $sandbox = "no";
 
     const ORDER_NOTIFY_CALLBACK = 'payermax-order-notify-v1';

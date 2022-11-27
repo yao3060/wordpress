@@ -71,23 +71,6 @@ return apply_filters(
             'default'     => 'no',
         ],
 
-        // ISV商户所需参数
-        'isv_settings'     => [
-            'title'       => __('ISV Merchant', 'woocommerce-gateway-payermax'),
-            'type'        => 'title',
-            'description' => '',
-        ],
-
-        'sp_merchant_number' => [
-            'title'       => __('SP Merchant Number', 'woocommerce-gateway-payermax'),
-            'type'        => 'text',
-        ],
-
-        'sp_merchant_auth_token' => [
-            'title'       => __('SP Merchant Auth Token', 'woocommerce-gateway-payermax'),
-            'type'        => 'text',
-        ],
-
         'callbacks'     => [
             'title'       => __('Callbacks', 'woocommerce-gateway-payermax'),
             'type'        => 'title',
