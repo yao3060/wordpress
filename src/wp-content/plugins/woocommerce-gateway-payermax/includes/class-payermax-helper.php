@@ -30,6 +30,35 @@ class PayerMax_Helper
         return openssl_verify($content, base64_decode($sign), $formatted, OPENSSL_ALGO_SHA256) === 1;
     }
 
+    /**
+     * Convert total amount into payermax format
+     * 
+     * 商户传入的订单金额，金额的单位为元。
+     * 除以下国家外按照各国币种支持的小数点位上送。
+     * 注意：巴林、科威特、伊拉克，约旦、突尼斯、利比亚、奥马尔地区，本币只支持两位小数；
+     * 印尼、中国台湾、韩国、越南、智利、巴基斯坦、哥伦比亚地区，本币不支持带小数金额。
+     * @example 美元：15.00
+     * @example 日元：101
+     *
+     * @param [type] $amount
+     * @param [type] $currency
+     * @return string 最大长度(20,4)
+     */
+    static function total_amount($amount, $currency): string
+    {
+        // 巴林、科威特、伊拉克，约旦、突尼斯、利比亚、奥马尔地区，本币只支持两位小数；
+        if (in_array($currency, ['BHD', 'KWD', 'JOD'])) {
+            return number_format($amount, 2, '.', '');
+        }
+
+        // 印尼、中国台湾、韩国、越南、智利、巴基斯坦、哥伦比亚地区，本币不支持带小数金额。
+        if (in_array($currency, ['IDR', 'TWD', 'KRW', 'VND', 'CLP', 'PKR', 'COP'])) {
+            return number_format($amount, 0, '.', '');
+        }
+
+        return number_format($amount, 4, '.', '');
+    }
+
 
     public static function get_order_country(WC_Order $order)
     {
