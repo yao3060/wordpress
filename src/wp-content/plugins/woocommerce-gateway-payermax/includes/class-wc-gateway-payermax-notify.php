@@ -48,8 +48,9 @@ class WC_Gateway_PayerMax_Notify
         }
 
         // processing on-hold order only
+        PayerMax_Logger::debug("Payment Notify Order Status, " .  wc_print_r(['id' => $order->get_id(), 'status' => $order->get_status()], false));
         if ($order->get_status() !== 'on-hold') {
-            PayerMax_Logger::debug("it is not on-hold order:" . wc_print_r(['id' => $order->get_id(), 'status' => $order->get_status()], false));
+            PayerMax_Logger::info("it is not on-hold order:" . wc_print_r(['id' => $order->get_id(), 'status' => $order->get_status()], false));
             return false;
         }
 
