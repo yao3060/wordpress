@@ -98,9 +98,9 @@ class PayerMax_Helper
      * Get Woo Order by Transaction ID.
      *
      * @param string $transaction_id
-     * @return WC_Order
+     * @return WC_Order | null
      */
-    static function get_order_by_transaction_id(string $transaction_id): WC_Order
+    static function get_order_by_transaction_id(string $transaction_id)
     {
         $query = new WP_Query([
             'post_type' => 'shop_order',
@@ -141,9 +141,9 @@ class PayerMax_Helper
         return $transaction_id;
     }
 
-    static function get_order_transaction_id(WC_Order $order): ?string
+    static function get_order_transaction_id(WC_Order $order)
     {
-        return substr(date('YmdHis') . $order->get_order_number(), -64);
+        return substr((new Datetime())->format('YmdHisv') . $order->get_order_number(), -64);
     }
 
     static function update_transaction_id(string $transaction_id, WC_Order $wc_order): bool
