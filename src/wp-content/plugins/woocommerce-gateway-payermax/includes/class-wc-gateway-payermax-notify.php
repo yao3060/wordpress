@@ -111,7 +111,7 @@ class WC_Gateway_PayerMax_Notify
      */
     public static function refund_complete(array $request_data): bool
     {
-        if ($request_data['notifyType'] === 'REFUND') {
+        if ($request_data['notifyType'] !== 'REFUND') {
             return false;
         }
 
