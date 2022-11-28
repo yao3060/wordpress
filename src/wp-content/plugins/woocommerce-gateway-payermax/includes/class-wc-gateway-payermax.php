@@ -45,6 +45,8 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         // @see https://woocommerce.com/document/wc_api-the-woocommerce-api-callback/#section-2
         // payermax order notify `https://domain.com/wc-api/payermax-order-notify-v1`
         add_action('woocommerce_api_' . self::ORDER_NOTIFY_CALLBACK, [$this, 'order_notify']);
+
+        // payermax order notify `https://domain.com/wc-api/payermax-refund-order-notify-v1`
         add_action('woocommerce_api_' . self::REFUND_ORDER_NOTIFY_CALLBACK, [$this, 'order_refund_notify']);
     }
 
@@ -176,9 +178,9 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         // 2. dispatch refund request.
         include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
-        $result = (new WC_Gateway_PayerMax_Request($this))
-            ->refund_transaction($order, $amount, $reason);
+        $result = (new WC_Gateway_PayerMax_Request($this))->refund_transaction($order, $amount, $reason);
 
+        // 3. record refund trade no if apply successfully.
         if (!is_wp_error($result) && $result['code'] === 'APPLY_SUCCESS') {
             $order->add_order_note(sprintf(
                 __('Refund Status: %1$s - Refund ID: %2$s', 'woocommerce-gateway-payermax'),
@@ -188,6 +190,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             return true;
         }
 
+        // 4. else return wp error
         new WP_Error(
             'error',
             __('Refund Failed.', 'woocommerce-gateway-payermax')
@@ -307,17 +310,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     }
 
     /**
-     * Can the order be refunded via PayerMax?
-     *
-     * @param WC_Order $order Order object.
-     * @return bool
-     */
-    function can_refund_order($order)
-    {
-        return parent::can_refund_order($order);
-    }
-
-    /**
      * Output for the order received page.
      */
     public function thankyou_page($order_id)
@@ -327,11 +319,11 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
             $request = new WC_Gateway_PayerMax_Request($this);
 
-            $request->get_transaction_status($order);
+            $this->verify_payermax_payment_status(
+                $request->get_transaction_status($order),
+                $order
+            );
         }
-
-        // display some information about PayerMax
-        echo '<h2>Thank you.</h2>';
     }
 
     /**
@@ -350,6 +342,11 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         }
     }
 
+    /**
+     * Ajax check payment status
+     *
+     * @return string
+     */
     public static function check_payermax_payment_status()
     {
         $order_id = $_POST['order_id'];
@@ -360,10 +357,14 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
 
-        $request = new WC_Gateway_PayerMax_Request(new self());
+        $payment_methods = WC()->payment_gateways()->payment_gateways();
 
-        $response = $request->get_transaction_status($order);
+        /** @var self $gateway */
+        $gateway = $payment_methods[self::ID];
 
+        $request = new WC_Gateway_PayerMax_Request($gateway);
+
+        $response = $gateway->verify_payermax_payment_status($request->get_transaction_status($order), $order);
         echo json_encode($response);
         wp_die();
     }

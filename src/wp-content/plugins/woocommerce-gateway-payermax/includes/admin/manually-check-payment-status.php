@@ -16,27 +16,28 @@
                 method: "POST",
                 data: dataset,
                 dataType: "json",
-                beforeSend: function(xhr) {
+                beforeSend: (xhr) => {
                     target.classList.add('button-disabled');
                     target.innerHTML = `LOADING`;
                 }
             });
 
-            request.done(function(response) {
-                // refresh current page if success
-                if (response.code === "APPLY_SUCCESS" && response.data.status === "SUCCESS") {
-                    window.location.reload();
+            request.done((response) => {
+                if (response.code === "APPLY_SUCCESS") {
+                    target.innerHTML = `<span title="${dataset.text}">${response.data.status}</span>`;
+                    if (response.data.status === "SUCCESS" || response.data.status === "CLOSED") {
+                        window.location.reload();
+                    } else {
+                        target.classList.remove('button-disabled');
+                    }
                 }
             });
 
-            request.fail(function(jqXHR, textStatus) {
+            request.fail((jqXHR, textStatus) => {
                 alert("Request failed: " + jqXHR.responseText);
-            });
-
-            request.always(() => {
                 target.classList.remove('button-disabled');
                 target.innerHTML = dataset.text
-            })
+            });
         });
     });
 </script>

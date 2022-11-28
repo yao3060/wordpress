@@ -32,31 +32,96 @@ class PayerMax_Helper
 
     /**
      * Convert total amount into payermax format
-     * 
+     *
      * 商户传入的订单金额，金额的单位为元。
      * 除以下国家外按照各国币种支持的小数点位上送。
      * 注意：巴林、科威特、伊拉克，约旦、突尼斯、利比亚、奥马尔地区，本币只支持两位小数；
      * 印尼、中国台湾、韩国、越南、智利、巴基斯坦、哥伦比亚地区，本币不支持带小数金额。
+     * @ref https://taxsummaries.pwc.com/glossary/currency-codes
      * @example 美元：15.00
      * @example 日元：101
      *
-     * @param [type] $amount
-     * @param [type] $currency
+     * @param float $amount
+     * @param string $currency
      * @return string 最大长度(20,4)
      */
-    static function total_amount($amount, $currency): string
+    static function payment_amount(float $amount, string $currency): string
     {
         // 巴林、科威特、伊拉克，约旦、突尼斯、利比亚、奥马尔地区，本币只支持两位小数；
-        if (in_array($currency, ['BHD', 'KWD', 'JOD'])) {
-            return number_format($amount, 2, '.', '');
+        if (in_array($currency, ['BHD', 'KWD', 'IQD', 'JOD', 'TND', 'LYD'])) {
+            return (string)round($amount, 2);
         }
 
         // 印尼、中国台湾、韩国、越南、智利、巴基斯坦、哥伦比亚地区，本币不支持带小数金额。
         if (in_array($currency, ['IDR', 'TWD', 'KRW', 'VND', 'CLP', 'PKR', 'COP'])) {
-            return number_format($amount, 0, '.', '');
+            return (string)round($amount);
         }
 
-        return number_format($amount, 4, '.', '');
+        return (string)round($amount, 4);
+    }
+
+    static function is_equal_payment_amount(float $order_amount, string $transaction_amount, string $currency)
+    {
+        if (self::payment_amount($order_amount, $currency) === $transaction_amount) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 退款金额，金额的单位为元。
+     * 除以下国家外按照各国币种支持的小数点位上送。
+     * 注意：巴林、科威特、伊拉克，约旦、突尼斯、利比亚、奥马尔地区，本币只支持两位小数；
+     * 印尼、中国台湾、巴基斯坦、哥伦比亚地区，本币不支持带小数金额。
+     * @ref https://taxsummaries.pwc.com/glossary/currency-codes
+     *
+     * @param float $amount
+     * @param string $currency
+     * @return string 最大长度(20,4)
+     */
+    static function refund_amount(float $amount, string $currency)
+    {
+        // 巴林、科威特、伊拉克，约旦、突尼斯、利比亚、奥马尔地区，本币只支持两位小数；
+        if (in_array($currency, ['BHD', 'KWD', 'IQD', 'JOD', 'TND', 'LYD'])) {
+            return (string)round($amount, 2);
+        }
+
+        // 印尼、中国台湾、巴基斯坦、哥伦比亚地区，本币不支持带小数金额
+        if (in_array($currency, ['IDR', 'TWD', 'PKR', 'COP'])) {
+            return (string)round($amount);
+        }
+
+        return (string)round($amount);
+    }
+
+    /**
+     * Get Woo Order by Transaction ID.
+     *
+     * @param string $transaction_id
+     * @return WC_Order
+     */
+    static function get_order_by_transaction_id(string $transaction_id): WC_Order
+    {
+        $query = new WP_Query([
+            'post_type' => 'shop_order',
+            'post_status' => 'any',
+            'posts_per_page' => 1,
+            'meta_key' => '_transaction_id',
+            'meta_value' => $transaction_id,
+            'meta_compare' => '='
+        ]);
+
+        if (!$query->have_posts()) {
+            PayerMax_Logger::warning('Order not found by transaction id: ' .  $transaction_id);
+            return null;
+        }
+
+        $order = wc_get_order($query->posts[0]->ID);
+        if (!$order) {
+            return null;
+        }
+
+        return $order;
     }
 
 

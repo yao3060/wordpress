@@ -133,7 +133,7 @@ final class PayerMax
 }
 
 
-add_action('plugins_loaded', 'woocommerce_gateway_payermax_init', 11);
+add_action('plugins_loaded', 'woocommerce_gateway_payermax_init');
 
 function woocommerce_gateway_payermax_init()
 {
@@ -171,9 +171,6 @@ function woocommerce_gateway_payermax()
     require_once __DIR__ . '/includes/abstracts/abstract-wc-payermax-payment-gateway.php';
     require_once __DIR__ . '/includes/class-wc-gateway-payermax.php';
 
-    // PayerMax_Logger::debug("Supported Currencies:" . json_encode(PayerMax::get_currencies()));
-    // PayerMax_Logger::debug("Supported Languages:" . json_encode(PayerMax::get_languages()));
-
     /**
      * This action hook registers our PHP class as a WooCommerce payment gateway
      */
@@ -187,5 +184,9 @@ function woocommerce_gateway_payermax()
         [PayerMax::class, 'plugin_action_links']
     );
 
-    add_action('wp_ajax_check_payermax_payment_status', [WC_Gateway_PayerMax::class, 'check_payermax_payment_status']);
+    // ajax check payermax payment status in order detail page in dashboard.
+    add_action(
+        'wp_ajax_check_payermax_payment_status',
+        [WC_Gateway_PayerMax::class, 'check_payermax_payment_status']
+    );
 }

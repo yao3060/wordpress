@@ -36,23 +36,51 @@ class WC_Gateway_PayerMax_Notify
      */
     public static function payment_complete($notice_data): bool
     {
-        $order = wc_get_order((int)$notice_data['reference']);
-        if (!$order) {
-            PayerMax_Logger::warning("Order not found from Notify, order id:" . $notice_data['reference']);
+        if ($notice_data['code'] !== 'APPLY_SUCCESS' || $notice_data['notifyType'] !== 'PAYMENT') {
             return false;
         }
 
-        // verify transaction_id totalAmount and currency
-        if (
-            $order->get_transaction_id() !== $notice_data['data']['outTradeNo'] ||
-            $order->get_total() !== (float)$notice_data['data']['totalAmount'] ||
-            $order->get_currency() !== $notice_data['data']['currency']
-        ) {
+        // find the order by `reference`
+        $order = wc_get_order((int)$notice_data['data']['reference']);
+        if (!$order) {
+            PayerMax_Logger::warning("Order not found from Notify, order id:" . $notice_data['data']['reference']);
+            return false;
+        }
+
+        // processing on-hold order only
+        if ($order->get_status() !== 'on-hold') {
+            PayerMax_Logger::debug("it is not on-hold order:" . wc_print_r(['id' => $order->get_id(), 'status' => $order->get_status()], false));
+            return false;
+        }
+
+        // verify transaction_id
+        if ($order->get_transaction_id() !== $notice_data['data']['outTradeNo']) {
+            return false;
+        }
+
+        // update order status to failed, otherwise customer can't repay.
+        if (in_array($notice_data['data']['status'], ['CLOSED', 'FAILED'])) {
+            $order->update_status('failed');
+            $order->add_order_note(sprintf(
+                __('PayerMax Payment Failed, Trade Token: %s, Result message: %s', 'woocommerce-gateway-payermax'),
+                $notice_data['data']['tradeToken'],
+                $notice_data['data']['resultMsg']
+            ));
+            return false;
+        }
+
+        // verify totalAmount and currency
+        if (!PayerMax_Helper::is_equal_payment_amount($order->get_total(), $notice_data['data']['totalAmount'], $order->get_currency())) {
             PayerMax_Logger::warning('Order out_trade_no, total or currency not match.');
             return false;
         }
 
         $order->payment_complete();
+
+        $order->add_order_note(sprintf(
+            __('PayerMax payment succeeded, Trade Token: %s', 'woocommerce-gateway-payermax'),
+            $notice_data['data']['tradeToken']
+        ));
 
         PayerMax_Logger::info('Order (' . $order->get_id() . ') payment complete via payermax notify.');
 
@@ -83,44 +111,31 @@ class WC_Gateway_PayerMax_Notify
     public static function refund_complete(array $request_data): bool
     {
         if ($request_data['notifyType'] === 'REFUND') {
-
-            $transaction_id = $request_data['data']['outTradeNo'];
-            $query = new WP_Query([
-                'post_type' => 'shop_order',
-                'post_status' => 'any',
-                'posts_per_page' => 1,
-                'meta_key' => '_transaction_id',
-                'meta_value' => $transaction_id,
-                'meta_compare' => '='
-            ]);
-
-            if (!$query->have_posts()) {
-                PayerMax_Logger::warning('Order not found by transaction id: ' .  $transaction_id);
-                return false;
-            }
-
-            $order = wc_get_order($query->posts[0]->ID);
-            if (!$order) {
-                return false;
-            }
-
-            // if refund successfully
-            if ($order->get_transaction_id() === $transaction_id && $request_data['data']['status'] === 'REFUND_SUCCESS') {
-                $order->add_order_note(sprintf(
-                    'Refunded - Refund ID: %s - Refund Amount: %s',
-                    $request_data['data']['refundTradeNo'],
-                    $request_data['data']['refundAmount']
-                ), 1);
-                return true;
-            } else {
-                $order->add_order_note(sprintf(
-                    'Refund failed - Refund ID: %s - errorMessage: %s',
-                    $request_data['data']['refundTradeNo'],
-                    $request_data['msg']
-                ));
-            }
+            return false;
         }
 
-        return false;
+        $transaction_id = $request_data['data']['outTradeNo'];
+
+        $order = PayerMax_Helper::get_order_by_transaction_id($transaction_id);
+        if (!$order) {
+            return false;
+        }
+
+        // if refund successfully
+        if ($order->get_transaction_id() === $transaction_id && $request_data['data']['status'] === 'REFUND_SUCCESS') {
+            $order->add_order_note(sprintf(
+                __('Refunded - Refund ID: %s - Refund Amount: %s', 'woocommerce-gateway-payermax'),
+                $request_data['data']['refundTradeNo'],
+                $request_data['data']['refundAmount']
+            ), 1);
+            return true;
+        } else {
+            $order->add_order_note(sprintf(
+                __('Refund failed - Refund ID: %s - Error Message: %s', 'woocommerce-gateway-payermax'),
+                $request_data['data']['refundTradeNo'],
+                $request_data['msg']
+            ));
+            return false;
+        }
     }
 }

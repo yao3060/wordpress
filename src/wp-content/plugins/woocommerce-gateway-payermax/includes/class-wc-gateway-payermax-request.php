@@ -17,20 +17,6 @@ class WC_Gateway_PayerMax_Request
     protected $gateway;
 
     /**
-     * Endpoint for requests from PayerMax.
-     *
-     * @var string
-     */
-    protected $notify_url;
-
-    /**
-     * Endpoint for requests from PayerMax.
-     *
-     * @var string
-     */
-    protected $front_callback_url;
-
-    /**
      * Endpoint for requests to PayerMax.
      *
      * @var string
@@ -45,8 +31,7 @@ class WC_Gateway_PayerMax_Request
     public function __construct($gateway)
     {
         $this->gateway    = $gateway;
-        $this->notify_url = $this->gateway->get_option('notify_url');
-        $this->front_callback_url = WC()->api_request_url(WC_Gateway_PayerMax::class);
+        $this->endpoint = PayerMax::gateway($this->gateway->sandbox === 'no');
     }
 
     /**
@@ -57,8 +42,6 @@ class WC_Gateway_PayerMax_Request
      */
     public function get_request_url($order)
     {
-        $this->endpoint = PayerMax::gateway($this->gateway->sandbox === 'no');
-
         $request_data = $this->wrap_request_data($this->get_request_data($order));
         PayerMax_Logger::info(json_encode($request_data));
         $response = wp_remote_post(
@@ -105,8 +88,7 @@ class WC_Gateway_PayerMax_Request
         $request_data = $this->wrap_request_data([
             "outRefundNo" => $out_refund_no,
             "outTradeNo" => $order->get_transaction_id(),
-            // TODO: cast into payermax format amount
-            "refundAmount" => $amount,
+            "refundAmount" => PayerMax_Helper::refund_amount($amount, $order->get_currency()),
             "refundCurrency" => $order->get_currency(),
             "comments" => $reason ?? '',
             "refundNotifyUrl" => home_url('wc-api/' . $this->gateway::REFUND_ORDER_NOTIFY_CALLBACK)
@@ -136,13 +118,16 @@ class WC_Gateway_PayerMax_Request
 
 
     /**
-     * verify transaction status
+     * get transaction status
      */
     public function get_transaction_status(WC_Order $order)
     {
-        $request_data = $this->wrap_request_data(["outTradeNo" => $order->get_transaction_id()]);
+        // if it's not on-hold payermax order, direct return;
+        if ($order->get_payment_method() !== $this->gateway::ID && $order->get_status() !== 'on-hold') {
+            return null;
+        }
 
-        $this->endpoint = PayerMax::gateway($this->gateway->sandbox === 'no');
+        $request_data = $this->wrap_request_data(["outTradeNo" => $order->get_transaction_id()]);
 
         $response = wp_remote_post($this->endpoint . 'orderQuery', [
             'method' => 'POST',
@@ -159,13 +144,7 @@ class WC_Gateway_PayerMax_Request
             return $response;
         } else {
             PayerMax_Logger::info('get_transaction_status response:' . $response['body']);
-            $response_data = json_decode($response['body'], true);
-
-            if ($response_data['data'] && $response_data['data']['status'] === 'SUCCESS') {
-                $order->payment_complete();
-            }
-
-            return $response_data;
+            return json_decode($response['body'], true);
         }
     }
 
@@ -186,12 +165,14 @@ class WC_Gateway_PayerMax_Request
         $data = [
             'outTradeNo' => PayerMax_Helper::get_trade_no($order),
             'subject' => $order->get_title(),
-            // TODO: cast into payermax format amount
-            'totalAmount' => (string)$order->get_total(),
+            // cast into payermax format amount
+            'totalAmount' => PayerMax_Helper::payment_amount($order->get_total(), $order->get_currency()),
             'currency' => $order->get_currency(),
             'country' => PayerMax_Helper::get_order_country($order),
             'userId' => (string)$order->get_customer_id(),
             'goodsDetails' => $this->get_goods_details($order),
+            'shippingInfo' => $this->get_shipping_info($order),
+            'billingInfo' => $this->get_billing_info($order),
             'language' => PayerMax_Helper::get_payermax_language(get_user_locale()), // 收银台页面语言
             'reference' => (string)$order->get_id(), // it will returned in notify callback, so we can easily get order object via `reference`.
             'frontCallbackUrl' => $this->gateway->get_return_url($order),
@@ -204,6 +185,39 @@ class WC_Gateway_PayerMax_Request
         ];
 
         return apply_filters('wc_payermax_order_data', $data, $order);
+    }
+
+    public function get_shipping_info(WC_Order $order)
+    {
+        return [
+            'firstName' => $order->get_shipping_first_name(),
+            'lastName' => $order->get_shipping_last_name(),
+            'phoneNo' => $order->get_shipping_phone(),
+            // required in PayerMax document(https://docs.shareitpay.in/#/30?page_id=650&lang=zh-cn), but no such field in woocommerce.
+            // 'email' => '',
+            'address1' => $order->get_shipping_address_1(),
+            'city' => $order->get_shipping_city(),
+            // 收货地址所在州, 送货到加拿大，美国，英国，澳大利亚时必填
+            'state' => $order->get_shipping_state(),
+            'country' => $order->get_shipping_country(),
+            'zipCode' => $order->get_shipping_postcode()
+        ];
+    }
+
+    public function get_billing_info(WC_Order $order)
+    {
+        return [
+            'firstName' => $order->get_billing_first_name(),
+            'lastName' => $order->get_billing_last_name(),
+            'phoneNo' => $order->get_billing_phone(),
+            'email' => $order->get_billing_email(),
+            'address1' => $order->get_billing_address_1(),
+            'city' => $order->get_billing_city(),
+            // 收货地址所在州, 送货到加拿大，美国，英国，澳大利亚时必填
+            'state' => $order->get_billing_state(),
+            'country' => $order->get_billing_country(),
+            'zipCode' => $order->get_billing_postcode()
+        ];
     }
 
     public function get_goods_details(WC_Order $order)
