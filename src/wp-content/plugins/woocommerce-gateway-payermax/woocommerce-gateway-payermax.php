@@ -130,6 +130,16 @@ final class PayerMax
         ];
         return array_merge($plugin_links, $links);
     }
+
+    static function require_permalink()
+    {
+        echo '<div class="error"><p><strong>' .
+            sprintf(
+                __('WooCommerce PayerMax Gateway require custom permalink. <a href="%s">Settings</a>', 'woocommerce-gateway-payermax'),
+                admin_url('options-permalink.php')
+            ) .
+            '</strong></p></div>';
+    }
 }
 
 
@@ -155,8 +165,9 @@ function woocommerce_gateway_payermax_init()
         return;
     }
 
-    // permalink is required
-    if (get_option('permalink_structure')) {
+    if (!get_option('permalink_structure')) {
+        add_action('admin_notices', [PayerMax::class, 'require_permalink']);
+        return;
     }
 
     woocommerce_gateway_payermax();
