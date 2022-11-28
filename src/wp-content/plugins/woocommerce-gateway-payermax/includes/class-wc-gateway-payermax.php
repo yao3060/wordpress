@@ -57,6 +57,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $this->sandbox = $this->get_option('sandbox', 'no');
         $this->app_id = $this->get_option('app_id');
         $this->merchant_number = $this->get_option('merchant_number');
+        $this->merchant_public_key = $this->get_option('merchant_public_key');
         $this->merchant_private_key = $this->get_option('merchant_private_key');
     }
 
