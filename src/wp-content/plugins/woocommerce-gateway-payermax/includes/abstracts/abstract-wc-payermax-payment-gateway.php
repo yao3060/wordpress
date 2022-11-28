@@ -11,7 +11,7 @@ abstract class WC_PayerMax_Payment_Gateway extends WC_Payment_Gateway
         }
 
         if ($order->get_status() !== 'on-hold') {
-            PayerMax_Logger::info("it is not on-hold order:" . wc_print_r(['id' => $order->get_id(), 'status' => $order->get_status()], false));
+            PayerMax_Logger::info("it is not on-hold order:" . wc_print_r(['id' => $order->get_id(), 'status' => $order->get_status()], true));
             return $response_data;
         }
 
