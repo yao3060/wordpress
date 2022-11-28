@@ -156,7 +156,7 @@ class WC_Gateway_PayerMax_Request
         if (is_wp_error($response)) {
             PayerMax_Logger::error('query transaction failed: ' . json_encode($request_data));
             PayerMax_Logger::error('get_transaction_status response:' . json_encode($response));
-            return false;
+            return $response;
         } else {
             PayerMax_Logger::info('get_transaction_status response:' . $response['body']);
             $response_data = json_decode($response['body'], true);
@@ -164,9 +164,9 @@ class WC_Gateway_PayerMax_Request
             if ($response_data['data'] && $response_data['data']['status'] === 'SUCCESS') {
                 $order->payment_complete();
             }
-        }
 
-        // else do nothing
+            return $response_data;
+        }
     }
 
     public function wrap_request_data($data)

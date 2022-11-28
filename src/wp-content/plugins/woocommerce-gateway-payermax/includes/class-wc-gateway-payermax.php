@@ -40,6 +40,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
 
         add_action('admin_notices', [$this, 'warning_no_debug_or_sandbox_on_production'], 0);
+        add_action('woocommerce_admin_order_data_after_order_details', [$this, 'manually_check_payment_status']);
 
         // @see https://woocommerce.com/document/wc_api-the-woocommerce-api-callback/#section-2
         // payermax order notify `https://domain.com/wc-api/payermax-order-notify-v1`
@@ -331,5 +332,39 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         // display some information about PayerMax
         echo '<h2>Thank you.</h2>';
+    }
+
+    /**
+     * Add button to order details, so shop owner can check payment status via it manually.
+     *
+     * @param WC_Order $order Order.
+     */
+    public function manually_check_payment_status($order)
+    {
+        if (!$order instanceof WC_Order || !$order->get_id()) {
+            return;
+        }
+
+        if ($order->get_status() === 'on-hold' && $order->get_payment_method() === self::ID) {
+            include_once dirname(__FILE__) . '/admin/manually-check-payment-status.php';
+        }
+    }
+
+    public static function check_payermax_payment_status()
+    {
+        $order_id = $_POST['order_id'];
+        $order = wc_get_order((int)$order_id);
+        if (!$order->get_id()) {
+            wp_die('Order Not Found');
+        }
+
+        include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+
+        $request = new WC_Gateway_PayerMax_Request(new self());
+
+        $response = $request->get_transaction_status($order);
+
+        echo json_encode($response);
+        wp_die();
     }
 }

@@ -186,4 +186,6 @@ function woocommerce_gateway_payermax()
         'plugin_action_links_' . plugin_basename(__FILE__),
         [PayerMax::class, 'plugin_action_links']
     );
+
+    add_action('wp_ajax_check_payermax_payment_status', [WC_Gateway_PayerMax::class, 'check_payermax_payment_status']);
 }
