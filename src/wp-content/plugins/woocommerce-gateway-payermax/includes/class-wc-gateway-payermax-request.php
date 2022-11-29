@@ -67,7 +67,7 @@ class WC_Gateway_PayerMax_Request
             // transaction closed by payermax
             if ($response_data['data'] && $response_data['data']['status'] && $response_data['data']['status'] === 'CLOSED') {
                 // reset transaction id
-                PayerMax_Helper::update_transaction_id(PayerMax_Helper::get_order_transaction_id($order), $order);
+                PayerMax_Helper::update_transaction_id(PayerMax_Helper::generate_order_transaction_id($order), $order);
                 // return `closed`, so parent class can recall this method according this response.
                 return 'CLOSED';
             }
@@ -84,14 +84,14 @@ class WC_Gateway_PayerMax_Request
 
     public function refund_transaction(WC_Order $order, $amount, $reason)
     {
-        $out_refund_no = 'R' . str_replace('-', '', wp_generate_uuid4());
+        $out_refund_no = 'WCR' . str_replace('-', '', wp_generate_uuid4());
         $request_data = $this->wrap_request_data([
             "outRefundNo" => $out_refund_no,
             "outTradeNo" => $order->get_transaction_id(),
             "refundAmount" => PayerMax_Helper::refund_amount($amount, $order->get_currency()),
             "refundCurrency" => $order->get_currency(),
             "comments" => $reason ?? '',
-            "refundNotifyUrl" => home_url('wc-api/' . $this->gateway::REFUND_ORDER_NOTIFY_CALLBACK)
+            "refundNotifyUrl" =>  $this->gateway->get_refund_callback_url()
         ]);
         PayerMax_Logger::info('Refund Request: ' . wc_print_r($request_data, true));
 
@@ -164,7 +164,7 @@ class WC_Gateway_PayerMax_Request
     {
         $data = [
             'outTradeNo' => PayerMax_Helper::get_trade_no($order),
-            'subject' => $order->get_title(),
+            'subject' => method_exists($order, 'get_title') ? $order->get_title() : 'WC Order #' . $order->get_id(),
             // cast into payermax format amount
             'totalAmount' => PayerMax_Helper::payment_amount($order->get_total(), $order->get_currency()),
             'currency' => $order->get_currency(),
@@ -176,7 +176,7 @@ class WC_Gateway_PayerMax_Request
             'language' => PayerMax_Helper::get_payermax_language(get_user_locale()), // 收银台页面语言
             'reference' => (string)$order->get_id(), // it will returned in notify callback, so we can easily get order object via `reference`.
             'frontCallbackUrl' => $this->gateway->get_return_url($order),
-            'notifyUrl' => home_url('wc-api/' . $this->gateway::ORDER_NOTIFY_CALLBACK)
+            'notifyUrl' => $this->gateway->get_payment_callback_url()
         ];
 
         // Only CARD pay for Phase 1
@@ -192,7 +192,7 @@ class WC_Gateway_PayerMax_Request
         return [
             'firstName' => $order->get_shipping_first_name(),
             'lastName' => $order->get_shipping_last_name(),
-            'phoneNo' => $order->get_shipping_phone(),
+            'phoneNo' => method_exists($order, 'get_shipping_phone') ? $order->get_shipping_phone() : $order->get_billing_phone(),
             // required in PayerMax document(https://docs.shareitpay.in/#/30?page_id=650&lang=zh-cn), but no such field in woocommerce.
             // 'email' => '',
             'address1' => $order->get_shipping_address_1(),

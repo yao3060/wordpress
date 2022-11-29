@@ -134,16 +134,16 @@ class PayerMax_Helper
     {
         $transaction_id = $order->get_transaction_id();
         if (!$transaction_id) {
-            $transaction_id = self::get_order_transaction_id($order);
+            $transaction_id = self::generate_order_transaction_id($order);
             self::update_transaction_id($transaction_id, $order);
         }
 
         return $transaction_id;
     }
 
-    static function get_order_transaction_id(WC_Order $order)
+    static function generate_order_transaction_id(WC_Order $order)
     {
-        return substr((new Datetime())->format('YmdHisv') . $order->get_order_number(), -64);
+        return substr('WCP' . (new Datetime())->format('YmdHisv') . $order->get_order_number(), -64);
     }
 
     static function update_transaction_id(string $transaction_id, WC_Order $wc_order): bool

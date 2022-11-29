@@ -77,8 +77,8 @@ return apply_filters(
             'description' => sprintf(
                 __('<pre>Payment Result: %s
 Refund Result:  %s</pre>', 'woocommerce-gateway-payermax'),
-                home_url('wc-api/' . self::ORDER_NOTIFY_CALLBACK),
-                home_url('wc-api/' . self::REFUND_ORDER_NOTIFY_CALLBACK)
+                $this->get_payment_callback_url(),
+                $this->get_refund_callback_url()
             ),
         ],
 

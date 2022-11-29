@@ -100,6 +100,16 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $this->form_fields = require __DIR__ . '/admin/payermax-settings.php';
     }
 
+    public static function get_payment_callback_url()
+    {
+        return WC()->api_request_url(self::ORDER_NOTIFY_CALLBACK);
+    }
+
+    public static function get_refund_callback_url()
+    {
+        return WC()->api_request_url(self::REFUND_ORDER_NOTIFY_CALLBACK);
+    }
+
     /**
      * Process the payment and return the result.
      *

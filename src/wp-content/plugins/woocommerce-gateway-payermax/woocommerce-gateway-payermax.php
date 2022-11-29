@@ -6,7 +6,7 @@
  * Description: Take credit card payments on your store using PayerMax.
  * Author: PayerMax
  * Author URI: https://www.payermax.com/
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 4.0
  * Tested up to: 6.0
  * WC requires at least: 3.0
@@ -27,7 +27,7 @@ if (!defined('WPINC')) {
  * Required minimums and constants
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
-define('WC_PAYERMAX_PLUGIN_VERSION', '1.0.0');
+define('WC_PAYERMAX_PLUGIN_VERSION', '1.0.1');
 define('WC_PAYERMAX_PLUGIN_NAME', 'woocommerce-gateway-payermax');
 define('WC_PAYERMAX_API_VERSION', '1.0');
 define('WC_PAYERMAX_API_KEY_VERSION', '1');
@@ -127,15 +127,6 @@ final class PayerMax
         return array_merge($plugin_links, $links);
     }
 
-    static function require_permalink()
-    {
-        echo '<div class="error"><p><strong>' .
-            sprintf(
-                __('WooCommerce PayerMax Gateway require custom permalink. <a href="%s">Settings</a>', 'woocommerce-gateway-payermax'),
-                admin_url('options-permalink.php')
-            ) .
-            '</strong></p></div>';
-    }
     static function admin_head()
     {
         echo "
@@ -176,11 +167,6 @@ function woocommerce_gateway_payermax_init()
 
     if (version_compare(WC_VERSION, WC_PAYERMAX_MIN_WC_VER, '<')) {
         add_action('admin_notices', [PayerMax::class, 'wc_not_supported']);
-        return;
-    }
-
-    if (!get_option('permalink_structure')) {
-        add_action('admin_notices', [PayerMax::class, 'require_permalink']);
         return;
     }
 
