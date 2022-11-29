@@ -32,8 +32,8 @@ define('WC_PAYERMAX_PLUGIN_VERSION', '1.0.0');
 define('WC_PAYERMAX_PLUGIN_NAME', 'woocommerce-gateway-payermax');
 define('WC_PAYERMAX_API_VERSION', '1.0');
 define('WC_PAYERMAX_API_KEY_VERSION', '1');
-define('WC_PAYERMAX_MIN_PHP_VER', '7.3.0');
-define('WC_PAYERMAX_MIN_WC_VER', '6.8');
+define('WC_PAYERMAX_MIN_PHP_VER', '7.0.0');
+define('WC_PAYERMAX_MIN_WC_VER', '3.0');
 define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', __FILE__)); // with tail slash
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
