@@ -75,7 +75,8 @@ return apply_filters(
             'title'       => __('Callbacks', 'woocommerce-gateway-payermax'),
             'type'        => 'title',
             'description' => sprintf(
-                __('<strong>Payment:</strong><code>%s</code><br><strong>Refund:</strong><code>%s</code>', 'woocommerce-gateway-payermax'),
+                __('<pre>Payment Result: %s
+Refund Result:  %s</pre>', 'woocommerce-gateway-payermax'),
                 home_url('wc-api/' . self::ORDER_NOTIFY_CALLBACK),
                 home_url('wc-api/' . self::REFUND_ORDER_NOTIFY_CALLBACK)
             ),

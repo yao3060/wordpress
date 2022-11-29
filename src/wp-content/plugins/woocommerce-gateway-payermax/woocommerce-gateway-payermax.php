@@ -34,10 +34,7 @@ define('WC_PAYERMAX_API_VERSION', '1.0');
 define('WC_PAYERMAX_API_KEY_VERSION', '1');
 define('WC_PAYERMAX_MIN_PHP_VER', '7.3.0');
 define('WC_PAYERMAX_MIN_WC_VER', '6.8');
-define('WC_PAYERMAX_FUTURE_MIN_WC_VER', '6.9');
-define('WC_PAYERMAX_PLUGIN_FILE', __FILE__);
-define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', WC_PAYERMAX_PLUGIN_FILE)); // with tail slash
-define('WC_PAYERMAX_PLUGIN_PATH', untrailingslashit(plugin_dir_path(WC_PAYERMAX_PLUGIN_FILE))); // without tail slash
+define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', __FILE__)); // with tail slash
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 
@@ -81,7 +78,7 @@ final class PayerMax
         }
 
         $supports = [];
-        if (($open = fopen(WC_PAYERMAX_PLUGIN_PATH . '/payermax-payment-supports.csv', "r")) !== FALSE) {
+        if (($open = fopen(__DIR__ . '/payermax-payment-supports.csv', "r")) !== FALSE) {
             $headers = fgetcsv($open, 10000, ",");
             while (($data = fgetcsv($open, 1000, ",")) !== FALSE) {
                 $combine = array_combine($headers, $data);
@@ -140,6 +137,24 @@ final class PayerMax
             ) .
             '</strong></p></div>';
     }
+    static function admin_head()
+    {
+        echo "
+        <style type='text/css'>
+        .payermax-method-description {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .payermax-method-description a {
+            display: flex;
+        }
+        .payermax-method-description img {
+            height: 24px;
+        }
+        </style>
+        ";
+    }
 }
 
 
@@ -151,7 +166,7 @@ function woocommerce_gateway_payermax_init()
     load_plugin_textdomain(
         'woocommerce-gateway-payermax',
         false,
-        plugin_basename(dirname(WC_PAYERMAX_PLUGIN_FILE)) . '/languages'
+        plugin_basename(dirname(__FILE__)) . '/languages'
     );
 
 
@@ -200,4 +215,6 @@ function woocommerce_gateway_payermax()
         'wp_ajax_check_payermax_payment_status',
         [WC_Gateway_PayerMax::class, 'check_payermax_payment_status']
     );
+
+    add_action('admin_head', [PayerMax::class, 'admin_head']);
 }

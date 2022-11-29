@@ -81,7 +81,11 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $this->id   = self::ID;
         $this->icon = WC_PAYERMAX_ASSETS_URI . 'assets/images/logo.png';
         $this->method_title = __('PayerMax Payment', 'woocommerce-gateway-payermax');
-        $this->method_description = __('PayerMax payment settings. for more information, please visit our <a target="_blank" href="https://www.payermax.com/">official website</a>.', 'woocommerce-gateway-payermax');
+        $this->method_description = sprintf(
+            __('<span class="payermax-method-description"><a target="_blank" href="%s"><img src="%s" /></a> <span>PayerMax, Your reliable global payment partner.</a></span></span>', 'woocommerce-gateway-payermax'),
+            'https://www.payermax.com/',
+            $this->icon
+        );
         $this->has_fields = false;
         $this->supports = [
             'products',
@@ -94,7 +98,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
      */
     public function init_form_fields()
     {
-        $this->form_fields = require WC_PAYERMAX_PLUGIN_PATH . '/includes/admin/payermax-settings.php';
+        $this->form_fields = require __DIR__ . '/admin/payermax-settings.php';
     }
 
     /**
