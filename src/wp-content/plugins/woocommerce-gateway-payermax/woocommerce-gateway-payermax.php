@@ -7,6 +7,7 @@
  * Author: PayerMax
  * Author URI: https://www.payermax.com/
  * Version: 1.0.1
+ * Requires PHP: 7.1
  * Requires at least: 4.0
  * Tested up to: 6.0
  * WC requires at least: 3.0
