@@ -9,8 +9,18 @@ if (!defined('ABSPATH')) {
 class PayerMax_Logger
 {
     private static $instance;
-    private array $context;
-    private WC_Logger $logger;
+
+    /**
+     * @var array
+     */
+    private $context;
+
+    /**
+     * WC_Logger
+     *
+     * @var WC_Logger
+     */
+    private $logger;
 
     public static function getInstance()
     {

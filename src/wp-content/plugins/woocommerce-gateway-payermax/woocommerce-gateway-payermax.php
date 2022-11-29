@@ -7,22 +7,21 @@
  * Author: PayerMax
  * Author URI: https://www.payermax.com/
  * Version: 1.0.0
- * Requires at least: 5.8
+ * Requires at least: 4.0
  * Tested up to: 6.0
- * WC requires at least: 6.8
+ * WC requires at least: 3.0
  * WC tested up to: 7.0
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License: GPL-2.0+
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: woocommerce-gateway-payermax
  * Domain Path: /languages
  */
+
 
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
 }
-
-use Automattic\Jetpack\Constants;
 
 /**
  * Required minimums and constants
@@ -109,7 +108,7 @@ final class PayerMax
             sprintf(
                 esc_html__('PayerMax requires WooCommerce %1$s or greater to be installed and active. WooCommerce %2$s is no longer supported.', 'woocommerce-gateway-payermax'),
                 WC_PAYERMAX_MIN_WC_VER,
-                Constants::get_constant('WC_VERSION')
+                WC_VERSION
             ) .
             '</strong></p></div>';
     }
@@ -175,7 +174,7 @@ function woocommerce_gateway_payermax_init()
         return;
     }
 
-    if (version_compare(Constants::get_constant('WC_VERSION'), WC_PAYERMAX_MIN_WC_VER, '<')) {
+    if (version_compare(WC_VERSION, WC_PAYERMAX_MIN_WC_VER, '<')) {
         add_action('admin_notices', [PayerMax::class, 'wc_not_supported']);
         return;
     }

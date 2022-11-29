@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) {
  */
 class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 {
-
     const ID = 'payermax';
     public $app_id = '';
     public $merchant_number = '';
