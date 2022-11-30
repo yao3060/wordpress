@@ -28,6 +28,24 @@ services:
     volumes:
       - ./src:/var/www/html:delegated
 
+  cli:
+    image: wordpress:cli
+    container_name: ${COMPOSE_PROJECT_NAME}_wp_cli
+    restart: "no"
+    volumes:
+      - ./src:/var/www/html:delegated
+    env_file: .env
+    environment:
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: domain
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_REDIS_DISABLED', true);
+    working_dir: /var/www/html
+    command: ["tail", "-f", "/dev/null"]
+
   db:
     image: mysql:8
     container_name: ${COMPOSE_PROJECT_NAME}_db
