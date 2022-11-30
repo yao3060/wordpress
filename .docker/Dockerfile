@@ -4,7 +4,6 @@ FROM wordpress:5.8-apache
 RUN pecl install redis-5.3.7 \
     && docker-php-ext-enable redis
 
-# some plugins require PDO
-RUN docker-php-ext-install pdo pdo_mysql
+COPY ./.docker/php/custom.ini $PHP_INI_DIR/conf.d/
 
 CMD ["apache2-foreground"]

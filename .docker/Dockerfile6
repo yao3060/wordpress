@@ -1,6 +1,0 @@
-FROM wordpress:6-apache
-
-RUN pecl install redis-5.3.7 \
-    && docker-php-ext-enable redis
-
-CMD ["apache2-foreground"]
