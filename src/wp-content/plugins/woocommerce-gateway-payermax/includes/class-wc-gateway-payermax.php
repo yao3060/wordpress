@@ -124,9 +124,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         if ($order->get_total() > 0) {
 
-            // Mark as on-hold (we're awaiting the payermax payment)
-            $order->update_status('on-hold', __('Awaiting payermax payment', 'woocommerce-gateway-payermax'));
-
             include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
 
             $request = new WC_Gateway_PayerMax_Request($this);
@@ -142,6 +139,9 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
                 wc_add_notice(__("Payment error:  Can't get payment link.", 'woocommerce-gateway-payermax'), 'error');
                 return;
             }
+
+            // Mark as on-hold (we're awaiting the payermax payment)
+            $order->update_status('on-hold', __('Awaiting payermax payment', 'woocommerce-gateway-payermax'));
 
             // Remove cart.
             WC()->cart->empty_cart();
@@ -381,5 +381,23 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $response = $gateway->verify_payermax_payment_status($request->get_transaction_status($order), $order);
         echo json_encode($response);
         wp_die();
+    }
+
+    public static function account_view_order(int $order_id)
+    {
+        $order = wc_get_order($order_id);
+        if (!$order) {
+            return;
+        }
+        $payment_methods = WC()->payment_gateways()->payment_gateways();
+        /** @var self $gateway */
+        $gateway = $payment_methods[self::ID];
+
+        if ($order->get_payment_method() === $gateway::ID && $order->get_status() === 'on-hold') {
+            include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+            $request = new WC_Gateway_PayerMax_Request($gateway);
+            $transaction_status = $request->get_transaction_status($order);
+            $gateway->verify_payermax_payment_status($transaction_status, $order);
+        }
     }
 }

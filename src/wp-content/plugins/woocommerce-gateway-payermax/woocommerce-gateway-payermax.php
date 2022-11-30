@@ -203,4 +203,6 @@ function woocommerce_gateway_payermax()
     );
 
     add_action('admin_head', [PayerMax::class, 'admin_head']);
+
+    add_action('woocommerce_account_view-order_endpoint', [WC_Gateway_PayerMax::class, 'account_view_order'], 1);
 }
