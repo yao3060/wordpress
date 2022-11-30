@@ -149,7 +149,7 @@ final class PayerMax
 }
 
 
-add_action('plugins_loaded', 'woocommerce_gateway_payermax_init');
+add_action('plugins_loaded', 'woocommerce_gateway_payermax_init', 11);
 
 function woocommerce_gateway_payermax_init()
 {

@@ -6,7 +6,7 @@ abstract class WC_PayerMax_Payment_Gateway extends WC_Payment_Gateway
 
     public function verify_payermax_payment_status($response_data, WC_Order $order)
     {
-        if (is_wp_error($response_data) || !$response_data['data']) {
+        if (is_wp_error($response_data) || !isset($response_data['data'])) {
             return $response_data;
         }
 
