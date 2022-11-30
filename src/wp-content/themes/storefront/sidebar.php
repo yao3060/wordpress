@@ -17,6 +17,7 @@ if (!is_active_sidebar('sidebar-1')) {
 echo ('get_user_locale:' . get_user_locale()) . PHP_EOL;
 echo ('get_locale:' . get_locale()) . PHP_EOL;
 echo ('WPML:' . apply_filters('wpml_current_language', NULL)) . PHP_EOL;
+echo 'PayerMax:' . PayerMax_Helper::get_payermax_language(get_user_locale()) . PHP_EOL;
 ?>
 </pre>
 
