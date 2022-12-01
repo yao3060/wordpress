@@ -30,8 +30,9 @@ class WC_Gateway_PayerMax_Request
      */
     public function __construct($gateway)
     {
-        $this->gateway    = $gateway;
-        $this->endpoint = PayerMax::gateway($this->gateway->sandbox === 'no');
+        $this->gateway = $gateway;
+        $this->endpoint = $this->gateway->endpoint;
+        PayerMax_Logger::debug('gateway endpoint: ' . $this->endpoint);
     }
 
     /**
@@ -96,7 +97,7 @@ class WC_Gateway_PayerMax_Request
         PayerMax_Logger::info('Refund Request: ' . wc_print_r($request_data, true));
 
         $response = wp_safe_remote_post(
-            PayerMax::gateway($this->gateway->sandbox === 'no') . 'refund',
+            $this->gateway->endpoint . 'refund',
             [
                 'method' => 'POST',
                 'body' => json_encode($request_data),

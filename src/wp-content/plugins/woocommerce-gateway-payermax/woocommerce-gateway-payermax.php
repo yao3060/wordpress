@@ -18,7 +18,6 @@
  * Domain Path: /languages
  */
 
-
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
@@ -34,16 +33,28 @@ define('WC_PAYERMAX_API_VERSION', '1.0');
 define('WC_PAYERMAX_API_KEY_VERSION', '1');
 define('WC_PAYERMAX_MIN_PHP_VER', '7.0.0');
 define('WC_PAYERMAX_MIN_WC_VER', '3.0');
+define('WC_PAYERMAX_PLUGIN_DIR', __DIR__);
 define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', __FILE__)); // with tail slash
-define('PAYERMAX_API_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
-define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
+define('PAYERMAX_API_GATEWAY', 'https://pay-gate.payermax.com/aggregate-pay-gate/api/gateway/');
+define('PAYERMAX_API_DEV_GATEWAY', 'http://pay-dev.shareitpay.in/aggregate-pay/api/gateway/');
+
+
 
 final class PayerMax
 {
+    private static $instance;
 
-    static function gateway($sandbox): string
+    protected function __construct()
     {
-        return $sandbox ? PAYERMAX_API_UAT_GATEWAY : PAYERMAX_API_GATEWAY;
+    }
+
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
     }
 
     static function get_currencies(): array
@@ -146,6 +157,16 @@ final class PayerMax
         </style>
         ";
     }
+
+    static function plugin_activate()
+    {
+        update_option(WC_PAYERMAX_PLUGIN_NAME . '-activate-date', date('Y-m-d H:i:s'), false);
+    }
+
+    static function get_activate_date()
+    {
+        return get_option(WC_PAYERMAX_PLUGIN_NAME . '-activate-date');
+    }
 }
 
 
@@ -153,13 +174,6 @@ add_action('plugins_loaded', 'woocommerce_gateway_payermax_init', 11);
 
 function woocommerce_gateway_payermax_init()
 {
-
-    load_plugin_textdomain(
-        'woocommerce-gateway-payermax',
-        false,
-        plugin_basename(dirname(__FILE__)) . '/languages'
-    );
-
 
     if (!class_exists('WooCommerce')) {
         add_action('admin_notices', [PayerMax::class, 'missing_wc_notice']);
@@ -206,3 +220,6 @@ function woocommerce_gateway_payermax()
 
     add_action('woocommerce_account_view-order_endpoint', [WC_Gateway_PayerMax::class, 'account_view_order'], 1);
 }
+
+
+register_activation_hook(__FILE__, [PayerMax::class, 'plugin_activate']);

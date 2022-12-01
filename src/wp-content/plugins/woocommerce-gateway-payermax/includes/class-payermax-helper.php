@@ -166,14 +166,26 @@ class PayerMax_Helper
         }
     }
 
+    /**
+     * get payermax language code from wordpress language code
+     *
+     * @see https://docs.payermax.com/#/30?page_id=677&lang=zh-cn
+     * @param string $language
+     * @return string
+     */
     public static function get_payermax_language($language)
     {
-        if (in_array($language, ['zh_CN', 'zh-CN', 'zh-Hans'])) {
+        if (in_array($language, ['zh_CN', 'zh-CN', 'zh-Hans', 'zh-hans'])) {
             return 'zh';
         }
 
-        if (in_array($language, ['zh_HK', 'zh-HK', 'zh_TW', 'zh-TW', 'zh-Hant'])) {
+        if (in_array($language, ['zh_HK', 'zh-HK', 'zh_TW', 'zh-TW', 'zh-Hant',  'zh-hant'])) {
             return 'zh-TW';
+        }
+
+        // 马来西亚 Malay	ms_MY mys ??
+        if (in_array($language, ['ms_MY', 'ms-MY'])) {
+            return 'mys';
         }
 
         return substr($language, 0, 2);

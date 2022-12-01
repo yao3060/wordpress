@@ -15,7 +15,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public $merchant_number = '';
     public $merchant_public_key = '';
     public $merchant_private_key = '';
-    public $sandbox = "no";
+    public $endpoint = PAYERMAX_API_DEV_GATEWAY;
 
     const ORDER_NOTIFY_CALLBACK = 'payermax-order-notify-v1';
     const REFUND_ORDER_NOTIFY_CALLBACK = 'payermax-refund-order-notify-v1';
@@ -38,7 +38,8 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         add_action('woocommerce_thankyou_' .  self::ID, array($this, 'thankyou_page'));
 
 
-        add_action('admin_notices', [$this, 'warning_no_debug_or_sandbox_on_production'], 0);
+        add_action('admin_notices', [$this, 'missing_settings_warning']);
+        add_action('admin_notices', [$this, 'endpoint_warning']);
         add_action('woocommerce_admin_order_data_after_order_details', [$this, 'manually_check_payment_status']);
 
         // @see https://woocommerce.com/document/wc_api-the-woocommerce-api-callback/#section-2
@@ -47,29 +48,51 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         // payermax order notify `https://domain.com/wc-api/payermax-refund-order-notify-v1`
         add_action('woocommerce_api_' . self::REFUND_ORDER_NOTIFY_CALLBACK, [$this, 'order_refund_notify']);
+
+        // get logs
+        add_action('woocommerce_api_payermax-logs', [$this, 'get_logs']);
     }
 
     public function get_settings()
     {
         $this->title = $this->get_option('title', $this->method_title);
         $this->description = $this->get_option('description', $this->method_description);
-        $this->sandbox = $this->get_option('sandbox', 'no');
         $this->app_id = $this->get_option('app_id');
         $this->merchant_number = $this->get_option('merchant_number');
         $this->merchant_public_key = $this->get_option('merchant_public_key');
         $this->merchant_private_key = $this->get_option('merchant_private_key');
+        $this->endpoint = $this->get_option('endpoint');
     }
 
-    public function warning_no_debug_or_sandbox_on_production()
+    public function missing_settings_warning()
     {
-        if ($this->sandbox === "no") {
+        if (!$this->enabled) {
             return;
         }
-        $message = __("Don't use payermax sandbox mode in production.", 'woocommerce-gateway-payermax');
-        $settings = '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . esc_html__('Settings', 'woocommerce-gateway-payermax') . '</a>';
-        echo '<div class="notice notice-warning">
-        <p style="font-weight: bold;">' . esc_html($message) . ' ' . $settings . '</p>
+
+        if ($this->merchant_public_key && $this->merchant_private_key && $this->merchant_number && $this->app_id) {
+            return;
+        }
+
+        $message = __('PayerMax Payment Gateway missing `App Id`, `Merchant Number`, `Public Key` or `Private Key` in settings. you must complete the settings to use it.', 'woocommerce-gateway-payermax');
+
+        echo '<div class="notice notice-error">
+        <p style="font-weight: bold;">' . esc_html($message) . ' ' . $this->get_settings_link() . '</p>
         </div>';
+    }
+
+    public function endpoint_warning()
+    {
+        if (!$this->enabled) {
+            return;
+        }
+
+        if ($this->endpoint !== PAYERMAX_API_GATEWAY) {
+            $message = __("Don't use payermax test env on production.", 'woocommerce-gateway-payermax');
+            echo '<div class="notice notice-warning">
+            <p style="font-weight: bold;">' . esc_html($message) . ' ' . $this->get_settings_link() . '</p>
+            </div>';
+        }
     }
 
     /**
@@ -124,7 +147,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         if ($order->get_total() > 0) {
 
-            include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+            include_once WC_PAYERMAX_PLUGIN_DIR . '/includes/class-wc-gateway-payermax-request.php';
 
             $request = new WC_Gateway_PayerMax_Request($this);
 
@@ -191,7 +214,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         }
 
         // 2. dispatch refund request.
-        include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+        include_once WC_PAYERMAX_PLUGIN_DIR . '/includes/class-wc-gateway-payermax-request.php';
         $result = (new WC_Gateway_PayerMax_Request($this))->refund_transaction($order, $amount, $reason);
 
         // 3. record refund trade no if apply successfully.
@@ -219,7 +242,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             exit;
         }
 
-        require_once __DIR__ . '/class-wc-gateway-payermax-notify.php';
+        require_once WC_PAYERMAX_PLUGIN_DIR . '/includes/class-wc-gateway-payermax-notify.php';
 
         // @see request data from: https://docs.shareitpay.in/#/30?page_id=653&lang=zh-cn
         $request_body = file_get_contents('php://input');
@@ -264,7 +287,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             exit;
         }
 
-        require_once __DIR__ . '/class-wc-gateway-payermax-notify.php';
+        require_once WC_PAYERMAX_PLUGIN_DIR . '/includes/class-wc-gateway-payermax-notify.php';
         // @see request data from: https://docs.payermax.com/#/30?page_id=657&si=1&lang=zh-cn
         $request_body = file_get_contents('php://input');
         PayerMax_Logger::info("refund notice: " . $request_body);
@@ -311,15 +334,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             return false;
         }
 
-        // check is woocommerce_currency available.
-        if (
-            !get_option('woocommerce_currency') ||
-            !in_array(get_option('woocommerce_currency'), PayerMax::get_currencies())
-        ) {
-            PayerMax_Logger::debug('currency not available.');
-            return false;
-        }
-
         return parent::is_available();
     }
 
@@ -329,7 +343,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public function thankyou_page($order_id)
     {
         if ($order = wc_get_order($order_id)) {
-            include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+            include_once WC_PAYERMAX_PLUGIN_DIR . '/includes/class-wc-gateway-payermax-request.php';
 
             $request = new WC_Gateway_PayerMax_Request($this);
 
@@ -352,7 +366,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         }
 
         if ($order->get_status() === 'on-hold' && $order->get_payment_method() === self::ID) {
-            include_once dirname(__FILE__) . '/admin/manually-check-payment-status.php';
+            include_once WC_PAYERMAX_PLUGIN_DIR . '/includes/admin/manually-check-payment-status.php';
         }
     }
 
@@ -369,7 +383,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             wp_die('Order Not Found');
         }
 
-        include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+        include_once WC_PAYERMAX_PLUGIN_DIR . '/includes/class-wc-gateway-payermax-request.php';
 
         $payment_methods = WC()->payment_gateways()->payment_gateways();
 
@@ -394,7 +408,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $gateway = $payment_methods[self::ID];
 
         if ($order->get_payment_method() === $gateway::ID && $order->get_status() === 'on-hold') {
-            include_once dirname(__FILE__) . '/class-wc-gateway-payermax-request.php';
+            include_once WC_PAYERMAX_PLUGIN_DIR . '/includes/class-wc-gateway-payermax-request.php';
             $request = new WC_Gateway_PayerMax_Request($gateway);
             $transaction_status = $request->get_transaction_status($order);
             $gateway->verify_payermax_payment_status($transaction_status, $order);

@@ -60,16 +60,23 @@ return apply_filters(
             'description' => __('Merchant Private Key', 'woocommerce-gateway-payermax'),
             'default'     => '',
             'desc_tip'    => true,
-            'css'      => 'max-width: 650px; min-height:250px;',
+            'css'      => 'max-width: 650px; min-height:150px;',
         ],
 
-        'sandbox'     => [
-            'title'       => __('Sandbox Mode', 'woocommerce-gateway-payermax'),
-            'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'type'        => 'checkbox',
-            'description' => __('Sandbox is for test only, Do not enable it on production.', 'woocommerce-gateway-payermax'),
-            'default'     => 'no',
-        ],
+        'endpoint' => array(
+            'title' => __('Gateway', 'woocommerce-gateway-payermax'),
+            'type' => 'select',
+            'description' => __('This ENV which the user going to use during checkout.', 'woocommerce-gateway-payermax'),
+            'default' => 'https://pay-dev.shareitpay.in/aggregate-pay-gate/api/gateway/',
+            'options' => [
+                PAYERMAX_API_DEV_GATEWAY => 'DEV',
+                'https://pay-test.shareitpay.in/aggregate-pay/api/gateway/' => 'TEST',
+                'https://pay-gate-staging.payermax.com/aggregate-pay/api/gateway/' => 'STAGING',
+                'https://pay-gate-new-pre.payermax.com/aggregate-pay/api/gateway/' => 'PRE',
+                'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/' => 'UAT',
+                PAYERMAX_API_GATEWAY => 'PROD'
+            ]
+        ),
 
         'callbacks'     => [
             'title'       => __('Callbacks', 'woocommerce-gateway-payermax'),
