@@ -48,9 +48,6 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
 
         // payermax order notify `https://domain.com/wc-api/payermax-refund-order-notify-v1`
         add_action('woocommerce_api_' . self::REFUND_ORDER_NOTIFY_CALLBACK, [$this, 'order_refund_notify']);
-
-        // get logs
-        add_action('woocommerce_api_payermax-logs', [$this, 'get_logs']);
     }
 
     public function get_settings()

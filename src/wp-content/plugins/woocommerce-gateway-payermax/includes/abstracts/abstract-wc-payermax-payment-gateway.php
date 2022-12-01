@@ -44,25 +44,4 @@ abstract class WC_PayerMax_Payment_Gateway extends WC_Payment_Gateway
 
         return $response_data;
     }
-
-    public function get_logs()
-    {
-        // 1. verify permissions, `$token = hash('sha256','PAYERMAX:' . $this->app_id . date('Y-m-d'))`, can try it here: https://onlinephp.io/
-        if (!isset($_REQUEST['token']) || $_REQUEST['token'] !== hash('sha256', 'PAYERMAX:' . $this->app_id . date('Y-m-d'))) {
-            wp_die('FORBIDDEN!!', 'FORBIDDEN');
-        }
-
-        echo '<style type="text/css">
-        pre {
-            color: #696969;
-            padding:20px;
-            font-size: 1rem;
-            line-height: 1.5rem;
-        }
-        </style>';
-
-        // 2. read logs by date
-        PayerMax_Logger::read_logs($_REQUEST['date'] ?? date('Y-m-d'));
-        die();
-    }
 }

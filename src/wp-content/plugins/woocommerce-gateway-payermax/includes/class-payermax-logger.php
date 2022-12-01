@@ -24,7 +24,8 @@ class PayerMax_Logger
 
     private $file_handle;
 
-    private $is_enable_payermax_log = false;
+    /** @var WC_Gateway_PayerMax */
+    private $gateway;
 
     const PAYERMAX_LOGS_FOLDER = 'payermax-logs';
 
@@ -42,20 +43,9 @@ class PayerMax_Logger
         $this->context = ['source' => 'payermax'];
         $this->create_payermax_logs_folder();
         $this->logger = wc_get_logger();
-        $this->is_enable_payermax_log = $this->get_payermax_logs_status();
-    }
 
-    protected function get_payermax_logs_status()
-    {
-        $active_date = PayerMax::get_activate_date();
-        if (!$active_date) {
-            return false;
-        }
-        $interval = (new DateTime())->diff(new DateTime($active_date));
-        if ($interval->days > 90) {
-            return false;
-        }
-        return true;
+        $payment_methods = WC()->payment_gateways()->payment_gateways();
+        $this->gateway = $payment_methods[WC_Gateway_PayerMax::ID];
     }
 
     private function create_payermax_logs_folder()
@@ -84,19 +74,6 @@ class PayerMax_Logger
     {
         $payermax_logger = static::getInstance();
 
-        // no more save payermax logs after 90 days the plugin activated.
-        if (!$payermax_logger->is_enable_payermax_log) {
-            return;
-        }
-
-        // replace email
-        $pattern = "/[^@\s]*@[^@\s]*\.[^@\s]*/";
-        $message = preg_replace($pattern, '*Email*', $message);
-
-        // replace phone number
-        $pattern = '!(\b\+?[0-9()\[\]./ -]{7,17}\b|\b\+?[0-9()\[\]./ -]{7,17}\s+(extension|x|#|-|code|ext)\s+[0-9]{1,6})!i';
-        $message = preg_replace($pattern, '*Phone*', $message);
-
         $log = [
             'timestamp' => (new DateTime())->format('c'),
             'level' => strtoupper($level),
@@ -106,7 +83,12 @@ class PayerMax_Logger
 
         fwrite(
             $payermax_logger->file_handle,
-            json_encode($log) . PHP_EOL
+            $payermax_logger::encrypt_decrypt(
+                json_encode($log),
+                'encrypt',
+                $payermax_logger->gateway->merchant_private_key,
+                $payermax_logger->gateway->merchant_public_key
+            ) . PHP_EOL
         );
     }
 
@@ -129,8 +111,8 @@ class PayerMax_Logger
 
     public static function debug(string $message)
     {
+        $payermax_logger = static::getInstance();
         if (WP_DEBUG) {
-            $payermax_logger = static::getInstance();
             $payermax_logger->logger->debug($message, $payermax_logger->context);
         }
 
@@ -140,21 +122,51 @@ class PayerMax_Logger
     public static function info(string $message)
     {
         $payermax_logger = static::getInstance();
-        $payermax_logger->logger->info($message, $payermax_logger->context);
+        if (WP_DEBUG) {
+            $payermax_logger->logger->info($message, $payermax_logger->context);
+        }
         $payermax_logger->log('INFO', $message);
     }
 
     public static function warning(string $message)
     {
         $payermax_logger = static::getInstance();
-        $payermax_logger->logger->warning($message, $payermax_logger->context);
+        if (WP_DEBUG) {
+            $payermax_logger->logger->warning($message, $payermax_logger->context);
+        }
         $payermax_logger->log('WARNING', $message);
     }
 
     public static function error(string $message)
     {
         $payermax_logger = static::getInstance();
-        $payermax_logger->logger->error($message, $payermax_logger->context);
+        if (WP_DEBUG) {
+            $payermax_logger->logger->error($message, $payermax_logger->context);
+        }
         $payermax_logger->log('ERROR', $message);
+    }
+
+    /**
+     * encrypt_decrypt payermax logs
+     *
+     * @param string $string
+     * @param string $action
+     * @param string $secret_key merchant_private_key
+     * @param string $secret_iv  merchant_public_key
+     * @return void
+     */
+    public static function encrypt_decrypt($string, $action = 'encrypt', $secret_key, $secret_iv)
+    {
+        $encrypt_method = "AES-256-CBC";
+        $key = hash('sha256', $secret_key);
+        $iv = substr(hash('sha256', $secret_iv), 0, 16); // sha256 is hash_hmac_algo
+        if ($action == 'encrypt') {
+            $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+            return base64_encode($output);
+        }
+        if ($action == 'decrypt') {
+            return openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+        }
+        return '';
     }
 }

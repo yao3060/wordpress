@@ -94,10 +94,9 @@ Refund Result:  %s</pre>', 'woocommerce-gateway-payermax'),
             'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
             'type'        => 'title',
             'description' => sprintf(
-                __('<code>WP_DEBUG</code> is %s, if enabled, plugin will store <code title="%s">%s</code> level logs.', 'woocommerce-gateway-payermax'),
+                __('<code>WP_DEBUG</code> is <code>%s</code>, if enabled, plugin will store trade info into <code>%s</code>.', 'woocommerce-gateway-payermax'),
                 WP_DEBUG ? 'true' : 'false',
-                'PayerMax_Logger::debug()',
-                'debug'
+                wc_get_log_file_path(self::ID)
             ),
             'default'     => WP_DEBUG ? 'yes' : 'no',
         ],
