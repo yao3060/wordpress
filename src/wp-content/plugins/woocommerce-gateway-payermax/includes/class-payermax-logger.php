@@ -92,21 +92,27 @@ class PayerMax_Logger
         );
     }
 
-    public static function read_logs(string $date = '')
+    public static function remove_logs()
     {
         $payermax_logger = static::getInstance();
+        $date = $date = date('Y-m-d', (strtotime('-30 day')));
+        $logs_dir = str_replace(date('Y-m-d') . '.log', '', $payermax_logger->log_file);
 
-        if ($date) {
-            $log_file = str_replace(date('Y-m-d'), $date, $payermax_logger->log_file);
-        } else {
-            $log_file = $payermax_logger->log_file;
+        $files  = @scandir($logs_dir);
+        $results = [];
+        if (!empty($files)) {
+            foreach ($files as $value) {
+                if (!in_array($value, array('.', '..', 'index.html'), true)) {
+                    $filename = str_replace('.log', '', $value);
+                    if (date($filename) < date($date)) {
+                        unlink(str_replace(date('Y-m-d') . '.log', $value, $payermax_logger->log_file));
+                        $results[] = 'delete log file: ' . $value;
+                    }
+                }
+            }
         }
 
-        if (!file_exists($log_file)) {
-            wp_die('File Not exists', 'Not Found');
-        }
-
-        echo '<pre>' . esc_html(file_get_contents($log_file)) . '</pre>';
+        return $results;
     }
 
     public static function debug(string $message)

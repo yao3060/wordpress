@@ -167,6 +167,26 @@ final class PayerMax
     {
         return get_option(WC_PAYERMAX_PLUGIN_NAME . '-activate-date');
     }
+
+    static function clean_logs()
+    {
+        $date = get_option('clean_payermax_logs');
+        if ($date === date('Y-m-d')) {
+            return;
+        }
+
+        echo <<<EOF
+<script type="text/javascript">
+        jQuery(document).ready(function($) {
+            jQuery.post(ajaxurl, {
+                action: 'clean_payermax_logs'
+            }, function(response) {
+                // no need handle response
+            });
+        });
+</script>
+EOF;
+    }
 }
 
 
@@ -219,6 +239,13 @@ function woocommerce_gateway_payermax()
     add_action('admin_head', [PayerMax::class, 'admin_head']);
 
     add_action('woocommerce_account_view-order_endpoint', [WC_Gateway_PayerMax::class, 'account_view_order'], 1);
+
+    // make ajax call to clean payermax logs
+    add_action('admin_footer', [PayerMax::class, 'clean_logs']);
+    add_action(
+        'wp_ajax_clean_payermax_logs',
+        [WC_Gateway_PayerMax::class, 'clean_payermax_logs']
+    );
 }
 
 
