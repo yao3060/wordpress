@@ -163,15 +163,16 @@ class WC_Gateway_PayerMax_Request
 
     protected function get_request_data(WC_Order $order): array
     {
+        $good_details = $this->get_goods_details($order);
         $data = [
             'outTradeNo' => PayerMax_Helper::get_trade_no($order),
-            'subject' => method_exists($order, 'get_title') ? $order->get_title() : 'WC Order #' . $order->get_id(),
+            'subject' =>   $this->get_subject($good_details),
             // cast into payermax format amount
             'totalAmount' => PayerMax_Helper::payment_amount($order->get_total(), $order->get_currency()),
             'currency' => $order->get_currency(),
             'country' => PayerMax_Helper::get_order_country($order),
             'userId' => (string)$order->get_customer_id(),
-            'goodsDetails' => $this->get_goods_details($order),
+            'goodsDetails' => $good_details,
             'shippingInfo' => $this->get_shipping_info($order),
             'billingInfo' => $this->get_billing_info($order),
             'language' => PayerMax_Helper::get_payermax_language(get_user_locale()), // 收银台页面语言
@@ -241,5 +242,14 @@ class WC_Gateway_PayerMax_Request
             ];
         }
         return $goods;
+    }
+
+    public function get_subject(array $good_details)
+    {
+        $string = join(' / ', array_column($good_details, 'goodsName'));
+        if (strlen($string) > 256) {
+            return mb_substr($string, 0, 250) . '...';
+        }
+        return $string;
     }
 }
