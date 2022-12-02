@@ -167,6 +167,9 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     {
 
         $order = wc_get_order($order_id);
+        if (!$order) {
+            return false;
+        }
 
         if ($order->get_total() > 0) {
 
