@@ -179,17 +179,8 @@ class PayerMax_Helper
      */
     public static function get_payermax_language($language)
     {
-        if (in_array($language, ['zh_CN', 'zh-CN', 'zh-Hans', 'zh-hans'])) {
-            return 'zh';
-        }
-
         if (in_array($language, ['zh_HK', 'zh-HK', 'zh_TW', 'zh-TW', 'zh-Hant',  'zh-hant'])) {
             return 'zh-TW';
-        }
-
-        // 马来西亚 Malay	ms_MY mys ??
-        if (in_array($language, ['ms_MY', 'ms-MY'])) {
-            return 'mys';
         }
 
         return substr($language, 0, 2);
