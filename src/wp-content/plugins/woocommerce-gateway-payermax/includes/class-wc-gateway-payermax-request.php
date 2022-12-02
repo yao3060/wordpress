@@ -171,7 +171,7 @@ class WC_Gateway_PayerMax_Request
             'totalAmount' => PayerMax_Helper::payment_amount($order->get_total(), $order->get_currency()),
             'currency' => $order->get_currency(),
             'country' => PayerMax_Helper::get_order_country($order),
-            'userId' => (string)$order->get_customer_id(),
+            'userId' => is_user_logged_in() ? (string)$order->get_customer_id() : 'NA',
             'goodsDetails' => $good_details,
             'shippingInfo' => $this->get_shipping_info($order),
             'billingInfo' => $this->get_billing_info($order),

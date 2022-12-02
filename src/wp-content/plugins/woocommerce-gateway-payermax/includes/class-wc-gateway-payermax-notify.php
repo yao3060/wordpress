@@ -47,6 +47,17 @@ class WC_Gateway_PayerMax_Notify
             return false;
         }
 
+        // if received notice SUCCESS on Failed order
+        if ($order->get_status() === 'failed' && $notice_data['data']['status'] === 'SUCCESS') {
+            $order->add_order_note(sprintf(
+                __('Received SUCCESS notice on FAILED order, Trade Number: %s, Trade Token: %s', 'woocommerce-gateway-payermax'),
+                $notice_data['data']['outTradeNo'],
+                $notice_data['data']['tradeToken']
+            ));
+
+            return false;
+        }
+
         // processing on-hold order only
         PayerMax_Logger::debug("Payment Notify Order Status, " .  wc_print_r(['id' => $order->get_id(), 'status' => $order->get_status()], true));
         if ($order->get_status() !== 'on-hold') {
