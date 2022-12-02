@@ -1,5 +1,5 @@
 <style>
-    .woocommerce_payermax_icon_wrapper .forminp {
+    .woocommerce_payermax_icon_wrapper .flex {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -30,21 +30,25 @@ echo wp_kses_post(wpautop($this->get_method_description()));
             <label for="woocommerce_payermax_icon"><?php _e('ICON', 'woocommerce-gateway-payermax'); ?></label>
         </th>
         <td class="forminp">
-            <?php
-            $image_id = get_option($this::ICON_ID_KEY, 0);
-            if ($image = wp_get_attachment_image_url($image_id, 'full')) : ?>
-                <a href="#" class="woocommerce_payermax_icon" data-title="<?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
-                    <img src="<?php echo esc_url($image) ?>" />
-                </a>
-                <a href="#" class="remove_woocommerce_payermax_icon"><?php _e('Remove', 'woocommerce-gateway-payermax'); ?></a>
-                <input type="hidden" name="<?php echo $this::ICON_ID_KEY; ?>" value="<?php echo absint($image_id) ?>">
-            <?php else : ?>
-                <a href="#" class="button woocommerce_payermax_icon" data-title="<?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
-                    <?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>
-                </a>
-                <a href="#" class="remove_woocommerce_payermax_icon" style="display:none"><?php _e('Remove', 'woocommerce-gateway-payermax'); ?></a>
-                <input type="hidden" name="<?php echo $this::ICON_ID_KEY; ?>" value="" />
-            <?php endif; ?>
+            <div class="flex">
+                <?php
+                $image_id = get_option($this::ICON_ID_KEY, 0);
+                if ($image = wp_get_attachment_image_url($image_id, 'full')) : ?>
+                    <a href="#" class="woocommerce_payermax_icon" data-title="<?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
+                        <img src="<?php echo esc_url($image) ?>" />
+                    </a>
+                    <a href="#" class="remove_woocommerce_payermax_icon"><?php _e('Remove', 'woocommerce-gateway-payermax'); ?></a>
+                    <input type="hidden" name="<?php echo $this::ICON_ID_KEY; ?>" value="<?php echo absint($image_id) ?>">
+                <?php else : ?>
+                    <a href="#" class="button woocommerce_payermax_icon" data-title="<?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
+                        <?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>
+                    </a>
+                    <a href="#" class="remove_woocommerce_payermax_icon" style="display:none"><?php _e('Remove', 'woocommerce-gateway-payermax'); ?></a>
+                    <input type="hidden" name="<?php echo $this::ICON_ID_KEY; ?>" value="" />
+                <?php endif; ?>
+            </div>
+
+            <p class="description"><?php _e('ICON image should small than 512px * 256px', 'woocommerce-gateway-payermax'); ?></p>
         </td>
     </tr>
 
@@ -73,6 +77,11 @@ echo wp_kses_post(wpautop($this->get_method_description()));
 
             customUploader.on('select', function() { // it also has "open" and "close" events
                 const attachment = customUploader.state().get('selection').first().toJSON();
+                console.log('attachment', attachment.height, attachment.width);
+                if (attachment.width > 512 || attachment.height > 256) {
+                    alert('Image too large for ICON');
+                    return;
+                }
                 button.removeClass('button').html('<img src="' + attachment.url + '">'); // add image instead of "Upload Image"
                 button.next().show(); // show "Remove image" link
                 button.next().next().val(attachment.id); // Populate the hidden field with image ID
