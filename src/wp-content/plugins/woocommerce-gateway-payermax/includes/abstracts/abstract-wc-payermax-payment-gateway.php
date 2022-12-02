@@ -3,6 +3,15 @@
 
 abstract class WC_PayerMax_Payment_Gateway extends WC_Payment_Gateway
 {
+    /**
+     * Return the gateway's icon.
+     *
+     * @return string
+     */
+    public function get_custom_icon(int $id)
+    {
+        return  wp_get_attachment_image_url($id, 'full');
+    }
 
     public function get_settings_link()
     {

@@ -124,9 +124,13 @@ class PayerMax_Helper
         return $order;
     }
 
-
     public static function get_order_country(WC_Order $order)
     {
+        $country = get_option('woocommerce_default_country');
+        if ($country) {
+            return substr($country, 0, 2);
+        }
+        // if there is no store country, return order country.
         return empty(trim($order->get_shipping_country())) ? trim($order->get_billing_country()) : trim($order->get_shipping_country());
     }
 

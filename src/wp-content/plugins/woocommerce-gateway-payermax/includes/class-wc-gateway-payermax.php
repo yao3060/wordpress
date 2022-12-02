@@ -17,11 +17,14 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public $merchant_private_key = '';
     public $endpoint = PAYERMAX_API_DEV_GATEWAY;
 
+    const ICON_ID_KEY = 'woocommerce_payermax_icon_id';
     const ORDER_NOTIFY_CALLBACK = 'payermax-order-notify-v1';
     const REFUND_ORDER_NOTIFY_CALLBACK = 'payermax-refund-order-notify-v1';
 
     public function __construct()
     {
+        add_action('admin_enqueue_scripts', [$this, 'add_media_script']);
+
         // Setup general properties.
         $this->setup_general_properties();
 
@@ -50,6 +53,24 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         add_action('woocommerce_api_' . self::REFUND_ORDER_NOTIFY_CALLBACK, [$this, 'order_refund_notify']);
     }
 
+    function add_media_script($hook_suffix)
+    {
+        if ($hook_suffix === "woocommerce_page_wc-settings") {
+            wp_enqueue_media();
+        }
+    }
+
+    public function process_admin_options()
+    {
+        $post_data = $this->get_post_data();
+
+        if (isset($post_data[self::ICON_ID_KEY])) {
+            update_option(self::ICON_ID_KEY, $post_data[self::ICON_ID_KEY]);
+        }
+
+        parent::process_admin_options();
+    }
+
     public function get_settings()
     {
         $this->title = $this->get_option('title', $this->method_title);
@@ -59,6 +80,9 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         $this->merchant_public_key = $this->get_option('merchant_public_key');
         $this->merchant_private_key = $this->get_option('merchant_private_key');
         $this->endpoint = $this->get_option('endpoint');
+        if ($this->get_option('enable_refunds') === 'yes' && !in_array('refunds', $this->supports)) {
+            $this->supports[] = 'refunds';
+        }
     }
 
     public function missing_settings_warning()
@@ -98,18 +122,20 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     protected function setup_general_properties()
     {
         $this->id   = self::ID;
-        $this->icon = WC_PAYERMAX_ASSETS_URI . 'assets/images/logo.png';
+        $this->icon = $this->get_custom_icon((int)get_option(self::ICON_ID_KEY));
         $this->method_title = __('PayerMax Payment', 'woocommerce-gateway-payermax');
         $this->method_description = sprintf(
-            __('<span class="payermax-method-description"><a target="_blank" href="%s"><img src="%s" /></a> <span>PayerMax, Your reliable global payment partner.</a></span></span>', 'woocommerce-gateway-payermax'),
-            'https://www.payermax.com/',
-            $this->icon
+            __('<a target="_blank" href="%s">PayerMax</a>, Your reliable global payment partner.', 'woocommerce-gateway-payermax'),
+            'https://www.payermax.com/'
         );
         $this->has_fields = false;
-        $this->supports = [
-            'products',
-            'refunds',
-        ];
+        $this->supports = ['products'];
+    }
+
+    function admin_options()
+    {
+        // parent::admin_options();
+        require_once WC_PAYERMAX_PLUGIN_DIR . '/includes/admin/admin-options.php';
     }
 
     /**
@@ -117,7 +143,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
      */
     public function init_form_fields()
     {
-        $this->form_fields = require __DIR__ . '/admin/payermax-settings.php';
+        $this->form_fields = require WC_PAYERMAX_PLUGIN_DIR . '/includes/admin/payermax-settings.php';
     }
 
     public static function get_payment_callback_url()

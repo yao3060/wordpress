@@ -63,11 +63,21 @@ return apply_filters(
             'css'      => 'max-width: 650px; min-height:150px;',
         ],
 
+        // TODO: disabled temporarily.
+        // 'enable_refunds'     => [
+        //     'title'       => __('Enable PayerMax Refunds', 'woocommerce-gateway-payermax'),
+        //     'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
+        //     'type'        => 'checkbox',
+        //     'description' => '',
+        //     'default'     => 'no',
+        //     'desc_tip'    => true,
+        // ],
+
         'endpoint' => array(
             'title' => __('Gateway', 'woocommerce-gateway-payermax'),
             'type' => 'select',
             'description' => __('This ENV which the user going to use during checkout.', 'woocommerce-gateway-payermax'),
-            'default' => 'https://pay-dev.shareitpay.in/aggregate-pay-gate/api/gateway/',
+            'default' => PAYERMAX_API_DEV_GATEWAY,
             'options' => [
                 PAYERMAX_API_DEV_GATEWAY => 'DEV',
                 'https://pay-test.shareitpay.in/aggregate-pay/api/gateway/' => 'TEST',
@@ -89,17 +99,7 @@ Refund Result:  %s</pre>', 'woocommerce-gateway-payermax'),
             ),
         ],
 
-        'debug'     => [
-            'title'       => __('Debug', 'woocommerce-gateway-payermax'),
-            'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'type'        => 'title',
-            'description' => sprintf(
-                __('<code>WP_DEBUG</code> is <code>%s</code>, if enabled, plugin will store trade info into <code>%s</code>.', 'woocommerce-gateway-payermax'),
-                WP_DEBUG ? 'true' : 'false',
-                wc_get_log_file_path(self::ID)
-            ),
-            'default'     => WP_DEBUG ? 'yes' : 'no',
-        ],
+
 
         'available_for_payment_method' => array(
             'title'             => __('Available for Payment Method', 'woocommerce-gateway-payermax'),
@@ -117,5 +117,17 @@ Refund Result:  %s</pre>', 'woocommerce-gateway-payermax'),
                 get_option('woocommerce_currency')
             )
         ),
+
+        'debug'     => [
+            'title'       => __('Debug', 'woocommerce-gateway-payermax'),
+            'label'       => __('Enable/Disable', 'woocommerce-gateway-payermax'),
+            'type'        => 'title',
+            'description' => sprintf(
+                __('<code>WP_DEBUG</code> is <code>%s</code>, if enabled, plugin will store trade info into <code>%s</code>.', 'woocommerce-gateway-payermax'),
+                WP_DEBUG ? 'true' : 'false',
+                wc_get_log_file_path(self::ID)
+            ),
+            'default'     => WP_DEBUG ? 'yes' : 'no',
+        ],
     ]
 );
