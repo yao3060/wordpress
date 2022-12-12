@@ -78,14 +78,7 @@ return apply_filters(
             'type' => 'select',
             'description' => __('This ENV which the user going to use during checkout.', 'woocommerce-gateway-payermax'),
             'default' => PAYERMAX_API_DEV_GATEWAY,
-            'options' => [
-                PAYERMAX_API_DEV_GATEWAY => 'DEV',
-                'https://pay-test.shareitpay.in/aggregate-pay/api/gateway/' => 'TEST',
-                'https://pay-gate-staging.payermax.com/aggregate-pay/api/gateway/' => 'STAGING',
-                'https://pay-gate-new-pre.payermax.com/aggregate-pay/api/gateway/' => 'PRE',
-                'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/' => 'UAT',
-                PAYERMAX_API_GATEWAY => 'PROD'
-            ]
+            'options' => PayerMax::get_envs()
         ),
 
         'callbacks'     => [

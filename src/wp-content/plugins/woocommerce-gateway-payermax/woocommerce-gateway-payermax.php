@@ -35,10 +35,9 @@ define('WC_PAYERMAX_MIN_PHP_VER', '7.0.0');
 define('WC_PAYERMAX_MIN_WC_VER', '3.0');
 define('WC_PAYERMAX_PLUGIN_DIR', __DIR__);
 define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', __FILE__)); // with tail slash
+
+define('PAYERMAX_API_DEV_GATEWAY', 'https://pay-dev.shareitpay.in/aggregate-pay-gate/api/gateway/');
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate.payermax.com/aggregate-pay-gate/api/gateway/');
-define('PAYERMAX_API_DEV_GATEWAY', 'http://pay-dev.shareitpay.in/aggregate-pay/api/gateway/');
-
-
 
 final class PayerMax
 {
@@ -55,6 +54,24 @@ final class PayerMax
         }
 
         return self::$instance;
+    }
+
+    /**
+     * if env.php exists, use envs from this file.
+     */
+    static function get_envs()
+    {
+        if (file_exists(__DIR__ . '/env.php')) {
+            require_once(__DIR__ . '/env.php');
+            $oClass = new ReflectionClass(PAYERMAX_ENV::class);
+            $envs = $oClass->getConstants();
+            return array_flip($envs);
+        }
+
+        return [
+            PAYERMAX_API_DEV_GATEWAY => 'DEV',
+            PAYERMAX_API_GATEWAY => 'PROD'
+        ];
     }
 
     static function get_currencies(): array
