@@ -39,12 +39,18 @@ define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', __FILE__)); // with tail sla
 define('PAYERMAX_API_DEV_GATEWAY', 'https://pay-dev.shareitpay.in/aggregate-pay-gate/api/gateway/');
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate.payermax.com/aggregate-pay-gate/api/gateway/');
 
+require(__DIR__ . '/vendor/autoload.php');
+
 final class PayerMax
 {
     private static $instance;
 
+    /** @var \Symfony\Component\Translation\Translator $translator */
+    private $translator;
+
     protected function __construct()
     {
+        $this->init_i18n();
     }
 
     public static function getInstance()
@@ -54,6 +60,33 @@ final class PayerMax
         }
 
         return self::$instance;
+    }
+
+    public function init_i18n()
+    {
+        $locale = get_user_locale(); // en_US, zh_CN etc.
+
+        $translator = new \Symfony\Component\Translation\Translator($locale);
+        if (file_exists(__DIR__ . '/languages/' . $locale . '.php')) {
+            $translator->addLoader('array', new \Symfony\Component\Translation\Loader\ArrayLoader());
+            $translator->addResource(
+                'array',
+                require_once(__DIR__ . '/languages/' . $locale . '.php'),
+                $locale
+            );
+        }
+
+        $this->translator = $translator;
+    }
+
+    public static function __($string = '', $domain = '', array $parameters = [])
+    {
+        return static::getInstance()->translator->trans($string, $parameters);
+    }
+
+    public static function _e($string, $domain = '', array $parameters = [])
+    {
+        echo static::getInstance()::__($string, $domain, $parameters);
     }
 
     /**

@@ -50,7 +50,7 @@ class WC_Gateway_PayerMax_Notify
         // if received notice SUCCESS on Failed order
         if ($order->get_status() === 'failed' && $notice_data['data']['status'] === 'SUCCESS') {
             $order->add_order_note(sprintf(
-                __('Received SUCCESS notice on FAILED order, Trade Number: %s, Trade Token: %s', 'woocommerce-gateway-payermax'),
+                PayerMax::__('Received SUCCESS notice on FAILED order, Trade Number: %s, Trade Token: %s', 'woocommerce-gateway-payermax'),
                 $notice_data['data']['outTradeNo'],
                 $notice_data['data']['tradeToken']
             ));
@@ -74,7 +74,7 @@ class WC_Gateway_PayerMax_Notify
         if (in_array($notice_data['data']['status'], ['CLOSED', 'FAILED'])) {
             $order->update_status('failed');
             $order->add_order_note(sprintf(
-                __('PayerMax Payment Failed, Trade Token: %s, Result message: %s', 'woocommerce-gateway-payermax'),
+                PayerMax::__('PayerMax Payment Failed, Trade Token: %s, Result message: %s', 'woocommerce-gateway-payermax'),
                 $notice_data['data']['tradeToken'],
                 $notice_data['data']['resultMsg']
             ));
@@ -90,7 +90,7 @@ class WC_Gateway_PayerMax_Notify
         $order->payment_complete();
 
         $order->add_order_note(sprintf(
-            __('PayerMax payment succeeded, Trade Token: %s', 'woocommerce-gateway-payermax'),
+            PayerMax::__('PayerMax payment succeeded, Trade Token: %s', 'woocommerce-gateway-payermax'),
             $notice_data['data']['tradeToken']
         ));
 
@@ -136,14 +136,14 @@ class WC_Gateway_PayerMax_Notify
         // if refund successfully
         if ($order->get_transaction_id() === $transaction_id && $request_data['data']['status'] === 'REFUND_SUCCESS') {
             $order->add_order_note(sprintf(
-                __('Refunded - Refund ID: %s - Refund Amount: %s', 'woocommerce-gateway-payermax'),
+                PayerMax::__('Refunded - Refund ID: %s - Refund Amount: %s', 'woocommerce-gateway-payermax'),
                 $request_data['data']['refundTradeNo'],
                 $request_data['data']['refundAmount']
             ), 1);
             return true;
         } else {
             $order->add_order_note(sprintf(
-                __('Refund failed - Refund ID: %s - Error Message: %s', 'woocommerce-gateway-payermax'),
+                PayerMax::__('Refund failed - Refund ID: %s - Error Message: %s', 'woocommerce-gateway-payermax'),
                 $request_data['data']['refundTradeNo'],
                 $request_data['msg']
             ));

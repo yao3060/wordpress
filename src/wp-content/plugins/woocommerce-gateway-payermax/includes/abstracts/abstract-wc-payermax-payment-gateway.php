@@ -15,7 +15,7 @@ abstract class WC_PayerMax_Payment_Gateway extends WC_Payment_Gateway
 
     public function get_settings_link()
     {
-        return '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . __('Settings', 'woocommerce-gateway-payermax') . '</a>';
+        return '<a href="admin.php?page=wc-settings&tab=checkout&section=payermax">' . PayerMax::__('Settings', 'woocommerce-gateway-payermax') . '</a>';
     }
 
     public function verify_payermax_payment_status($response_data, WC_Order $order)
@@ -36,7 +36,7 @@ abstract class WC_PayerMax_Payment_Gateway extends WC_Payment_Gateway
         ) {
             $order->payment_complete();
             $order->add_order_note(sprintf(
-                __('PayerMax payment succeeded, Trade Token: %s', 'woocommerce-gateway-payermax'),
+                PayerMax::__('PayerMax payment succeeded, Trade Token: %s', 'woocommerce-gateway-payermax'),
                 $response_data['data']['tradeToken']
             ));
         }
@@ -45,7 +45,7 @@ abstract class WC_PayerMax_Payment_Gateway extends WC_Payment_Gateway
         if (in_array($response_data['data']['status'], ['CLOSED', 'FAILED'])) {
             $order->update_status('failed');
             $order->add_order_note(sprintf(
-                __('PayerMax Payment Failed, Trade Token: %s, Result message: %s', 'woocommerce-gateway-payermax'),
+                PayerMax::__('PayerMax Payment Failed, Trade Token: %s, Result message: %s', 'woocommerce-gateway-payermax'),
                 $response_data['data']['tradeToken'],
                 $response_data['data']['resultMsg']
             ));

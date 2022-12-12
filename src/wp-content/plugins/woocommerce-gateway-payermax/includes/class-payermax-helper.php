@@ -158,7 +158,7 @@ class PayerMax_Helper
 
             $wc_order->add_order_note(
                 sprintf(
-                    __('Set transaction ID: %s', 'woocommerce-gateway-payermax'),
+                    PayerMax::__('Set transaction ID: %s', 'woocommerce-gateway-payermax'),
                     $transaction_id
                 )
             );

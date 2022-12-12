@@ -95,7 +95,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             return;
         }
 
-        $message = __('PayerMax Payment Gateway missing `App Id`, `Merchant Number`, `Public Key` or `Private Key` in settings. you must complete the settings to use it.', 'woocommerce-gateway-payermax');
+        $message = PayerMax::__('PayerMax Payment Gateway missing `App Id`, `Merchant Number`, `Public Key` or `Private Key` in settings. you must complete the settings to use it.', 'woocommerce-gateway-payermax');
 
         echo '<div class="notice notice-error">
         <p style="font-weight: bold;">' . esc_html($message) . ' ' . $this->get_settings_link() . '</p>
@@ -109,7 +109,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         }
 
         if ($this->endpoint !== PAYERMAX_API_GATEWAY) {
-            $message = __("Don't use payermax test env on production.", 'woocommerce-gateway-payermax');
+            $message = PayerMax::__("Don't use payermax test env on production.", 'woocommerce-gateway-payermax');
             echo '<div class="notice notice-warning">
             <p style="font-weight: bold;">' . esc_html($message) . ' ' . $this->get_settings_link() . '</p>
             </div>';
@@ -123,9 +123,9 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     {
         $this->id   = self::ID;
         $this->icon = $this->get_custom_icon((int)get_option(self::ICON_ID_KEY));
-        $this->method_title = __('PayerMax Payment', 'woocommerce-gateway-payermax');
+        $this->method_title = PayerMax::__('PayerMax Payment', 'woocommerce-gateway-payermax');
         $this->method_description = sprintf(
-            __('<a target="_blank" href="%s">PayerMax</a>, Your reliable global payment partner.', 'woocommerce-gateway-payermax'),
+            PayerMax::__('<a target="_blank" href="%s">PayerMax</a>, Your reliable global payment partner.', 'woocommerce-gateway-payermax'),
             'https://www.payermax.com/'
         );
         $this->has_fields = false;
@@ -190,7 +190,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             }
 
             // Mark as on-hold (we're awaiting the payermax payment)
-            $order->update_status('on-hold', __('Awaiting payermax payment', 'woocommerce-gateway-payermax'));
+            $order->update_status('on-hold', PayerMax::__('Awaiting payermax payment', 'woocommerce-gateway-payermax'));
 
             // Remove cart.
             WC()->cart->empty_cart();
@@ -246,7 +246,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         // 3. record refund trade no if apply successfully.
         if (!is_wp_error($result) && $result['code'] === 'APPLY_SUCCESS') {
             $order->add_order_note(sprintf(
-                __('Refund Status: %1$s - Refund ID: %2$s', 'woocommerce-gateway-payermax'),
+                PayerMax::__('Refund Status: %1$s - Refund ID: %2$s', 'woocommerce-gateway-payermax'),
                 $result['data']['status'],
                 $result['data']['refundTradeNo']
             ));
@@ -256,7 +256,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
         // 4. else return wp error
         new WP_Error(
             'error',
-            __('Refund Failed.', 'woocommerce-gateway-payermax')
+            PayerMax::__('Refund Failed.', 'woocommerce-gateway-payermax')
         );
     }
 

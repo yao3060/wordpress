@@ -27,23 +27,23 @@ echo wp_kses_post(wpautop($this->get_method_description()));
     <!-- upload payermax icon -->
     <tr valign="top" class="woocommerce_payermax_icon_wrapper">
         <th scope="row" class="titledesc">
-            <label for="woocommerce_payermax_icon"><?php _e('ICON', 'woocommerce-gateway-payermax'); ?></label>
+            <label for="woocommerce_payermax_icon"><?php PayerMax::_e('ICON', 'woocommerce-gateway-payermax'); ?></label>
         </th>
         <td class="forminp">
             <div class="flex">
                 <?php
                 $image_id = get_option($this::ICON_ID_KEY, 0);
                 if ($image = wp_get_attachment_image_url($image_id, 'full')) : ?>
-                    <a href="#" class="woocommerce_payermax_icon" data-title="<?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
+                    <a href="#" class="woocommerce_payermax_icon" data-title="<?php PayerMax::_e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
                         <img src="<?php echo esc_url($image) ?>" />
                     </a>
-                    <a href="#" class="remove_woocommerce_payermax_icon"><?php _e('Remove', 'woocommerce-gateway-payermax'); ?></a>
+                    <a href="#" class="remove_woocommerce_payermax_icon"><?php PayerMax::_e('Remove', 'woocommerce-gateway-payermax'); ?></a>
                     <input type="hidden" name="<?php echo $this::ICON_ID_KEY; ?>" value="<?php echo absint($image_id) ?>">
                 <?php else : ?>
-                    <a href="#" class="button woocommerce_payermax_icon" data-title="<?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
+                    <a href="#" class="button woocommerce_payermax_icon" data-title="<?php PayerMax::_e('Upload ICON', 'woocommerce-gateway-payermax'); ?>">
                         <?php _e('Upload ICON', 'woocommerce-gateway-payermax'); ?>
                     </a>
-                    <a href="#" class="remove_woocommerce_payermax_icon" style="display:none"><?php _e('Remove', 'woocommerce-gateway-payermax'); ?></a>
+                    <a href="#" class="remove_woocommerce_payermax_icon" style="display:none"><?php PayerMax::_e('Remove', 'woocommerce-gateway-payermax'); ?></a>
                     <input type="hidden" name="<?php echo $this::ICON_ID_KEY; ?>" value="" />
                 <?php endif; ?>
             </div>

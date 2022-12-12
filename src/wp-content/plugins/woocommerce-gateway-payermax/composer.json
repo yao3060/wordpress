@@ -1,7 +1,7 @@
 {
   "description": "packages for i18n",
   "require": {
-    "symfony/translation": "^4.4.47",
+    "symfony/translation": "^v4.4",
     "symfony/translation-contracts": "v1.1.13"
   }
 }
