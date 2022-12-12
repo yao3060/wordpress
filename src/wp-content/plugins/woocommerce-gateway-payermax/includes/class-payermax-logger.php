@@ -92,6 +92,38 @@ class PayerMax_Logger
         );
     }
 
+    static function clean_logs()
+    {
+        $date = get_option('clean_payermax_logs');
+        if ($date === date('Y-m-d')) {
+            return;
+        }
+
+        echo <<<EOF
+<script type="text/javascript">
+        jQuery(document).ready(function($) {
+            jQuery.post(ajaxurl, {
+                action: 'clean_payermax_logs'
+            }, function(response) {
+                // no need handle response
+            });
+        });
+</script>
+EOF;
+    }
+
+    public static function clean_payermax_logs()
+    {
+        // the date of 30 days ago
+        $results = PayerMax_Logger::remove_logs();
+
+        // update lock
+        update_option('clean_payermax_logs', date('Y-m-d'));
+
+        echo json_encode($results);
+        wp_die();
+    }
+
     public static function remove_logs()
     {
         $payermax_logger = static::getInstance();

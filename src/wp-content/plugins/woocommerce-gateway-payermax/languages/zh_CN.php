@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Hello World!' => '你好 PayerMax！',
+    'Hello PayerMax!' => '你好 PayerMax！',
     'PayerMax Payment' => 'PayerMax 支付',
     'ICON' => '图标',
     'Enable/Disable' => '开/关',

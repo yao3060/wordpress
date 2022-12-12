@@ -440,16 +440,4 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
             $gateway->verify_payermax_payment_status($transaction_status, $order);
         }
     }
-
-    public static function clean_payermax_logs()
-    {
-        // the date of 30 days ago
-        $results = PayerMax_Logger::remove_logs();
-
-        // update lock
-        update_option('clean_payermax_logs', date('Y-m-d'));
-
-        echo json_encode($results);
-        wp_die();
-    }
 }
