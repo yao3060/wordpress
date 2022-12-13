@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Example of `env.php` file.
+ * Example of env.php.
  */
 class PAYERMAX_ENV
 {
-    const DEV = 'https://pay-dev.shareitpay.in/aggregate-pay-gate/api/gateway/';
+    const UAT = 'https://pay-gate-uat.shareitpay.in/aggregate-pay-gate/api/gateway/';
     const PROD = 'https://pay-gate.payermax.com/aggregate-pay-gate/api/gateway/';
 }

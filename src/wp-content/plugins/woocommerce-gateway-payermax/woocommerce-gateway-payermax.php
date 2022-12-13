@@ -36,7 +36,7 @@ define('WC_PAYERMAX_MIN_WC_VER', '3.0');
 define('WC_PAYERMAX_PLUGIN_DIR', __DIR__);
 define('WC_PAYERMAX_ASSETS_URI',   plugins_url('/', __FILE__)); // with tail slash
 
-define('PAYERMAX_API_DEV_GATEWAY', 'https://pay-dev.shareitpay.in/aggregate-pay-gate/api/gateway/');
+define('PAYERMAX_API_UAT_GATEWAY', 'https://pay-gate-uat.payermax.com/aggregate-pay/api/gateway/');
 define('PAYERMAX_API_GATEWAY', 'https://pay-gate.payermax.com/aggregate-pay-gate/api/gateway/');
 
 require(__DIR__ . '/vendor/autoload.php');
@@ -102,7 +102,7 @@ final class PayerMax
         }
 
         return [
-            PAYERMAX_API_DEV_GATEWAY => 'DEV',
+            PAYERMAX_API_UAT_GATEWAY => 'UAT',
             PAYERMAX_API_GATEWAY => 'PROD'
         ];
     }

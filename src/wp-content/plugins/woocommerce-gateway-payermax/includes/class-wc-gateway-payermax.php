@@ -15,7 +15,7 @@ class WC_Gateway_PayerMax extends WC_PayerMax_Payment_Gateway
     public $merchant_number = '';
     public $merchant_public_key = '';
     public $merchant_private_key = '';
-    public $endpoint = PAYERMAX_API_DEV_GATEWAY;
+    public $endpoint = PAYERMAX_API_GATEWAY;
 
     const ICON_ID_KEY = 'woocommerce_payermax_icon_id';
     const ORDER_NOTIFY_CALLBACK = 'payermax-order-notify-v1';

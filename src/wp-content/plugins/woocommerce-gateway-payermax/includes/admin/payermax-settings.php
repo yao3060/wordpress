@@ -8,8 +8,8 @@ return apply_filters(
     [
 
         'enabled'     => [
-            'title'       => PayerMax::__('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'label'       => PayerMax::__('PayerMax', 'woocommerce-gateway-payermax'),
+            'title'       => PayerMax::__('Status', 'woocommerce-gateway-payermax'),
+            'label'       => PayerMax::__('Enable/Disable', 'woocommerce-gateway-payermax'),
             'type'        => 'checkbox',
             'description' => '',
             'default'     => 'no',
@@ -77,49 +77,10 @@ return apply_filters(
             'title' => PayerMax::__('Gateway', 'woocommerce-gateway-payermax'),
             'type' => 'select',
             'description' => PayerMax::__('This ENV which the user going to use during checkout.', 'woocommerce-gateway-payermax'),
-            'default' => PAYERMAX_API_DEV_GATEWAY,
-            'options' => PayerMax::get_envs()
+            'default' => PAYERMAX_API_GATEWAY,
+            'options' => array_map(function ($item) {
+                return sprintf('%s [%s]', PayerMax::__($item, 'woocommerce-gateway-payermax'), $item);
+            }, PayerMax::get_envs())
         ),
-
-        'callbacks'     => [
-            'title'       => PayerMax::__('Callbacks', 'woocommerce-gateway-payermax'),
-            'type'        => 'title',
-            'description' => sprintf(
-                PayerMax::__("<pre>Payment Result: %s \nRefund Result:  %s</pre>", 'woocommerce-gateway-payermax'),
-                $this->get_payment_callback_url(),
-                $this->get_refund_callback_url()
-            ),
-        ],
-
-
-
-        'available_for_payment_method' => array(
-            'title'             => PayerMax::__('Available for Payment Method', 'woocommerce-gateway-payermax'),
-            'type'              => 'title',
-            'description'       => PayerMax::__('PayerMax is only available for <code>CARD</code> method is this version.', 'woocommerce-gateway-payermax'),
-        ),
-
-        'available_for_currencies' => array(
-            'title'             => PayerMax::__('Available for Currencies', 'woocommerce-gateway-payermax'),
-            'type'              => 'title',
-            'css'      => 'max-width: 600px;',
-            'description'       => sprintf(
-                PayerMax::__('PayerMax is only available for those currencies: <code>%s</code>, <br>Current currency is: <code>%s</code>', 'woocommerce-gateway-payermax'),
-                join(', ', PayerMax::get_currencies()),
-                get_option('woocommerce_currency')
-            )
-        ),
-
-        'debug'     => [
-            'title'       => PayerMax::__('Debug', 'woocommerce-gateway-payermax'),
-            'label'       => PayerMax::__('Enable/Disable', 'woocommerce-gateway-payermax'),
-            'type'        => 'title',
-            'description' => sprintf(
-                PayerMax::__('<code>WP_DEBUG</code> is <code>%s</code>, if enabled, plugin will store trade info into <code>%s</code>.', 'woocommerce-gateway-payermax'),
-                WP_DEBUG ? 'true' : 'false',
-                wc_get_log_file_path(self::ID)
-            ),
-            'default'     => WP_DEBUG ? 'yes' : 'no',
-        ],
     ]
 );

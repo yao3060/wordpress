@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'DEV' => '测试环境',
+    'UAT' => '沙盒环境',
+    'PROD' => '生产环境',
     'Hello PayerMax!' => '你好 PayerMax！',
     'PayerMax Payment' => 'PayerMax 支付',
     'ICON' => '图标',
@@ -32,7 +35,6 @@ return [
     'Refunded - Refund ID: %s - Refund Amount: %s' => 'Refunded - Refund ID: %s - Refund Amount: %s',
     'Refund failed - Refund ID: %s - Error Message: %s' => 'Refund failed - Refund ID: %s - Error Message: %s',
     'PayerMax Payment Gateway missing `App Id`, `Merchant Number`, `Public Key` or `Private Key` in settings. you must complete the settings to use it.' => 'PayerMax Payment Gateway missing `App Id`, `Merchant Number`, `Public Key` or `Private Key` in settings. you must complete the settings to use it.',
-    "Don't use payermax test env on production." => "Don't use payermax test env on production.",
     '<a target="_blank" href="%s">PayerMax</a>, Your reliable global payment partner.' => '<a target="_blank" href="%s">PayerMax</a>, Your reliable global payment partner.',
     'Awaiting payermax payment' => 'Awaiting payermax payment',
     'Refund Status: %1$s - Refund ID: %2$s' => 'Refund Status: %1$s - Refund ID: %2$s',

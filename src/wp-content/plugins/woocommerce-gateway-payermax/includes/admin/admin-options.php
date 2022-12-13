@@ -53,6 +53,38 @@ echo wp_kses_post(wpautop($this->get_method_description()));
     </tr>
 
     <?php echo $this->generate_settings_html($this->get_form_fields(), false); ?>
+
+    <tr valign="top">
+        <th scope="row" class="titledesc">
+            <label for="woocommerce_payermax_endpoint">Available Payment Method</label>
+        </th>
+        <td class="forminp">
+            <fieldset>
+                <legend class="screen-reader-text"><span>Available Payment Method</span></legend>
+                <select class="select" disabled="disabled">
+                    <option value="">SELECT</option>
+                    <option value="CARD" selected>CARD</option>
+                </select>
+            </fieldset>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row" class="titledesc">
+            <label for="woocommerce_payermax_endpoint">
+                <?php PayerMax::_e('Debug', 'woocommerce-gateway-payermax'); ?>
+            </label>
+        </th>
+        <td class="forminp">
+            <?php
+            echo sprintf(
+                PayerMax::__('<code>WP_DEBUG</code> is <code>%s</code>, if enabled, plugin will store trade info into <code>%s</code>.', 'woocommerce-gateway-payermax'),
+                WP_DEBUG ? 'true' : 'false',
+                wc_get_log_file_path(self::ID)
+            );
+            ?>
+        </td>
+    </tr>
 </table>
 
 
